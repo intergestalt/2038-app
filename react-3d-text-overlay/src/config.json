@@ -1,0 +1,31 @@
+{
+  "slogans": [
+    {
+      "id": "1",
+      "akronym": "1abcd",
+      "text": {
+        "en": "1 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "de": "1 de de de d orfijs elriufhs eriufhsleri",
+        "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
+      }
+    },
+    {
+      "id": "2",
+      "akronym": "2abcd",
+      "text": {
+        "en": "2 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "de": "2 de de de d orfijs elriufhs eriufhsleri",
+        "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
+      }
+    },
+    {
+      "id": "3",
+      "akronym": "3abcd",
+      "text": {
+        "en": "3 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "de": "3 de de de d orfijs elriufhs eriufhsleri",
+        "cn": "3 cn 我想玩电脑 我想玩电脑 我想玩电脑"
+      }
+    }        
+  ]
+}
