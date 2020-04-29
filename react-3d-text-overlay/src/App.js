@@ -3,7 +3,7 @@ import ZFontOverlay from './ZFontOverlay';
 
 function App() {
   return (
-    <ZFontOverlay text="hello, world"/>
+    <ZFontOverlay text="chinese: 我想玩电脑"/>
   );
 }
 

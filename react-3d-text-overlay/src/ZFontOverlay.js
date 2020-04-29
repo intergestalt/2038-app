@@ -3,6 +3,14 @@ import './ZFontOverlay.css';
 
 export default class ZFontOverlay extends React.Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      snapped: false
+    }
+  }
+
   loadScript(src, onload) {
     const script = document.createElement("script");
     script.async = true;
@@ -12,12 +20,16 @@ export default class ZFontOverlay extends React.Component {
   }
 
   componentDidMount() {    
+    
+    this.initVideo();  
+
     // load zdog and zfont scripts and then init zfont
     this.loadScript("https://unpkg.com/zdog@1/dist/zdog.dist.min.js", ()=>{
       this.loadScript("https://cdn.jsdelivr.net/npm/zfont@latest/dist/zfont.min.js", ()=>{
         this.initZfont();
       })
     })
+
   }
 
   initZfont() {
@@ -30,10 +42,10 @@ export default class ZFontOverlay extends React.Component {
     // Create Zdog Illustration
     // https://zzz.dog/api#illustration
     var illo = new Zdog.Illustration({
-      element: '.zdog-canvas',
+      element: '#zdog-canvas',
       dragRotate: true,
       rotate: { x: -0.32, y: 0.64, z: 0 },
-      resize: 'fullscreen',
+      resize: true,
       zoom: 1,
       onResize: function (width, height) {
         var minSize = Math.min(width, height);
@@ -43,8 +55,10 @@ export default class ZFontOverlay extends React.Component {
     // Create a Font object
     // You can use pretty much any .ttf or .otf font!
     // https://github.com/jaames/zfont#zdogfont
+
+
     var font = new Zdog.Font({
-      src: 'https://cdn.jsdelivr.net/gh/jaames/zfont/demo/fredokaone.ttf' });
+      src: 'fonts/wts11.ttf' });
 
     // Create a Text object
     // Text objects behave like any other Zdog shape!
@@ -74,9 +88,39 @@ export default class ZFontOverlay extends React.Component {
     animate();
   }
 
+  initVideo() {
+    let videoElement = document.getElementById("video");
+    
+    // Use facingMode: environment to attemt to get the front camera on phones
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+      videoElement.srcObject = stream;
+      videoElement.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+      videoElement.play();
+    });
+  }
+
+  combineCanvas = ()=> {
+    let videoElement = document.getElementById("video");
+    let zdogCanvas = document.getElementById("zdog-canvas");
+    
+    let resultCanvas = document.getElementById("combined-result");
+    let resultCanvasContext = resultCanvas.getContext("2d");
+    console.log(videoElement);
+
+    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.width, resultCanvas.height);     
+    resultCanvasContext.drawImage(zdogCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+
+    this.setState({snapped: true});
+  }
+
   render() {
     return( 
-      <canvas className="zdog-canvas" width="420" height="420"></canvas>
+      <div>
+        {!this.state.snapped && <video id="video"></video>}
+        <canvas id="combined-result" width="800" height="600"></canvas>
+        {!this.state.snapped && <canvas id="zdog-canvas" width="800" height="600"></canvas>}
+        {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
+      </div>
     ); 
   }
 }
