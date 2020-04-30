@@ -23,6 +23,9 @@ export default class ZFontOverlay extends React.Component {
 
     this.yData = [0, 0, 0, 0]; // average over four last values
     this.xData = [0, 0, 0, 0];
+
+    this.initSensors = this.initSensors.bind(this)
+    this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
   }
 
   loadScript(src, onload) {
@@ -44,21 +47,27 @@ export default class ZFontOverlay extends React.Component {
       })
     })
 
+  }
+
+  initSensors() {
     // iOS 13+
 
     if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
 
-      window.DeviceOrientationEvent.requestPermission().then( function ( response ) {
+      window.DeviceOrientationEvent.requestPermission().then(  response => {
+
 
         if ( response == 'granted' ) {
+
 
           //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
           //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
           window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
+          alert("granted")
         }
 
       } ).catch( function ( error ) {
-
+        alert("sensor error")
         console.error( 'Unable to use DeviceOrientation API:', error );
 
       } );
@@ -70,8 +79,6 @@ export default class ZFontOverlay extends React.Component {
       window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
 
     }
-
-
 
   }
 
@@ -162,7 +169,7 @@ export default class ZFontOverlay extends React.Component {
     
   }
 
-  onDeviceOrientationChangeEvent = (event) => {
+  onDeviceOrientationChangeEvent(event) {
 
     this.setState({orientation: event});
 
@@ -179,7 +186,7 @@ export default class ZFontOverlay extends React.Component {
       this.illo.rotate.y = avg(this.yData);*/
       
       // beta = 0 when flat on table, 90 when upright
-      let newX = (event.beta - 90) / 90;
+      let newX = (event.beta - 90) / 90 * (Math.PI / 2);
       this.illo.rotate.x = newX;
       
       /*this.xData.shift();
@@ -194,8 +201,8 @@ export default class ZFontOverlay extends React.Component {
     return( 
         <div>
           <div id="sensor-info">
-            alpha: {this.state.orientation.alpha}<br/>
-            beta: {this.state.orientation.beta}<br/>
+            alpha: {Math.round(this.state.orientation.alpha)}<br/>
+            beta: {Math.round(this.state.orientation.beta)}<br/>
             rotate y: {this.state.rotate.y}<br/> 
             rotate x: {this.state.rotate.x} 
           </div>
@@ -203,6 +210,7 @@ export default class ZFontOverlay extends React.Component {
           <canvas id="combined-result" width="600" height="800"></canvas>
           {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
           {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
+          <button style={{bottom: 20, left: 20, zIndex:10, position:"fixed"}} onClick={ this.initSensors  }>sensors</button>
         </div>
     ); 
   }
