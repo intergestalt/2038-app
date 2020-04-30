@@ -74,7 +74,7 @@ export default class ZFontOverlay extends React.Component {
     // https://github.com/jaames/zfont#zdogtext
     var text = new Zdog.Text({
       addTo: this.illo,
-      translate: { z: 0 },
+      translate: { z: 0, x: 25 },
       font: font,
       value: this.props.text,
       fontSize: 30,
