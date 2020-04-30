@@ -170,7 +170,7 @@ export default class ZFontOverlay extends React.Component {
 
     if(this.illo) {
 
-      let newY = ((event.alpha - this.alphaOffset) / 180) * Math.PI;
+      let newY = (event.alpha / 360) * (2 * Math.PI)
       this.illo.rotate.y = newY;  
 
       /*let prevY = this.yData[this.yData.length - 1];
@@ -179,14 +179,14 @@ export default class ZFontOverlay extends React.Component {
       this.illo.rotate.y = avg(this.yData);*/
       
       // beta = 0 when flat on table, 90 when upright
-      let newX = (event.beta - 90) / 90;
+      let newX = (event.beta - 90) / 90 * (Math.PI / 2)
       this.illo.rotate.x = newX;
       
       /*this.xData.shift();
       this.xData.push(newX);
       this.illo.rotate.x = avg(this.xData);*/
 
-      this.setState({rotate: this.illo.rotate});
+      //this.setState({rotate: this.illo.rotate});
     }
   }
 
@@ -196,8 +196,10 @@ export default class ZFontOverlay extends React.Component {
           <div id="sensor-info">
             alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
+            gamma: {this.state.orientation.gamma}<br/>
             rotate y: {this.state.rotate.y}<br/> 
-            rotate x: {this.state.rotate.x} 
+            rotate x: {this.state.rotate.x}<br/> 
+            rotate z: {this.state.rotate.z}
           </div>
           {!this.state.snapped && <video id="video"></video>}
           <canvas id="combined-result" width="600" height="800"></canvas>
