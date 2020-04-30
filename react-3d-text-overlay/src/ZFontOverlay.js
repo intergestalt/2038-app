@@ -135,7 +135,7 @@ export default class ZFontOverlay extends React.Component {
 
     if(this.illo) {
 
-      let y = Math.PI * ((event.alpha - this.alphaOffset) / 360)
+      let y = Math.PI * ((event.alpha - this.alphaOffset) / 180)
       
       //if(y > Math.PI / 2) y = Math.PI - y; // prevent flipping of text
       this.illo.rotate.y = y;
