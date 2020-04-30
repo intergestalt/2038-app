@@ -44,8 +44,35 @@ export default class ZFontOverlay extends React.Component {
       })
     })
 
-    //window.addEventListener('devicemotion', this.motionListener)
-    window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
+    // iOS 13+
+
+    if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
+
+      window.DeviceOrientationEvent.requestPermission().then( function ( response ) {
+
+        if ( response == 'granted' ) {
+
+          //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
+          //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
+          window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
+        }
+
+      } ).catch( function ( error ) {
+
+        console.error( 'Unable to use DeviceOrientation API:', error );
+
+      } );
+
+    } else {
+
+      //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
+      //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
+      window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
+
+    }
+
+
+
   }
 
   initZfont = ()=>{
