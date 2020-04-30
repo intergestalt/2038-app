@@ -3,6 +3,12 @@ import React from 'react';
 import './ZFontOverlay.css';
 
 function deg2rad(deg) { return deg * Math.PI / 180 }
+function avg(data) { 
+  let sum = 0;
+  data.forEach(d => sum+=d);
+  let avg = sum / data.length;
+  return avg;
+}
 
 export default class ZFontOverlay extends React.Component {
 
@@ -16,6 +22,8 @@ export default class ZFontOverlay extends React.Component {
       orientation: {alpha: 0, beta: 0, gamma: 0}
     }
 
+    this.yData = [0, 0, 0];
+    this.xData = [0, 0, 0];
   }
 
   loadScript(src, onload) {
@@ -135,13 +143,16 @@ export default class ZFontOverlay extends React.Component {
 
     if(this.illo) {
 
-      let y = Math.PI * ((event.alpha - this.alphaOffset) / 180)
+      let newY = Math.PI * ((event.alpha - this.alphaOffset) / 180)
+      this.yData.shift();
+      this.yData.push(newY);
+      this.illo.rotate.y = avg(this.yData);
       
-      //if(y > Math.PI / 2) y = Math.PI - y; // prevent flipping of text
-      this.illo.rotate.y = y;
-
       // beta = 0 when flat on table, 90 when upright
-      this.illo.rotate.x = (event.beta - 90) / 90;
+      let newX = (event.beta - 90) / 90;
+      this.xData.shift();
+      this.xData.push(newX);
+      this.illo.rotate.x = avg(this.xData);
 
       this.setState({rotate: this.illo.rotate});
     }
