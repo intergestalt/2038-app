@@ -59,11 +59,9 @@ export default class ZFontOverlay extends React.Component {
 
         if ( response == 'granted' ) {
 
-
           //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
           //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
           window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
-          alert("granted")
         }
 
       } ).catch( function ( error ) {
@@ -177,8 +175,13 @@ export default class ZFontOverlay extends React.Component {
 
     if(this.illo) {
 
-      let newY = ((event.alpha - this.alphaOffset) / 180) * Math.PI;
-      this.illo.rotate.y = newY;  
+      this.illo.rotate.y = ( -event.gamma ) * Math.PI/180
+      this.illo.rotate.x = (  event.beta ) * Math.PI/180
+      this.illo.rotate.z = (  event.alpha - 180 ) * Math.PI/180
+      
+
+      //let newY = ((event.gamma +180)/ 360) * (2 * Math.PI)
+      //this.illo.rotate.y = newY;  
 
       /*let prevY = this.yData[this.yData.length - 1];
       this.yData.shift();
@@ -186,14 +189,14 @@ export default class ZFontOverlay extends React.Component {
       this.illo.rotate.y = avg(this.yData);*/
       
       // beta = 0 when flat on table, 90 when upright
-      let newX = (event.beta - 90) / 90 * (Math.PI / 2);
-      this.illo.rotate.x = newX;
+      //let newX = (event.beta + 0) / 90 * (Math.PI / 2);
+      //this.illo.rotate.x = newX;
       
       /*this.xData.shift();
       this.xData.push(newX);
       this.illo.rotate.x = avg(this.xData);*/
 
-      this.setState({rotate: this.illo.rotate});
+      //this.setState({rotate: this.illo.rotate});
     }
   }
 
@@ -201,16 +204,18 @@ export default class ZFontOverlay extends React.Component {
     return( 
         <div>
           <div id="sensor-info">
-            alpha: {Math.round(this.state.orientation.alpha)}<br/>
-            beta: {Math.round(this.state.orientation.beta)}<br/>
+            alpha: {this.state.orientation.alpha}<br/>
+            beta: {this.state.orientation.beta}<br/>
+            gamma: {this.state.orientation.gamma}<br/>
             rotate y: {this.state.rotate.y}<br/> 
-            rotate x: {this.state.rotate.x} 
+            rotate x: {this.state.rotate.x}<br/> 
+            rotate z: {this.state.rotate.z}<br/>
           </div>
           {!this.state.snapped && <video id="video"></video>}
           <canvas id="combined-result" width="600" height="800"></canvas>
           {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
           {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
-          <button style={{bottom: 20, left: 20, zIndex:10, position:"fixed"}} onClick={ this.initSensors  }>sensors</button>
+          <button style={{bottom: 20, left: 20, zIndex:10, position:"fixed"}} onClick={ this.initSensors  }>activate sensors</button>
         </div>
     ); 
   }
