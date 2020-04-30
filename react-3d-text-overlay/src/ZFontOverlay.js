@@ -2,7 +2,6 @@ import React from 'react';
 
 import './ZFontOverlay.css';
 
-function deg2rad(deg) { return deg * Math.PI / 180 }
 function avg(data) { 
   let sum = 0;
   data.forEach(d => sum+=d);
@@ -22,8 +21,8 @@ export default class ZFontOverlay extends React.Component {
       orientation: {alpha: 0, beta: 0, gamma: 0}
     }
 
-    this.yData = [0, 0, 0];
-    this.xData = [0, 0, 0];
+    this.yData = [0, 0, 0, 0]; // average over four last values
+    this.xData = [0, 0, 0, 0];
   }
 
   loadScript(src, onload) {
@@ -46,7 +45,7 @@ export default class ZFontOverlay extends React.Component {
     })
 
     //window.addEventListener('devicemotion', this.motionListener)
-    window.addEventListener( 'deviceorientation', this.onDeviceOrientationChangeEvent, false );
+    window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
   }
 
   initZfont = ()=>{
@@ -137,22 +136,28 @@ export default class ZFontOverlay extends React.Component {
   }
 
   onDeviceOrientationChangeEvent = (event) => {
+
     this.setState({orientation: event});
 
     if(!this.alphaOffset) this.alphaOffset = event.alpha;
 
     if(this.illo) {
 
-      let newY = Math.PI * ((event.alpha - this.alphaOffset) / 180)
+      let newY = ((event.alpha - this.alphaOffset) / 180) * Math.PI;
+      this.illo.rotate.y = newY;  
+
+      /*let prevY = this.yData[this.yData.length - 1];
       this.yData.shift();
       this.yData.push(newY);
-      this.illo.rotate.y = avg(this.yData);
+      this.illo.rotate.y = avg(this.yData);*/
       
       // beta = 0 when flat on table, 90 when upright
       let newX = (event.beta - 90) / 90;
-      this.xData.shift();
+      this.illo.rotate.x = newX;
+      
+      /*this.xData.shift();
       this.xData.push(newX);
-      this.illo.rotate.x = avg(this.xData);
+      this.illo.rotate.x = avg(this.xData);*/
 
       this.setState({rotate: this.illo.rotate});
     }
@@ -162,14 +167,10 @@ export default class ZFontOverlay extends React.Component {
     return( 
         <div>
           <div id="sensor-info">
-            {/*x: {this.state.acceleration.x}<br/> 
-            y: {this.state.acceleration.y}<br/>
-            z: {this.state.acceleration.z}<br/>
             alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
-            gamma: {this.state.orientation.gamma}<br/>
             rotate y: {this.state.rotate.y}<br/> 
-            rotate x: {this.state.rotate.x}*/} 
+            rotate x: {this.state.rotate.x} 
           </div>
           {!this.state.snapped && <video id="video"></video>}
           <canvas id="combined-result" width="600" height="800"></canvas>
