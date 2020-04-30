@@ -2,13 +2,6 @@ import React from 'react';
 
 import './ZFontOverlay.css';
 
-function avg(data) { 
-  let sum = 0;
-  data.forEach(d => sum+=d);
-  let avg = sum / data.length;
-  return avg;
-}
-
 export default class ZFontOverlay extends React.Component {
 
   constructor(props) {
@@ -20,9 +13,6 @@ export default class ZFontOverlay extends React.Component {
       rotate: {x: 0, y: 0, z: 0},
       orientation: {alpha: 0, beta: 0, gamma: 0}
     }
-
-    this.yData = [0, 0, 0, 0]; // average over four last values
-    this.xData = [0, 0, 0, 0];
   }
 
   loadScript(src, onload) {
@@ -52,8 +42,6 @@ export default class ZFontOverlay extends React.Component {
 
         if ( response == 'granted' ) {
 
-          //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
-          //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
           window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
         }
 
@@ -65,8 +53,6 @@ export default class ZFontOverlay extends React.Component {
 
     } else {
 
-      //window.addEventListener( 'orientationchange', onScreenOrientationChangeEvent, false );
-      //window.addEventListener( 'deviceorientation', onDeviceOrientationChangeEvent, false );
       window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
 
     }
@@ -88,6 +74,12 @@ export default class ZFontOverlay extends React.Component {
       element: '#zdog-canvas',
       dragRotate: true,
       rotate: { x: 0, y: 0, z: 0 },
+      onDragStart: () => {
+        this.dragging = true;
+      },
+      onDragEnd: () => {
+        this.dragging = false;
+      },
       resize: true,
       zoom: 1,
       onResize: function (width, height) {
@@ -157,14 +149,11 @@ export default class ZFontOverlay extends React.Component {
     this.setState({snapped: true});
   }
 
-  motionListener = (event) => {
-    this.setState({acceleration: event.acceleration});
-    
-  }
-
   onDeviceOrientationChangeEvent = (event) => {
 
     this.setState({orientation: event});
+    this.setState({rotate: this.illo.rotate});
+    if(this.dragging) return;
 
     if(!this.alphaOffset) this.alphaOffset = event.alpha;
 
@@ -173,20 +162,10 @@ export default class ZFontOverlay extends React.Component {
       let newY = (event.alpha / 360) * (2 * Math.PI)
       this.illo.rotate.y = newY;  
 
-      /*let prevY = this.yData[this.yData.length - 1];
-      this.yData.shift();
-      this.yData.push(newY);
-      this.illo.rotate.y = avg(this.yData);*/
-      
       // beta = 0 when flat on table, 90 when upright
       let newX = (event.beta - 90) / 90 * (Math.PI / 2)
       this.illo.rotate.x = newX;
       
-      /*this.xData.shift();
-      this.xData.push(newX);
-      this.illo.rotate.x = avg(this.xData);*/
-
-      //this.setState({rotate: this.illo.rotate});
     }
   }
 
