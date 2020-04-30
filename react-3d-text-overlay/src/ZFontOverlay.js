@@ -1,5 +1,8 @@
 import React from 'react';
+
 import './ZFontOverlay.css';
+
+function deg2rad(deg) { return deg * Math.PI / 180 }
 
 export default class ZFontOverlay extends React.Component {
 
@@ -7,8 +10,12 @@ export default class ZFontOverlay extends React.Component {
     super(props);
 
     this.state = {
-      snapped: false
+      snapped: false,
+      acceleration: {x: 0, y: 0, z: 0},
+      rotate: {x: 0, y: 0, z: 0},
+      orientation: {alpha: 0, beta: 0, gamma: 0}
     }
+
   }
 
   loadScript(src, onload) {
@@ -30,9 +37,11 @@ export default class ZFontOverlay extends React.Component {
       })
     })
 
+    //window.addEventListener('devicemotion', this.motionListener)
+    window.addEventListener( 'deviceorientation', this.onDeviceOrientationChangeEvent, false );
   }
 
-  initZfont() {
+  initZfont = ()=>{
     let Zfont = window.Zfont;
     let Zdog = window.Zdog;
 
@@ -41,15 +50,15 @@ export default class ZFontOverlay extends React.Component {
 
     // Create Zdog Illustration
     // https://zzz.dog/api#illustration
-    var illo = new Zdog.Illustration({
+    this.illo = new Zdog.Illustration({
       element: '#zdog-canvas',
       dragRotate: true,
-      rotate: { x: -0.32, y: 0.64, z: 0 },
+      rotate: { x: 0, y: 0, z: 0 },
       resize: true,
       zoom: 1,
       onResize: function (width, height) {
         var minSize = Math.min(width, height);
-        this.zoom = minSize / 420;
+        this.zoom = minSize / 300;
       } });
 
     // Create a Font object
@@ -64,10 +73,11 @@ export default class ZFontOverlay extends React.Component {
     // Text objects behave like any other Zdog shape!
     // https://github.com/jaames/zfont#zdogtext
     var text = new Zdog.Text({
-      addTo: illo,
+      addTo: this.illo,
+      translate: { z: 0 },
       font: font,
       value: this.props.text,
-      fontSize: 50,
+      fontSize: 30,
       textAlign: 'center',
       textBaseline: 'middle',
       color: '#fff',
@@ -75,14 +85,14 @@ export default class ZFontOverlay extends React.Component {
 
     // Creating a darker duplicate of the text and pushing it backwards can help make it look like the text has depth
     // (This is entirely optional!)
-    var shadow = text.copy({
-      addTo: illo,
-      translate: { z: -6 },
-      color: '#aab' });
+    /*var shadow = text.copy({
+      addTo: this.illo,
+      translate: { z: -15 },
+      color: '#aab' });*/
 
     // Animation loop
-    function animate() {
-      illo.updateRenderGraph();
+    const animate = ()=> {
+      this.illo.updateRenderGraph();
       requestAnimationFrame(animate);
     }
     animate();
@@ -113,14 +123,57 @@ export default class ZFontOverlay extends React.Component {
     this.setState({snapped: true});
   }
 
+  motionListener = (event) => {
+    this.setState({acceleration: event.acceleration});
+    
+  }
+
+  onDeviceOrientationChangeEvent = (event) => {
+    this.setState({orientation: event});
+
+    if(!this.alphaOffset) this.alphaOffset = event.alpha;
+
+    if(this.illo) {
+
+      let y = Math.PI * ((event.alpha - this.alphaOffset) / 360)
+      
+      //if(y > Math.PI / 2) y = Math.PI - y; // prevent flipping of text
+      this.illo.rotate.y = y;
+
+      // beta = 0 when flat on table, 90 when upright
+      this.illo.rotate.x = (event.beta - 90) / 90;
+
+      this.setState({rotate: this.illo.rotate});
+    }
+  }
+
   render() {
     return( 
-      <div>
-        {!this.state.snapped && <video id="video"></video>}
-        <canvas id="combined-result" width="800" height="600"></canvas>
-        {!this.state.snapped && <canvas id="zdog-canvas" width="800" height="600"></canvas>}
-        {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
-      </div>
+        <div>
+          <div id="sensor-info">
+            {/*x: {this.state.acceleration.x}<br/> 
+            y: {this.state.acceleration.y}<br/>
+            z: {this.state.acceleration.z}<br/>
+            alpha: {this.state.orientation.alpha}<br/>
+            beta: {this.state.orientation.beta}<br/>
+            gamma: {this.state.orientation.gamma}<br/>
+            rotate y: {this.state.rotate.y}<br/> 
+            rotate x: {this.state.rotate.x}*/} 
+          </div>
+          {!this.state.snapped && <video id="video"></video>}
+          <canvas id="combined-result" width="600" height="800"></canvas>
+          {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
+          {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
+        </div>
     ); 
   }
 }
+
+
+
+    
+      
+    
+  
+
+

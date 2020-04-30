@@ -44,3 +44,11 @@ video {
   transform: translate(-50%, 0);
   z-index: 2;
 }
+
+#sensor-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: lightgray;
+  z-index: 10;
+}
