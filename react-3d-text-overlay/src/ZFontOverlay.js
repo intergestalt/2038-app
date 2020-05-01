@@ -37,7 +37,13 @@ export default class ZFontOverlay extends React.Component {
         this.initZfont();
       })
     })
+  }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.text !== prevProps.text) {
+      console.log("text changed to", this.props.text);
+      this.text.value = this.props.text;
+    }
   }
 
   initSensors() {
@@ -120,7 +126,7 @@ export default class ZFontOverlay extends React.Component {
     // Create a Text object
     // Text objects behave like any other Zdog shape!
     // https://github.com/jaames/zfont#zdogtext
-    var text = new Zdog.Text({
+    this.text = new Zdog.Text({
       addTo: this.illo,
       translate: { z: 0, x: 25 },
       font: font,
