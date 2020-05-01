@@ -27,7 +27,7 @@ class App extends React.Component {
     <FillViewport>
         <Container>
         <Top>
-          <ZFontOverlay text={text} ref={this.overlayRef}/>
+          <ZFontOverlay text={text} ref={this.overlayRef} color={'#faf'}/>
         </Top>
         <Bottom>
           <ControlPanel 

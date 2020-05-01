@@ -42,7 +42,12 @@ export default class ZFontOverlay extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.text !== prevProps.text) {
       console.log("text changed to", this.props.text);
-      this.text.value = this.props.text;
+      this.text.value = this.props.text;      
+    }
+
+    if (this.props.color !== prevProps.color) {
+      console.log("color changed to", this.props.color);
+      this.text.color = this.props.color;
     }
   }
 
@@ -134,7 +139,7 @@ export default class ZFontOverlay extends React.Component {
       fontSize: 30,
       textAlign: 'center',
       textBaseline: 'middle',
-      color: '#fff',
+      color: this.props.color,
       fill: true });
 
     // Creating a darker duplicate of the text and pushing it backwards can help make it look like the text has depth
