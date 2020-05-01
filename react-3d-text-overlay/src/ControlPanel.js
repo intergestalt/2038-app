@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Swiper from './Swiper'
 
 
-function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId }) {
+function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, snap }) {
   return (
     <Container>
       <Top>
@@ -13,7 +13,7 @@ function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId })
       <Bottom>
         <Left>=</Left>
         <Center>
-          <button>
+          <button onClick={snap}>
             snap
           </button>
         </Center>

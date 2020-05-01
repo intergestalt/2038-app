@@ -7,28 +7,40 @@ import ControlPanel from './ControlPanel'
 
 import config from './config.json'
 
-function App() {
-  const slogans = config.slogans
+class App extends React.Component {
 
-  const [currentSloganId, setCurrentSloganId] = useState(slogans[1].id)
+  constructor(props) {
+    super(props);
+    this.slogans = config.slogans
+    this.state = {
+      currentSloganId: this.slogans[1].id
+    }
 
-  const language = "cn"
-  const text = slogans.find( s => s.id === currentSloganId ).text[language]
+    this.overlayRef = React.createRef();
+  }
 
-  console.log(text)
-
-  return (
+  render() {
+    const language = "cn"
+    const text = this.slogans.find( s => s.id === this.state.currentSloganId ).text[language]
+    
+    return(
     <FillViewport>
         <Container>
         <Top>
-          <ZFontOverlay text={text}/>
+          <ZFontOverlay text={text} ref={this.overlayRef}/>
         </Top>
         <Bottom>
-          <ControlPanel slogans={slogans} currentSloganId={currentSloganId} setCurrentSloganId={setCurrentSloganId} />
+          <ControlPanel 
+            slogans={this.slogans} 
+            currentSloganId={this.state.currentSloganId} 
+            setCurrentSloganId={(id)=>this.setState({currentSloganId: id})} 
+            snap={()=>{this.overlayRef.current.snap()}}
+          />
         </Bottom>
       </Container>
     </FillViewport>
   );
+  } 
 }
 
 export default App;

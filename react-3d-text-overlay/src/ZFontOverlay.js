@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components'
 
 import './ZFontOverlay.css';
 
@@ -13,6 +14,8 @@ export default class ZFontOverlay extends React.Component {
       rotate: {x: 0, y: 0, z: 0},
       orientation: {alpha: 0, beta: 0, gamma: 0}
     }
+
+    this.dragging = false;
   }
 
   loadScript(src, onload) {
@@ -87,6 +90,21 @@ export default class ZFontOverlay extends React.Component {
         this.zoom = minSize / 300;
       } });
 
+
+    /*
+    let box = new Zdog.Box({
+      addTo: this.illo,
+      width: 120,
+      height: 100,
+      depth: 80,
+      stroke: false,
+      color: '#C25', // default face color
+      leftFace: '#EA0',
+      rightFace: '#E62',
+      topFace: '#ED0',
+      bottomFace: '#636',
+    });*/
+
     // Create a Font object
     // You can use pretty much any .ttf or .otf font!
     // https://github.com/jaames/zfont#zdogfont
@@ -135,6 +153,12 @@ export default class ZFontOverlay extends React.Component {
     });
   }
 
+  // this is exposed to parent
+  snap = ()=> {
+    console.log("SNAP");
+    this.combineCanvas();
+  }
+
   combineCanvas = ()=> {
     let videoElement = document.getElementById("video");
     let zdogCanvas = document.getElementById("zdog-canvas");
@@ -152,44 +176,49 @@ export default class ZFontOverlay extends React.Component {
   onDeviceOrientationChangeEvent = (event) => {
 
     this.setState({orientation: event});
-    this.setState({rotate: this.illo.rotate});
+    if(this.illo) this.setState({rotate: this.illo.rotate});
     if(this.dragging) return;
 
     if(!this.alphaOffset) this.alphaOffset = event.alpha;
 
     if(this.illo) {
 
-      let newY = (event.alpha / 360) * (2 * Math.PI)
-      this.illo.rotate.y = newY;  
-
-      // beta = 0 when flat on table, 90 when upright
-      let newX = (event.beta - 90) / 90 * (Math.PI / 2)
-      this.illo.rotate.x = newX;
+      /*this.illo.rotate.x = (event.beta - 90) / 365 * 2 * Math.PI;
+      this.illo.rotate.y = event.alpha / 365 * 2 * Math.PI;
+      this.illo.rotate.z = - event.gamma / 365 * 2 * Math.PI;*/
       
+    
     }
   }
 
   render() {
     return( 
-        <div>
-          <div id="sensor-info">
+        <VideoContainer>
+          {/*<div id="sensor-info">
             alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
             gamma: {this.state.orientation.gamma}<br/>
             rotate y: {this.state.rotate.y}<br/> 
             rotate x: {this.state.rotate.x}<br/> 
             rotate z: {this.state.rotate.z}
-          </div>
+          </div>*/}
           {!this.state.snapped && <video id="video"></video>}
           <canvas id="combined-result" width="600" height="800"></canvas>
           {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
-          {!this.state.snapped && <input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>}
-        </div>
+          {/*<input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>*/}
+        </VideoContainer>
     ); 
   }
 }
 
 
+
+const VideoContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+`
 
     
       
