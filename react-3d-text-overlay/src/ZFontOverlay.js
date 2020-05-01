@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
 
-import './ZFontOverlay.css';
-
 export default class ZFontOverlay extends React.Component {
 
   constructor(props) {
@@ -204,17 +202,17 @@ export default class ZFontOverlay extends React.Component {
   render() {
     return( 
         <VideoContainer>
-          {/*<div id="sensor-info">
+          {/*<SensorInfo>
             alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
             gamma: {this.state.orientation.gamma}<br/>
             rotate y: {this.state.rotate.y}<br/> 
             rotate x: {this.state.rotate.x}<br/> 
             rotate z: {this.state.rotate.z}
-          </div>*/}
-          {!this.state.snapped && <video id="video"></video>}
-          <canvas id="combined-result" width="600" height="800"></canvas>
-          {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
+          </SensorInfo>*/}
+          {!this.state.snapped && <Video id="video"></Video>}
+          <Canvas id="combined-result" width="600" height="800"></Canvas>
+          {!this.state.snapped && <Canvas id="zdog-canvas" width="600" height="800"></Canvas>}
           {/*<input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>*/}
           <button style={{bottom: 20, left: 20, zIndex:10, position:"fixed"}} onClick={ this.initSensors  }>activate sensors</button>
         </VideoContainer>
@@ -226,13 +224,39 @@ const VideoContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-
+  overflow: hidden;
 `
 
-    
+const Video = styled.video`
+  object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+`    
       
+const Canvas = styled.canvas`
+  display: block;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
+
+const SensorInfo = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: lightgray;
+  z-index: 10;
+`
     
   
+
+
+
+
+
 
 var degtorad = Math.PI / 180; // Degree-to-Radian conversion
 
