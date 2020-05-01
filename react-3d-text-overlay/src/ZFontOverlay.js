@@ -52,6 +52,7 @@ export default class ZFontOverlay extends React.Component {
   }
 
   initSensors() {
+    /*
     // iOS 13+
 
     if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
@@ -74,7 +75,25 @@ export default class ZFontOverlay extends React.Component {
 
       window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
 
-    }
+    }*/
+
+    this.orientationData = new window.FULLTILT.DeviceOrientation( { 'type': 'world' } );
+
+    this.orientationData.start(() => {
+      // DeviceOrientation updated
+
+      let angles = this.orientationData.getFixedFrameEuler();
+      angles.rotateX(- Math.PI / 2);
+
+      this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
+      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
+      this.illo.rotate.z = angles.gamme / 360 * 2 * Math.PI;
+
+/*      this.illo.rotate.z = angles.alpha;
+      
+      this.illo.rotate.y = angles.gamma;*/
+      
+    });
 
   }
 
@@ -109,21 +128,21 @@ export default class ZFontOverlay extends React.Component {
     /*
     let box = new Zdog.Box({
       addTo: this.illo,
-      width: 120,
+      width: 100,
       height: 100,
-      depth: 80,
+      depth: 100,
       stroke: false,
       color: '#C25', // default face color
       leftFace: '#EA0',
       rightFace: '#E62',
       topFace: '#ED0',
       bottomFace: '#636',
-    });*/
+    });
+    */
 
     // Create a Font object
     // You can use pretty much any .ttf or .otf font!
     // https://github.com/jaames/zfont#zdogfont
-
 
     var font = new Zdog.Font({
       src: 'fonts/wts11.ttf' });
@@ -206,9 +225,13 @@ export default class ZFontOverlay extends React.Component {
 
       const {alpha, beta, gamma} = event
 
-      this.illo.rotate.y = compassHeading( alpha, beta, gamma ) //( -event.gamma ) * Math.PI/180
+      /*this.illo.rotate.y = compassHeading( alpha, beta, gamma ) //( -event.gamma ) * Math.PI/180
       this.illo.rotate.x = 0//getQuaternion( alpha, beta, gamma )[1] *Math.PI //(  event.beta ) * Math.PI/180
-      this.illo.rotate.z = 0//(  event.alpha - 180 ) * Math.PI/180
+      this.illo.rotate.z = 0//(  event.alpha - 180 ) * Math.PI/180 */
+
+
+
+
       
     }
   }
