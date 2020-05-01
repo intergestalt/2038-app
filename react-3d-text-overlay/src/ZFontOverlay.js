@@ -177,7 +177,7 @@ export default class ZFontOverlay extends React.Component {
 
     let ratio = videoElement.videoWidth / videoElement.videoHeight;
 
-    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.height * ratio, resultCanvas.height);     
+    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.width, resultCanvas.width / ratio);     
     resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
     this.setState({snapped: true});
@@ -227,14 +227,14 @@ const VideoContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: green;
+  background-color: black;
 `
 
 const Video = styled.video`
   position: absolute;
   left: 0;
   top: 0;
-  height: 100%;
+  width: 100%;
 `    
       
 const Canvas = styled.canvas`
