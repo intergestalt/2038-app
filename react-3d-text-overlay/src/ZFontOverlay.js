@@ -10,7 +10,9 @@ export default class ZFontOverlay extends React.Component {
       snapped: false,
       acceleration: {x: 0, y: 0, z: 0},
       rotate: {x: 0, y: 0, z: 0},
-      orientation: {alpha: 0, beta: 0, gamma: 0}
+      orientation: {alpha: 0, beta: 0, gamma: 0},
+      width: null,
+      height: null
     }
 
     this.dragging = false;
@@ -27,7 +29,6 @@ export default class ZFontOverlay extends React.Component {
   }
 
   componentDidMount() {    
-    
     this.initVideo();  
 
     // load zdog and zfont scripts and then init zfont
@@ -83,6 +84,7 @@ export default class ZFontOverlay extends React.Component {
         this.dragging = true;
       },
       onDragEnd: () => {
+        this.setState({rotate: this.illo.rotate});
         this.dragging = false;
       },
       resize: true,
@@ -166,18 +168,19 @@ export default class ZFontOverlay extends React.Component {
     let zdogCanvas = document.getElementById("zdog-canvas");
     
     let resultCanvas = document.getElementById("combined-result");
+    resultCanvas.width = zdogCanvas.width;
+    resultCanvas.height = zdogCanvas.height;
+
     let resultCanvasContext = resultCanvas.getContext("2d");
     console.log(videoElement);
+    console.log(resultCanvas);
 
-    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.width, resultCanvas.height);     
-    resultCanvasContext.drawImage(zdogCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
+    let ratio = videoElement.videoWidth / videoElement.videoHeight;
+
+    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.height * ratio, resultCanvas.height);     
+    resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
     this.setState({snapped: true});
-  }
-
-  motionListener = (event) => {
-    this.setState({acceleration: event.acceleration});
-    
   }
 
   onDeviceOrientationChangeEvent(event) {
@@ -202,14 +205,14 @@ export default class ZFontOverlay extends React.Component {
   render() {
     return( 
         <VideoContainer>
-          {/*<SensorInfo>
-            alpha: {this.state.orientation.alpha}<br/>
+          <SensorInfo>
+            {/*alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
-            gamma: {this.state.orientation.gamma}<br/>
+            gamma: {this.state.orientation.gamma}<br/>*/}
+            rotate x: {this.state.rotate.x}<br/>
             rotate y: {this.state.rotate.y}<br/> 
-            rotate x: {this.state.rotate.x}<br/> 
             rotate z: {this.state.rotate.z}
-          </SensorInfo>*/}
+          </SensorInfo>
           {!this.state.snapped && <Video id="video"></Video>}
           <Canvas id="combined-result" width="600" height="800"></Canvas>
           {!this.state.snapped && <Canvas id="zdog-canvas" width="600" height="800"></Canvas>}
@@ -224,19 +227,19 @@ const VideoContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  background-color: green;
 `
 
 const Video = styled.video`
-  object-fit: cover;
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  height: 100%;
 `    
       
 const Canvas = styled.canvas`
   display: block;
+  height: 100%;
   width: 100%;
   position: absolute;
   top: 0;
@@ -247,7 +250,7 @@ const SensorInfo = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  color: lightgray;
+  color: black;
   z-index: 10;
 `
     
