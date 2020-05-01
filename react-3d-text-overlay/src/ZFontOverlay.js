@@ -17,7 +17,7 @@ export default class ZFontOverlay extends React.Component {
 
     this.dragging = false;
     this.initSensors = this.initSensors.bind(this)
-    this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
+    //this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
   }
 
   loadScript(src, onload) {
@@ -87,11 +87,7 @@ export default class ZFontOverlay extends React.Component {
 
       this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
       this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
-      this.illo.rotate.z = angles.gamme / 360 * 2 * Math.PI;
-
-/*      this.illo.rotate.z = angles.alpha;
-      
-      this.illo.rotate.y = angles.gamma;*/
+      this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
       
     });
 
@@ -213,6 +209,7 @@ export default class ZFontOverlay extends React.Component {
     this.setState({snapped: true});
   }
 
+  /*
   onDeviceOrientationChangeEvent(event) {
 
     this.setState({orientation: event});
@@ -225,16 +222,14 @@ export default class ZFontOverlay extends React.Component {
 
       const {alpha, beta, gamma} = event
 
-      /*this.illo.rotate.y = compassHeading( alpha, beta, gamma ) //( -event.gamma ) * Math.PI/180
+      this.illo.rotate.y = compassHeading( alpha, beta, gamma ) //( -event.gamma ) * Math.PI/180
       this.illo.rotate.x = 0//getQuaternion( alpha, beta, gamma )[1] *Math.PI //(  event.beta ) * Math.PI/180
-      this.illo.rotate.z = 0//(  event.alpha - 180 ) * Math.PI/180 */
-
-
-
-
+      this.illo.rotate.z = 0//(  event.alpha - 180 ) * Math.PI/180 
       
     }
   }
+
+  */
 
   render() {
     return( 
