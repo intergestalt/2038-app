@@ -16,6 +16,8 @@ export default class ZFontOverlay extends React.Component {
     }
 
     this.dragging = false;
+    this.initSensors = this.initSensors.bind(this)
+    this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
   }
 
   loadScript(src, onload) {
@@ -37,11 +39,15 @@ export default class ZFontOverlay extends React.Component {
       })
     })
 
+  }
+
+  initSensors() {
     // iOS 13+
 
     if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
 
-      window.DeviceOrientationEvent.requestPermission().then( function ( response ) {
+      window.DeviceOrientationEvent.requestPermission().then(  response => {
+
 
         if ( response == 'granted' ) {
 
@@ -49,7 +55,7 @@ export default class ZFontOverlay extends React.Component {
         }
 
       } ).catch( function ( error ) {
-
+        alert("sensor error")
         console.error( 'Unable to use DeviceOrientation API:', error );
 
       } );
@@ -59,8 +65,6 @@ export default class ZFontOverlay extends React.Component {
       window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
 
     }
-
-
 
   }
 
@@ -173,7 +177,12 @@ export default class ZFontOverlay extends React.Component {
     this.setState({snapped: true});
   }
 
-  onDeviceOrientationChangeEvent = (event) => {
+  motionListener = (event) => {
+    this.setState({acceleration: event.acceleration});
+    
+  }
+
+  onDeviceOrientationChangeEvent(event) {
 
     this.setState({orientation: event});
     if(this.illo) this.setState({rotate: this.illo.rotate});
@@ -183,11 +192,12 @@ export default class ZFontOverlay extends React.Component {
 
     if(this.illo) {
 
-      /*this.illo.rotate.x = (event.beta - 90) / 365 * 2 * Math.PI;
-      this.illo.rotate.y = event.alpha / 365 * 2 * Math.PI;
-      this.illo.rotate.z = - event.gamma / 365 * 2 * Math.PI;*/
+      const {alpha, beta, gamma} = event
+
+      this.illo.rotate.y = compassHeading( alpha, beta, gamma ) //( -event.gamma ) * Math.PI/180
+      this.illo.rotate.x = 0//getQuaternion( alpha, beta, gamma )[1] *Math.PI //(  event.beta ) * Math.PI/180
+      this.illo.rotate.z = 0//(  event.alpha - 180 ) * Math.PI/180
       
-    
     }
   }
 
@@ -206,12 +216,11 @@ export default class ZFontOverlay extends React.Component {
           <canvas id="combined-result" width="600" height="800"></canvas>
           {!this.state.snapped && <canvas id="zdog-canvas" width="600" height="800"></canvas>}
           {/*<input id="snap-button" type="button" value="snap" onClick={this.combineCanvas}/>*/}
+          <button style={{bottom: 20, left: 20, zIndex:10, position:"fixed"}} onClick={ this.initSensors  }>activate sensors</button>
         </VideoContainer>
     ); 
   }
 }
-
-
 
 const VideoContainer = styled.div`
   position: relative;
@@ -225,4 +234,62 @@ const VideoContainer = styled.div`
     
   
 
+var degtorad = Math.PI / 180; // Degree-to-Radian conversion
 
+function compassHeading( alpha, beta, gamma ) {
+
+  var _x = beta  ? beta  * degtorad : 0; // beta value
+  var _y = gamma ? gamma * degtorad : 0; // gamma value
+  var _z = alpha ? alpha * degtorad : 0; // alpha value
+
+  var cX = Math.cos( _x );
+  var cY = Math.cos( _y );
+  var cZ = Math.cos( _z );
+  var sX = Math.sin( _x );
+  var sY = Math.sin( _y );
+  var sZ = Math.sin( _z );
+
+  // Calculate Vx and Vy components
+  var Vx = - cZ * sY - sZ * sX * cY;
+  var Vy = - sZ * sY + cZ * sX * cY;
+
+  // Calculate compass heading
+  var compassHeading = Math.atan( Vx / Vy );
+
+  // Convert compass heading to use whole unit circle
+  if( Vy < 0 ) {
+    compassHeading += Math.PI;
+  } else if( Vx < 0 ) {
+    compassHeading += 2 * Math.PI;
+  }
+
+  //return compassHeading * ( 180 / Math.PI ); // Compass Heading (in degrees)
+  return compassHeading; // Compass Heading (in rad)
+
+}
+
+function getQuaternion( alpha, beta, gamma ) {
+
+  var _x = beta  ? beta  * degtorad : 0; // beta value
+  var _y = gamma ? gamma * degtorad : 0; // gamma value
+  var _z = alpha ? alpha * degtorad : 0; // alpha value
+
+  var cX = Math.cos( _x/2 );
+  var cY = Math.cos( _y/2 );
+  var cZ = Math.cos( _z/2 );
+  var sX = Math.sin( _x/2 );
+  var sY = Math.sin( _y/2 );
+  var sZ = Math.sin( _z/2 );
+
+  //
+  // ZXY quaternion construction.
+  //
+
+  var w = cX * cY * cZ - sX * sY * sZ;
+  var x = sX * cY * cZ - cX * sY * sZ;
+  var y = cX * sY * cZ + sX * cY * sZ;
+  var z = cX * cY * sZ + sX * sY * cZ;
+
+  return [ w, x, y, z ];
+
+}
