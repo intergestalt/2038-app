@@ -80,10 +80,23 @@ export default class ZFontOverlay extends React.Component {
       let angles = this.orientationData.getFixedFrameEuler();
       angles.rotateX(- Math.PI / 2);
 
+    /*      
+      // seb
       this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
       this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
       this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
-      
+
+      // real
+      this.illo.rotate.y = (angles.alpha+180) / 360 * 2 * Math.PI;
+      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
+      this.illo.rotate.z = -angles.gamma / 360 * 2 * Math.PI;
+    */
+
+      // cool
+      this.illo.rotate.y = -(angles.alpha+180) / 360 * 2 * Math.PI;
+      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
+      this.illo.rotate.z = -0.5 * angles.gamma / 360 * 2 * Math.PI;
+
     });
 
   }
@@ -91,8 +104,6 @@ export default class ZFontOverlay extends React.Component {
   initZfont = ()=>{
     let Zdog = window.Zdog;
     let Zfont = window.Zfont;
-
-    Zdog.fov = -150;
 
     // Init Zfont plugin and bind to Zdog
     Zfont.init(Zdog);
