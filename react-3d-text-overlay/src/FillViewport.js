@@ -37,6 +37,7 @@ export default class FillViewport extends React.Component {
 }
 
 const Container = styled.div`
+  position: fixed;
   width: ${ ({vw}) => vw }px;
   height: ${ ({vh}) => vh }px
 `

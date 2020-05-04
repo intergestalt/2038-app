@@ -1,7 +1,12 @@
-html, body, #root {
+:root, html, body, #root {
   background-color: black;
   height: 100%;
 }
+
+body {
+  overscroll-behavior: none;
+}
+
 
 body {
   margin: 0;
