@@ -20,23 +20,17 @@ export default class ZFontOverlay extends React.Component {
     //this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
   }
 
-  loadScript(src, onload) {
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = src;
-    script.onload = onload;
-    document.body.appendChild(script);    
-  }
-
   componentDidMount() {    
     this.initVideo();  
 
-    // load zdog and zfont scripts and then init zfont
-    this.loadScript("https://unpkg.com/zdog@1/dist/zdog.dist.min.js", ()=>{
-      this.loadScript("https://cdn.jsdelivr.net/npm/zfont@latest/dist/zfont.min.js", ()=>{
+    import("zdog").then(foo => {
+      window.Zdog = foo.default
+      import("zfont").then(foo => {
+        window.Zfont = foo.default
         this.initZfont();
-      })
-    })
+      })    
+    })    
+    
   }
 
   componentDidUpdate(prevProps) {
@@ -52,7 +46,7 @@ export default class ZFontOverlay extends React.Component {
   }
 
   initSensors() {
-    /*
+    
     // iOS 13+
 
     if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
@@ -75,7 +69,7 @@ export default class ZFontOverlay extends React.Component {
 
       window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
 
-    }*/
+    }
 
     this.orientationData = new window.FULLTILT.DeviceOrientation( { 'type': 'world' } );
 
@@ -94,8 +88,8 @@ export default class ZFontOverlay extends React.Component {
   }
 
   initZfont = ()=>{
-    let Zfont = window.Zfont;
     let Zdog = window.Zdog;
+    let Zfont = window.Zfont;
 
     // Init Zfont plugin and bind to Zdog
     Zfont.init(Zdog);

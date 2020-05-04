@@ -10125,6 +10125,11 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
+typr.js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/typr.js/-/typr.js-1.0.0.tgz#0087fd0cf59d2d1e71a4a16f963c5227c78528e9"
+  integrity sha512-1fcCBnRerF4hLBrNVZyf6OwpWummpKomQ7N7OuWf3qzi4+XNSxtOnn3zvQlSwpV5SW/b0umULr5hQwOUNkZZUg==
+
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.4.tgz#2619800c4c825800efdd8343af7dd9933cbe2818"
@@ -10862,3 +10867,15 @@ yargs@^13.3.0:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^13.1.2"
+
+zdog@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/zdog/-/zdog-1.1.2.tgz#e2193d9d2cfef30f516d4ba8f02d53b0b846fa53"
+  integrity sha512-bWObLl2t1M8RB8kNcOkAFLn52H8n8Hxd+DvYpExCwGPzFOEIJ9COFhG9sjoOV9Da3cv4d6BqFBICNc2Pz37YQw==
+
+zfont@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.npmjs.org/zfont/-/zfont-1.2.7.tgz#3facf0e86be4cd51cc2d19bf748bd0580f596562"
+  integrity sha512-d+cTHEKRpDr+CPI/3Euf93Y7rZuWN7zZKkNUtlJw6lXNR57Ghgy+En44Zo4EOOpfbamjTtGUDr7aQKr//kFKOw==
+  dependencies:
+    typr.js "^1.0.0"
