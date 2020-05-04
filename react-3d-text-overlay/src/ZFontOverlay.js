@@ -23,6 +23,7 @@ export default class ZFontOverlay extends React.Component {
   componentDidMount() {    
     this.initVideo();  
 
+    window.fov = -500
     import("zdog").then(foo => {
       window.Zdog = foo.default
       import("zfont").then(foo => {
@@ -91,8 +92,11 @@ export default class ZFontOverlay extends React.Component {
     let Zdog = window.Zdog;
     let Zfont = window.Zfont;
 
+    Zdog.fov = -150;
+
     // Init Zfont plugin and bind to Zdog
     Zfont.init(Zdog);
+
 
     // Create Zdog Illustration
     // https://zzz.dog/api#illustration
