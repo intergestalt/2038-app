@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 
+import '@hughsk/fulltilt/dist/fulltilt'
 export default class ZFontOverlay extends React.Component {
 
   constructor(props) {
