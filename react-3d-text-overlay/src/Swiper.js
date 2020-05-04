@@ -14,7 +14,7 @@ const config = {
 function nextId(slogans, id) {
   const index = slogans.findIndex( s => s.id === id )
   if (index !== undefined) {
-    if (index < slogans.length) {
+    if (index < slogans.length-1) {
       return slogans[index+1].id
     } else {
       return id
