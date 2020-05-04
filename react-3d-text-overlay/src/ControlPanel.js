@@ -11,13 +11,13 @@ function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, s
         <Swiper slogans={slogans} currentSloganId={currentSloganId} setCurrentSloganId={setCurrentSloganId} />
       </Top>
       <Bottom>
-        <Left>=</Left>
+        <Left>≡≡</Left>
         <Center>
           <button onClick={snap}>
-            snap
+            ◉
           </button>
         </Center>
-        <Right>color</Right>
+        <Right>◎◎◎</Right>
       </Bottom>
     </Container>
   );
@@ -43,6 +43,7 @@ const Bottom = styled.div`
   display: flex;
   justify-content: space-between;
   background: yellow;
+  font-size:4vh;
 `
 
 const Left = styled.div`

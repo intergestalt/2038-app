@@ -20,7 +20,7 @@ class App extends React.Component {
   }
 
   render() {
-    const language = "cn"
+    const language = "en"
     const text = this.slogans.find( s => s.id === this.state.currentSloganId ).text[language]
     
     return(

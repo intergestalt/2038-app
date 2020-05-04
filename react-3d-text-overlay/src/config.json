@@ -2,30 +2,39 @@
   "slogans": [
     {
       "id": "1",
-      "akronym": "1abcd",
+      "akronym": "twctis",
       "text": {
-        "en": "1 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "en": "the world\ncame to its\nsenses",
         "de": "1 de de de d orfijs elriufhs eriufhsleri",
         "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
       }
     },
     {
       "id": "2",
-      "akronym": "2abcd",
+      "akronym": "wcottns",
       "text": {
-        "en": "2 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "en": "we call our\ntime the\nnew serenity",
         "de": "2 de de de d orfijs elriufhs eriufhsleri",
         "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
       }
     },
     {
       "id": "3",
-      "akronym": "3abcd",
+      "akronym": "eiomo",
       "text": {
-        "en": "3 en usher fiuhs ifuhse rifuhse irfuhsr",
+        "en": "equality\nis our main\nobjective",
         "de": "3 de de de d orfijs elriufhs eriufhsleri",
         "cn": "3 cn 我想玩电脑 我想玩电脑 我想玩电脑"
       }
-    }        
+    },
+    {
+      "id": "4",
+      "akronym": "市喫案給",
+      "text": {
+        "en": "市喫案給\n益立面旅\n恐段題責計",
+        "de": "3 de de de d orfijs elriufhs eriufhsleri",
+        "cn": "3 cn 我想玩电脑 我想玩电脑 我想玩电脑"
+      }
+    }            
   ]
 }
