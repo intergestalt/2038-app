@@ -158,7 +158,7 @@ export default class ZFontOverlay extends React.Component {
     // https://github.com/jaames/zfont#zdogfont
 
     var font = new Zdog.Font({
-      src: 'fonts/wts11.ttf' });
+      src: 'fonts/ARIALUNI.TTF' });
 
     // Create a Text object
     // Text objects behave like any other Zdog shape!
