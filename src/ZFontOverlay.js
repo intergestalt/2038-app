@@ -165,10 +165,10 @@ export default class ZFontOverlay extends React.Component {
     // https://github.com/jaames/zfont#zdogtext
     this.text = new Zdog.Text({
       addTo: this.illo,
-      translate: { z: 0, x: 25 },
+      translate: { z: 0, x: 0 },
       font: font,
       value: this.props.text,
-      fontSize: 30,
+      fontSize: 45,
       textAlign: 'center',
       textBaseline: 'middle',
       color: this.props.color,
@@ -257,10 +257,10 @@ export default class ZFontOverlay extends React.Component {
           <SensorInfo>
             {/*alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
-            gamma: {this.state.orientation.gamma}<br/>*/}
+            gamma: {this.state.orientation.gamma}<br/>
             rotate x: {this.state.rotate.x}<br/>
             rotate y: {this.state.rotate.y}<br/> 
-            rotate z: {this.state.rotate.z}
+            rotate z: {this.state.rotate.z}*/}
           </SensorInfo>
           <Video id="video"></Video>
           <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
