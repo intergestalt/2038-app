@@ -10885,7 +10885,7 @@ yarn@^1.22.4:
 
 "zdog@https://github.com/intergestalt/zdog#perspective":
   version "1.1.2"
-  resolved "https://github.com/intergestalt/zdog#3c325059882c7f7a63b09a3a855138ed8443dd26"
+  resolved "https://github.com/intergestalt/zdog#6ad594a3b6c8c3cdd5ce94bb5e7ba2fc6ce21a08"
 
 zfont@^1.2.7:
   version "1.2.7"
