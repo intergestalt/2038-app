@@ -92,18 +92,19 @@ export default class ZFontOverlay extends React.Component {
       this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
       this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
       this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
-
+    */
       // real
       this.illo.rotate.y = (angles.alpha+180) / 360 * 2 * Math.PI;
       this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
       this.illo.rotate.z = -angles.gamma / 360 * 2 * Math.PI;
-    */
+    
 
+    /*
       // cool
       this.illo.rotate.y = -(angles.alpha+180) / 360 * 2 * Math.PI;
       this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
       this.illo.rotate.z = -0.5 * angles.gamma / 360 * 2 * Math.PI;
-
+    */
     });
 
   }
