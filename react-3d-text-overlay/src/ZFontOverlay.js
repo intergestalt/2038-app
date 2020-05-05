@@ -8,7 +8,7 @@ export default class ZFontOverlay extends React.Component {
     super(props);
 
     this.state = {
-      snapped: false,
+      //snapped: false, <- prop
       acceleration: {x: 0, y: 0, z: 0},
       rotate: {x: 0, y: 0, z: 0},
       orientation: {alpha: 0, beta: 0, gamma: 0},
@@ -202,7 +202,8 @@ export default class ZFontOverlay extends React.Component {
   // this is exposed to parent
   snap = ()=> {
     console.log("SNAP");
-    this.combineCanvas();
+    const canvas = this.combineCanvas();
+    return canvas.toDataURL("image/jpeg")
   }
 
   combineCanvas = ()=> {
@@ -222,7 +223,9 @@ export default class ZFontOverlay extends React.Component {
     resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.width, resultCanvas.width / ratio);     
     resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
-    this.setState({snapped: true});
+    //this.setState({snapped: true});
+
+    return resultCanvas
   }
 
   /*
@@ -258,9 +261,9 @@ export default class ZFontOverlay extends React.Component {
             rotate y: {this.state.rotate.y}<br/> 
             rotate z: {this.state.rotate.z}
           </SensorInfo>
-          {!this.state.snapped && <Video id="video"></Video>}
-          <Canvas id="combined-result" width="600" height="800"></Canvas>
-          {!this.state.snapped && <Canvas id="zdog-canvas" width="600" height="800"></Canvas>}
+          <Video id="video"></Video>
+          <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
+          <Canvas id="combined-result" width="600" height="800" style={{visibility: this.props.snapped ? "visible" : "hidden"}}></Canvas>
 
           { !this.state.initialized &&
               <Cover>

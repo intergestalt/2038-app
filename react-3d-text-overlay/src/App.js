@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components/macro'
 
 import FillViewport from './FillViewport'
 import ZFontOverlay from './ZFontOverlay'
@@ -13,10 +13,21 @@ class App extends React.Component {
     super(props);
     this.slogans = config.slogans
     this.state = {
-      currentSloganId: this.slogans[1].id
+      currentSloganId: this.slogans[1].id,
+      imageDataUrl: null
     }
 
     this.overlayRef = React.createRef();
+  }
+
+  snap = () => {
+    const imageDataUrl = this.overlayRef.current.snap()
+    console.log(imageDataUrl)
+    this.setState({imageDataUrl})
+  }
+
+  clearPicture = () => {
+    this.setState({imageDataUrl: null})
   }
 
   render() {
@@ -27,14 +38,29 @@ class App extends React.Component {
     <FillViewport>
         <Container>
         <Top>
-          <ZFontOverlay text={text} ref={this.overlayRef} color={'#faf'}/>
+          <ZFontOverlay 
+            text={text} 
+            ref={this.overlayRef} 
+            color={'#faf'}
+            snapped={!!this.state.imageDataUrl}
+          />
+          { this.state.imageDataUrl &&
+            <Overlay>
+              <Question>
+                Keep Picture? <br /><br />
+                <span style={{textDecoration:"underline"}} onClick={this.clearPicture}>discard</span>
+                &nbsp;&nbsp;&nbsp;
+                <a href={this.state.imageDataUrl} onClick={this.clearPicture} download="meme.jpeg">save</a>
+              </Question>
+            </Overlay>
+          }
         </Top>
         <Bottom>
           <ControlPanel 
             slogans={this.slogans} 
             currentSloganId={this.state.currentSloganId} 
             setCurrentSloganId={(id)=>this.setState({currentSloganId: id})} 
-            snap={()=>{this.overlayRef.current.snap()}}
+            snap={this.snap}
           />
         </Bottom>
       </Container>
@@ -54,9 +80,28 @@ const Container = styled.div`
 const Top = styled.div`
   flex: 1;
   overflow: hidden;
+  position: relative;
 `
 
 const Bottom = styled.div`
 background: white;
   height: 100px;
+`
+
+const Overlay = styled.div`
+  display: flex;
+  position: absolute;
+  top:0;
+  right:0;
+  left:0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+`
+
+const Question = styled.div`
+  padding: 20px;
+  border-radius: 10px;
+  background-color: darkgrey;
+  opacity: 0.93;
 `
