@@ -5169,6 +5169,11 @@ internal-slot@^1.0.2:
     has "^1.0.3"
     side-channel "^1.0.2"
 
+intrinsic-scale@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/intrinsic-scale/-/intrinsic-scale-3.0.4.tgz#8695951c70af983c1507eae26219c9737320c4e8"
+  integrity sha512-K9+8JfjKhu4cl3kLBHrHW/RnAQFlyyOBV+zoSyzUM+vXz11ypaN+adk5PtI1pvMAuQN1zKnQ+lu9g7kDs/3hHw==
+
 invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"

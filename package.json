@@ -5,6 +5,7 @@
   "dependencies": {
     "@hughsk/fulltilt": "^0.7.1",
     "add": "^2.0.6",
+    "intrinsic-scale": "^3.0.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",

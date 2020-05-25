@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components'
 
+import {cover} from 'intrinsic-scale';
+
 import '@hughsk/fulltilt/dist/fulltilt'
 export default class ZFontOverlay extends React.Component {
 
@@ -11,6 +13,7 @@ export default class ZFontOverlay extends React.Component {
       //snapped: false, <- prop
       acceleration: {x: 0, y: 0, z: 0},
       rotate: {x: 0, y: 0, z: 0},
+      rotateY: 0,
       orientation: {alpha: 0, beta: 0, gamma: 0},
       width: null,
       height: null,
@@ -81,32 +84,38 @@ export default class ZFontOverlay extends React.Component {
 
     this.orientationData = new window.FULLTILT.DeviceOrientation( { 'type': 'world' } );
 
-    this.orientationData.start(() => {
-      // DeviceOrientation updated
+    this.orientationData.start(this.onOrientationData)
 
-      let angles = this.orientationData.getFixedFrameEuler();
-      angles.rotateX(- Math.PI / 2);
+  }
 
-    /*      
-      // seb
-      this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
-      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
-      this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
-    */
-      // real
-      this.illo.rotate.y = (angles.alpha+180) / 360 * 2 * Math.PI;
-      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
-      this.illo.rotate.z = -angles.gamma / 360 * 2 * Math.PI;
-    
+  onOrientationData = () => {
+    // DeviceOrientation updated
 
-    /*
-      // cool
-      this.illo.rotate.y = -(angles.alpha+180) / 360 * 2 * Math.PI;
-      this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
-      this.illo.rotate.z = -0.5 * angles.gamma / 360 * 2 * Math.PI;
-    */
-    });
+    let angles = this.orientationData.getFixedFrameEuler();
+    angles.rotateX(- Math.PI / 2);
 
+    if (this.dragging) return
+
+  /*      
+    // seb
+    this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
+    this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
+    this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
+  */
+    // real
+    this.illo.rotate.y = ((angles.alpha) / 360 * 2 * Math.PI) + this.state.rotateY;
+    this.illo.rotate.x = (angles.beta / 360 * 2 * Math.PI);
+    this.illo.rotate.z = 0//-angles.gamma / 360 * 2 * Math.PI;
+
+    //this.setState({ rotate: {x:0, y:0, z:0 } })
+  
+
+  /*
+    // cool
+    this.illo.rotate.y = -(angles.alpha+180) / 360 * 2 * Math.PI;
+    this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
+    this.illo.rotate.z = -0.5 * angles.gamma / 360 * 2 * Math.PI;
+  */
   }
 
   initZfont = ()=>{
@@ -125,9 +134,18 @@ export default class ZFontOverlay extends React.Component {
       rotate: { x: 0, y: 0, z: 0 },
       onDragStart: () => {
         this.dragging = true;
+        this.rotateY0 = this.illo.rotate.y
+        this.rotateX0 = this.illo.rotate.x
+        this.rotateZ0 = this.illo.rotate.z
+      },
+      onDragMove: () => {
+        this.illo.rotate.x = this.rotateX0
+        this.illo.rotate.z = this.rotateZ0
       },
       onDragEnd: () => {
         this.setState({rotate: this.illo.rotate});
+        this.setState({rotateY: this.state.rotateY + this.illo.rotate.y - this.rotateY0 });
+        //alert(this.illo.rotate.y)
         this.dragging = false;
       },
       resize: true,
@@ -221,7 +239,11 @@ export default class ZFontOverlay extends React.Component {
 
     let ratio = videoElement.videoWidth / videoElement.videoHeight;
 
-    resultCanvasContext.drawImage(videoElement, 0, 0, resultCanvas.width, resultCanvas.width / ratio);     
+    let { width, height, x, y } = cover(resultCanvas.width, resultCanvas.height, videoElement.videoWidth, videoElement.videoHeight);
+
+    console.log({x,y,width, height})
+
+    resultCanvasContext.drawImage(videoElement, x, y, width, height);     
     resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
     //this.setState({snapped: true});
@@ -264,7 +286,7 @@ export default class ZFontOverlay extends React.Component {
           </SensorInfo>
           <Video id="video"></Video>
           <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
-          <Canvas id="combined-result" width="600" height="800" style={{visibility: this.props.snapped ? "visible" : "hidden"}}></Canvas>
+          <Canvas id="combined-result" width="600" height="800" style={{pointerEvents: this.props.snapped ? "all" : "none", visibility: this.props.snapped ? "visible" : "hidden"}}></Canvas>
 
           { !this.state.initialized &&
               <Cover>
@@ -309,6 +331,8 @@ const Video = styled.video`
   left: 0;
   top: 0;
   width: 100%;
+  height: 100%;
+  object-fit: cover;
 `    
       
 const Canvas = styled.canvas`
