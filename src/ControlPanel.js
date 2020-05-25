@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components'
 
 import Swiper from './Swiper'
+import SelectButton from './SelectButton'
 
 
 function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, snap }) {
@@ -11,13 +12,17 @@ function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, s
         <Swiper slogans={slogans} currentSloganId={currentSloganId} setCurrentSloganId={setCurrentSloganId} />
       </Top>
       <Bottom>
-        <Left>≡≡</Left>
+        <Left>
+          <SelectButton />
+        </Left>
         <Center>
-          <button onClick={snap}>
-            ◉
-          </button>
+          <SnapButton onClick={snap} color="red"/>
         </Center>
-        <Right>◎◎◎</Right>
+        <Right>
+          <RoundButton color="red" selected={true}/>
+          <RoundButton color="red" selected={false}/>
+          <RoundButton color="red" selected={false}/>
+        </Right>
       </Bottom>
     </Container>
   );
@@ -42,24 +47,66 @@ const Bottom = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
-  background: yellow;
+  background: lightgrey;
   font-size:4vh;
 `
 
 const Left = styled.div`
-  
+  flex:1;
+  display: flex;
+  align-items: center;
 `
 
 const Center = styled.div`
-  
+  flex:1;
+  display: flex;
+  justify-content: center;
 `
 
 const Right = styled.div`
-  
+  flex:1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 `
 
 const Slide = styled.div`
   height: 100%;
   width: 30%;
   background: rgba(255,0,255,0.5);
+`
+
+const SnapButton = styled.div`
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: solid 5px ${ props => props.color || "black" };
+  position: relative;
+  cursor: pointer;
+  &:before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border-radius: 50%;
+    background-color: white;
+  }
+
+  &:hover {
+    &:before {
+    }
+  }
+`
+
+const RoundButton = styled.div`
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: ${ props => props.color };
+  border: ${ props => props.selected ? "solid white 2px" : "none" };
 `
