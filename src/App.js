@@ -36,6 +36,10 @@ class App extends React.Component {
     this.setState({currentColor:c})
   }
 
+  makeFilename = () => {
+    return this.slogans.find( ({id}) => id === this.state.currentSloganId).akronym + ".jpg"
+  }
+
   render() {
     const language = "en"
     const text = this.slogans.find( s => s.id === this.state.currentSloganId ).text[language]
@@ -56,7 +60,7 @@ class App extends React.Component {
                 Keep Picture? <br /><br />
                 <span style={{textDecoration:"underline"}} onClick={this.clearPicture}>discard</span>
                 &nbsp;&nbsp;&nbsp;
-                <a href={this.state.imageDataUrl} onClick={this.clearPicture} download="meme.jpeg">save</a>
+                <a href={this.state.imageDataUrl} onClick={this.clearPicture} download={this.makeFilename()}>save</a>
               </Question>
             </Overlay>
           }
