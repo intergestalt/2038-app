@@ -12,9 +12,11 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.slogans = config.slogans
+    this.colors = config.colors
     this.state = {
       currentSloganId: this.slogans[1].id,
-      imageDataUrl: null
+      currentColor: this.colors[0],
+      imageDataUrl: null,
     }
 
     this.overlayRef = React.createRef();
@@ -30,6 +32,10 @@ class App extends React.Component {
     this.setState({imageDataUrl: null})
   }
 
+  setCurrentColor = (c) => {
+    this.setState({currentColor:c})
+  }
+
   render() {
     const language = "en"
     const text = this.slogans.find( s => s.id === this.state.currentSloganId ).text[language]
@@ -41,7 +47,7 @@ class App extends React.Component {
           <ZFontOverlay 
             text={text} 
             ref={this.overlayRef} 
-            color={'#faf'}
+            color={this.state.currentColor}
             snapped={!!this.state.imageDataUrl}
           />
           { this.state.imageDataUrl &&
@@ -61,6 +67,9 @@ class App extends React.Component {
             currentSloganId={this.state.currentSloganId} 
             setCurrentSloganId={(id)=>this.setState({currentSloganId: id})} 
             snap={this.snap}
+            colors={this.colors}
+            currentColor={this.state.currentColor}
+            setCurrentColor={this.setCurrentColor}
           />
         </Bottom>
       </Container>

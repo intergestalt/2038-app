@@ -5,7 +5,7 @@ import Swiper from './Swiper'
 import SelectButton from './SelectButton'
 
 
-function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, snap }) {
+function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, snap, colors, currentColor, setCurrentColor }) {
   return (
     <Container>
       <Top>
@@ -19,9 +19,14 @@ function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, s
           <SnapButton onClick={snap} color="red"/>
         </Center>
         <Right>
-          <RoundButton color="red" selected={true}/>
-          <RoundButton color="red" selected={false}/>
-          <RoundButton color="red" selected={false}/>
+          {
+            colors.map( c => <RoundButton 
+              key={c} 
+              color={c} 
+              selected={ c === currentColor } 
+              onClick={ () => {console.log(c); setCurrentColor(c)} }
+            /> )
+          }
         </Right>
       </Bottom>
     </Container>
@@ -108,5 +113,7 @@ const RoundButton = styled.div`
   width: 20px;
   border-radius: 50%;
   background-color: ${ props => props.color };
+  cursor: ${ props => !props.selected ? "pointer" : "default" };
+  margin: ${ props => props.selected ? "0" : "2px" };
   border: ${ props => props.selected ? "solid white 2px" : "none" };
 `
