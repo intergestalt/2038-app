@@ -121,6 +121,7 @@ const Container = styled(Swipeable)`
 const Slide = styled.div`
   padding: 1em;
   white-space: nowrap;
+  cursor: ${ ({active}) => active ? "default" : "pointer" };
   transition: background-color 0.3s 0.1s;
   background-color: ${ ({active}) => active ? "rgba(255,0,255,0.5)" : "transparent" };
 `
