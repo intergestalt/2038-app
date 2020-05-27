@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components'
 
 import { Swipeable } from 'react-swipeable'
@@ -7,7 +7,7 @@ const config = {
   delta: 10,                             // min distance(px) before a swipe starts
   preventDefaultTouchmoveEvent: false,   // preventDefault on touchmove, *See Details*
   trackTouch: true,                      // track touch input
-  trackMouse: true,                      // track mouse input
+  trackMouse: false,                      // track mouse input
   rotationAngle: 0,                      // set a rotation angle
 }
 
@@ -45,8 +45,23 @@ function moveToId(slogans, targetId, currentId) {
   return currentId
 }
 
+function getScrollOffset(currentId) {
+  const slides = document.getElementsByClassName('slide')
+  let offset = 0
+  for (let i = 0; i < slides.length; i++) {
+    //console.log(slides[i].getAttribute('data-id'));
+    if (slides[i].getAttribute('data-id') !== currentId) {
+      offset += slides[i].offsetWidth
+    } else {
+      offset += slides[i].offsetWidth / 2
+      //console.log(offset)
+      return offset
+    }
+  }
+}
+
 function Swiper({language, slogans, currentSloganId, setCurrentSloganId}) {
- 
+
   const handleSwipe = ({
     event,          // source event
     initial,        // initial swipe [x,y]
@@ -58,18 +73,26 @@ function Swiper({language, slogans, currentSloganId, setCurrentSloganId}) {
     velocity,       // √(absX^2 + absY^2) / time
     dir,            // direction of swipe (Left|Right|Up|Down)
   }) => {
-    console.log(dir)
-    if (dir === "Right") {
+    console.log(dir, first)
+    if (!first) return
+    if (dir === "Left") {
       setCurrentSloganId(nextId(slogans, currentSloganId))
-    } else {
+    } else if (dir === "Right") {
       setCurrentSloganId(prevId(slogans, currentSloganId))
     }
   }
+
+  const [offset, setOffset] = useState(0)
+
+  useEffect(() => {
+    setOffset(getScrollOffset(currentSloganId))
+  });
+
  
   return (
-      <Container  onSwiped={(eventData) => handleSwipe(eventData)} {...config} >
+      <Container  onSwiping={(eventData) => handleSwipe(eventData)} {...config} offset={offset}>
         { slogans.map( ({akronym,id}) => 
-          <Slide key={id} active={ currentSloganId==id } onClick={ () => setCurrentSloganId(moveToId(slogans, id, currentSloganId)) } >
+          <Slide className="slide" data-id={id} key={id} active={ currentSloganId==id } onClick={ () => setCurrentSloganId(moveToId(slogans, id, currentSloganId)) } >
             {akronym}
           </Slide> 
         )}
@@ -80,14 +103,29 @@ function Swiper({language, slogans, currentSloganId, setCurrentSloganId}) {
 export default Swiper;
 
 const Container = styled(Swipeable)`
-  display: inline-flex;
+  display: flex;
+  flex: 1;
+  justify-self: flex-start;
   flex-direction: row;
+  flex-wrap: nowrap;
   height: 100%;
   color: black;
   user-select: none;
+  /*border-left: 50vw solid black;
+  position: absolute;
+  left:0;*/
+  transition: transform 0.3s;
+  transform: translateX( calc(50vw - ${ props => props.offset }px ) );
 `
 
 const Slide = styled.div`
-  height: 100%;
-  background: ${ ({active}) => active ? "rgba(255,0,255,0.5)" : "transparent" };
+  padding: 1em;
+  white-space: nowrap;
+  transition: background-color 0.3s 0.1s;
+  background-color: ${ ({active}) => active ? "rgba(255,0,255,0.5)" : "transparent" };
 `
+
+
+function randomColor() {
+  return 'rgb(' + (Math.random()*355-100) + ',' + (Math.random()*155+100) + ',' + (Math.random()*155+100) + ')'
+}
