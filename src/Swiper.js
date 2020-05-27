@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Swipeable } from 'react-swipeable'
 
 const config = {
-  delta: 10,                             // min distance(px) before a swipe starts
+  delta: 15,                             // min distance(px) before a swipe starts
   preventDefaultTouchmoveEvent: false,   // preventDefault on touchmove, *See Details*
   trackTouch: true,                      // track touch input
   trackMouse: false,                      // track mouse input
