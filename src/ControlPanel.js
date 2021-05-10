@@ -2,11 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 import Swiper from "./Swiper";
+import CameraButton from "./CameraButton";
 import SelectButton from "./SelectButton";
 
 function ControlPanel({
   language,
   slogans,
+  sloganSelect,
+  toggleSloganSelect,
   currentSloganId,
   setCurrentSloganId,
   snap,
@@ -25,7 +28,14 @@ function ControlPanel({
       </Top>
       <Bottom>
         <Left>
-          <SelectButton />
+          <div
+            onClick={() => {
+              console.log(`sloganSelect clicked: ${sloganSelect}`);
+              toggleSloganSelect();
+            }}
+          >
+            {sloganSelect ? <CameraButton /> : <SelectButton />}
+          </div>
         </Left>
         <Center>
           <SnapButton onClick={snap} color="red" />
