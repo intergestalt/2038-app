@@ -1,53 +1,50 @@
-import React from 'react';
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
-import {cover} from 'intrinsic-scale';
+import { cover } from "intrinsic-scale";
 
-import '@hughsk/fulltilt/dist/fulltilt'
+import "@hughsk/fulltilt/dist/fulltilt";
 export default class ZFontOverlay extends React.Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
       //snapped: false, <- prop
-      acceleration: {x: 0, y: 0, z: 0},
-      rotate: {x: 0, y: 0, z: 0},
+      acceleration: { x: 0, y: 0, z: 0 },
+      rotate: { x: 0, y: 0, z: 0 },
       rotateY: 0,
-      orientation: {alpha: 0, beta: 0, gamma: 0},
+      orientation: { alpha: 0, beta: 0, gamma: 0 },
       width: null,
       height: null,
-      initialized: false
-    }
+      initialized: false,
+    };
 
     this.dragging = false;
-    this.initSensors = this.initSensors.bind(this)
+    this.initSensors = this.initSensors.bind(this);
     //this.onDeviceOrientationChangeEvent = this.onDeviceOrientationChangeEvent.bind(this)
   }
 
-  componentDidMount() {    
-
-    window.fov = -500
-    import("zdog").then(foo => {
-      window.Zdog = foo.default
-      import("zfont").then(foo => {
-        window.Zfont = foo.default
+  componentDidMount() {
+    window.fov = -500;
+    import("zdog").then((foo) => {
+      window.Zdog = foo.default;
+      import("zfont").then((foo) => {
+        window.Zfont = foo.default;
         this.initZfont();
-      })    
-    })    
-    
+      });
+    });
   }
 
   initialize = () => {
     this.initVideo();
     this.initSensors();
-    this.setState({ initialized: true })
-  }
+    this.setState({ initialized: true });
+  };
 
   componentDidUpdate(prevProps) {
     if (this.props.text !== prevProps.text) {
       console.log("text changed to", this.props.text);
-      this.text.value = this.props.text;      
+      this.text.value = this.props.text;
     }
 
     if (this.props.color !== prevProps.color) {
@@ -57,94 +54,99 @@ export default class ZFontOverlay extends React.Component {
   }
 
   initSensors() {
-    
     // iOS 13+
 
-    if ( window.DeviceOrientationEvent !== undefined && typeof window.DeviceOrientationEvent.requestPermission === 'function' ) {
-
-      window.DeviceOrientationEvent.requestPermission().then(  response => {
-
-
-        if ( response == 'granted' ) {
-
-          window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
-        }
-
-      } ).catch( function ( error ) {
-        alert("sensor error")
-        console.error( 'Unable to use DeviceOrientation API:', error );
-
-      } );
-
+    if (
+      window.DeviceOrientationEvent !== undefined &&
+      typeof window.DeviceOrientationEvent.requestPermission === "function"
+    ) {
+      window.DeviceOrientationEvent.requestPermission()
+        .then((response) => {
+          if (response == "granted") {
+            window.addEventListener(
+              "deviceorientation",
+              this.onDeviceOrientationChangeEvent,
+              false,
+            );
+          }
+        })
+        .catch(function (error) {
+          alert("sensor error");
+          console.error("Unable to use DeviceOrientation API:", error);
+        });
     } else {
-
-      window.addEventListener('deviceorientation', this.onDeviceOrientationChangeEvent, false );
-
+      window.addEventListener(
+        "deviceorientation",
+        this.onDeviceOrientationChangeEvent,
+        false,
+      );
     }
 
-    this.orientationData = new window.FULLTILT.DeviceOrientation( { 'type': 'world' } );
+    this.orientationData = new window.FULLTILT.DeviceOrientation({
+      type: "world",
+    });
 
-    this.orientationData.start(this.onOrientationData)
-
+    this.orientationData.start(this.onOrientationData);
   }
 
   onOrientationData = () => {
     // DeviceOrientation updated
 
     let angles = this.orientationData.getFixedFrameEuler();
-    angles.rotateX(- Math.PI / 2);
+    angles.rotateX(-Math.PI / 2);
 
-    if (this.dragging) return
+    if (this.dragging) return;
 
-  /*      
+    /*
     // seb
     this.illo.rotate.y = angles.alpha / 360 * 2 * Math.PI;
     this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
     this.illo.rotate.z = 0; //angles.gamma / 360 * 2 * Math.PI;
   */
     // real
-    this.illo.rotate.y = ((angles.alpha) / 360 * 2 * Math.PI) + this.state.rotateY;
-    this.illo.rotate.x = (angles.beta / 360 * 2 * Math.PI);
-    this.illo.rotate.z = 0//-angles.gamma / 360 * 2 * Math.PI;
+    this.illo.rotate.y =
+      (angles.alpha / 360) * 2 * Math.PI + this.state.rotateY;
+    this.illo.rotate.x = (angles.beta / 360) * 2 * Math.PI;
+    this.illo.rotate.z = 0; //-angles.gamma / 360 * 2 * Math.PI;
 
     //this.setState({ rotate: {x:0, y:0, z:0 } })
-  
 
-  /*
+    /*
     // cool
     this.illo.rotate.y = -(angles.alpha+180) / 360 * 2 * Math.PI;
     this.illo.rotate.x = angles.beta / 360 * 2 * Math.PI;
     this.illo.rotate.z = -0.5 * angles.gamma / 360 * 2 * Math.PI;
   */
-  }
+  };
 
-  initZfont = ()=>{
+  initZfont = () => {
     let Zdog = window.Zdog;
     let Zfont = window.Zfont;
 
     // Init Zfont plugin and bind to Zdog
     Zfont.init(Zdog);
 
-
     // Create Zdog Illustration
     // https://zzz.dog/api#illustration
     this.illo = new Zdog.Illustration({
-      element: '#zdog-canvas',
+      element: "#zdog-canvas",
       dragRotate: true,
       rotate: { x: 0, y: 0, z: 0 },
       onDragStart: () => {
         this.dragging = true;
-        this.rotateY0 = this.illo.rotate.y
-        this.rotateX0 = this.illo.rotate.x
-        this.rotateZ0 = this.illo.rotate.z
+        this.rotateY0 = this.illo.rotate.y;
+        this.rotateX0 = this.illo.rotate.x;
+        this.rotateZ0 = this.illo.rotate.z;
       },
       onDragMove: () => {
-        this.illo.rotate.x = this.rotateX0
-        this.illo.rotate.z = this.rotateZ0
+        this.illo.rotate.x = this.rotateX0;
+        this.illo.rotate.z = this.rotateZ0;
       },
       onDragEnd: () => {
-        this.setState({rotate: this.illo.rotate});
-        this.setState({rotateY: this.state.rotateY + this.illo.rotate.y - this.rotateY0 });
+        this.setState({ rotate: this.illo.rotate });
+        this.setState({
+          rotateY: this.state.rotateY + this.illo.rotate.y - this.rotateY0,
+        });
         //alert(this.illo.rotate.y)
         this.dragging = false;
       },
@@ -153,8 +155,8 @@ export default class ZFontOverlay extends React.Component {
       onResize: function (width, height) {
         var minSize = Math.min(width, height);
         this.zoom = minSize / 300;
-      } });
-
+      },
+    });
 
     /*
     let box = new Zdog.Box({
@@ -176,7 +178,8 @@ export default class ZFontOverlay extends React.Component {
     // https://github.com/jaames/zfont#zdogfont
 
     var font = new Zdog.Font({
-      src: 'fonts/ARIALUNI.TTF' });
+      src: "fonts/ARIALUNI.TTF",
+    });
 
     // Create a Text object
     // Text objects behave like any other Zdog shape!
@@ -187,10 +190,11 @@ export default class ZFontOverlay extends React.Component {
       font: font,
       value: this.props.text,
       fontSize: 45,
-      textAlign: 'center',
-      textBaseline: 'middle',
+      textAlign: "center",
+      textBaseline: "middle",
       color: this.props.color,
-      fill: true });
+      fill: true,
+    });
 
     // Creating a darker duplicate of the text and pushing it backwards can help make it look like the text has depth
     // (This is entirely optional!)
@@ -200,35 +204,37 @@ export default class ZFontOverlay extends React.Component {
       color: '#aab' });*/
 
     // Animation loop
-    const animate = ()=> {
+    const animate = () => {
       this.illo.updateRenderGraph();
       requestAnimationFrame(animate);
-    }
+    };
     animate();
-  }
+  };
 
   initVideo() {
     let videoElement = document.getElementById("video");
-    
+
     // Use facingMode: environment to attemt to get the front camera on phones
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
-      videoElement.srcObject = stream;
-      videoElement.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
-      videoElement.play();
-    });
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: "environment" } })
+      .then(function (stream) {
+        videoElement.srcObject = stream;
+        videoElement.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+        videoElement.play();
+      });
   }
 
   // this is exposed to parent
-  snap = ()=> {
+  snap = () => {
     console.log("SNAP");
     const canvas = this.combineCanvas();
-    return canvas.toDataURL("image/jpeg")
-  }
+    return canvas.toDataURL("image/jpeg");
+  };
 
-  combineCanvas = ()=> {
+  combineCanvas = () => {
     let videoElement = document.getElementById("video");
     let zdogCanvas = document.getElementById("zdog-canvas");
-    
+
     let resultCanvas = document.getElementById("combined-result");
     resultCanvas.width = zdogCanvas.width;
     resultCanvas.height = zdogCanvas.height;
@@ -239,55 +245,69 @@ export default class ZFontOverlay extends React.Component {
 
     let ratio = videoElement.videoWidth / videoElement.videoHeight;
 
-    let { width, height, x, y } = cover(resultCanvas.width, resultCanvas.height, videoElement.videoWidth, videoElement.videoHeight);
+    let { width, height, x, y } = cover(
+      resultCanvas.width,
+      resultCanvas.height,
+      videoElement.videoWidth,
+      videoElement.videoHeight,
+    );
 
-    console.log({x,y,width, height})
+    console.log({ x, y, width, height });
 
-    resultCanvasContext.drawImage(videoElement, x, y, width, height);     
+    resultCanvasContext.drawImage(videoElement, x, y, width, height);
     resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
     //this.setState({snapped: true});
 
-    return resultCanvas
-  }
+    return resultCanvas;
+  };
 
   render() {
-    return( 
+    return (
       <VideoContainer initialized={this.state.initialized}>
-          <SensorInfo>
-            {/*alpha: {this.state.orientation.alpha}<br/>
+        <SensorInfo>
+          {/*alpha: {this.state.orientation.alpha}<br/>
             beta: {this.state.orientation.beta}<br/>
             gamma: {this.state.orientation.gamma}<br/>
             rotate x: {this.state.rotate.x}<br/>
-            rotate y: {this.state.rotate.y}<br/> 
+            rotate y: {this.state.rotate.y}<br/>
             rotate z: {this.state.rotate.z}*/}
-          </SensorInfo>
-          <Video id="video"></Video>
-          <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
-          <Canvas id="combined-result" width="600" height="800" style={{pointerEvents: this.props.snapped ? "all" : "none", visibility: this.props.snapped ? "visible" : "hidden"}}></Canvas>
+        </SensorInfo>
+        <Video id="video"></Video>
+        <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
+        <Canvas
+          id="combined-result"
+          width="600"
+          height="800"
+          style={{
+            pointerEvents: this.props.snapped ? "all" : "none",
+            visibility: this.props.snapped ? "visible" : "hidden",
+          }}
+        ></Canvas>
 
-          { !this.state.initialized &&
-              <Cover>
-                <CoverText>
-                  Please allow camera and sensor access<br />
-                  <button onClick={ this.initialize  }>Start</button>
-                </CoverText>
-              </Cover>
-          } 
+        {!this.state.initialized && (
+          <Cover>
+            <CoverText>
+              Please allow camera and sensor access
+              <br />
+              <button onClick={this.initialize}>Start</button>
+            </CoverText>
+          </Cover>
+        )}
       </VideoContainer>
-    ); 
+    );
   }
 }
 
 const VideoContainer = styled.div`
-  canvas { 
-    ${ ({initialized}) => initialized || "filter: blur(10px);"}
-  };
+  canvas {
+    ${({ initialized }) => initialized || "filter: blur(10px);"}
+  }
   position: relative;
   width: 100%;
   height: 100%;
   background-color: black;
-`
+`;
 
 const Cover = styled.div`
   position: relative;
@@ -297,12 +317,12 @@ const Cover = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: rgba(111,111,111,0.8);
-`
+  background-color: rgba(111, 111, 111, 0.8);
+`;
 
 const CoverText = styled.div`
   text-align: center;
-`
+`;
 
 const Video = styled.video`
   position: absolute;
@@ -311,8 +331,8 @@ const Video = styled.video`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`    
-      
+`;
+
 const Canvas = styled.canvas`
   display: block;
   height: 100%;
@@ -320,7 +340,7 @@ const Canvas = styled.canvas`
   position: absolute;
   top: 0;
   left: 0;
-`
+`;
 
 const SensorInfo = styled.div`
   position: absolute;
@@ -328,8 +348,6 @@ const SensorInfo = styled.div`
   left: 0;
   color: black;
   z-index: 10;
-`
-    
-  
+`;
 
 var degtorad = Math.PI / 180; // Degree-to-Radian conversion

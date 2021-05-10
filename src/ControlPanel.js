@@ -1,32 +1,47 @@
-import React from 'react';
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
-import Swiper from './Swiper'
-import SelectButton from './SelectButton'
+import Swiper from "./Swiper";
+import SelectButton from "./SelectButton";
 
-
-function ControlPanel({language, slogans, currentSloganId, setCurrentSloganId, snap, colors, currentColor, setCurrentColor }) {
+function ControlPanel({
+  language,
+  slogans,
+  currentSloganId,
+  setCurrentSloganId,
+  snap,
+  colors,
+  currentColor,
+  setCurrentColor,
+}) {
   return (
     <Container>
       <Top>
-        <Swiper slogans={slogans} currentSloganId={currentSloganId} setCurrentSloganId={setCurrentSloganId} />
+        <Swiper
+          slogans={slogans}
+          currentSloganId={currentSloganId}
+          setCurrentSloganId={setCurrentSloganId}
+        />
       </Top>
       <Bottom>
         <Left>
           <SelectButton />
         </Left>
         <Center>
-          <SnapButton onClick={snap} color="red"/>
+          <SnapButton onClick={snap} color="red" />
         </Center>
         <Right>
-          {
-            colors.map( c => <RoundButton 
-              key={c} 
-              color={c} 
-              selected={ c === currentColor } 
-              onClick={ () => {console.log(c); setCurrentColor(c)} }
-            /> )
-          }
+          {colors.map((c) => (
+            <RoundButton
+              key={c}
+              color={c}
+              selected={c === currentColor}
+              onClick={() => {
+                console.log(c);
+                setCurrentColor(c);
+              }}
+            />
+          ))}
         </Right>
       </Bottom>
     </Container>
@@ -40,54 +55,54 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   color: black;
-`
+`;
 
 const Top = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
-`
+`;
 
 const Bottom = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
   background: lightgrey;
-  font-size:4vh;
-`
+  font-size: 4vh;
+`;
 
 const Left = styled.div`
-  flex:1;
+  flex: 1;
   display: flex;
   align-items: center;
-`
+`;
 
 const Center = styled.div`
-  flex:1;
+  flex: 1;
   display: flex;
   justify-content: center;
-`
+`;
 
 const Right = styled.div`
-  flex:1;
+  flex: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-`
+`;
 
 const Slide = styled.div`
   height: 100%;
   width: 30%;
-  background: rgba(255,0,255,0.5);
-`
+  background: rgba(255, 0, 255, 0.5);
+`;
 
 const SnapButton = styled.div`
   height: 40px;
   width: 40px;
   border-radius: 50%;
   background-color: transparent;
-  border: solid 5px ${ props => props.color || "black" };
+  border: solid 5px ${(props) => props.color || "black"};
   position: relative;
   cursor: pointer;
   &:before {
@@ -106,14 +121,14 @@ const SnapButton = styled.div`
     &:before {
     }
   }
-`
+`;
 
 const RoundButton = styled.div`
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  background-color: ${ props => props.color };
-  cursor: ${ props => !props.selected ? "pointer" : "default" };
-  margin: ${ props => props.selected ? "0" : "2px" };
-  border: ${ props => props.selected ? "solid white 2px" : "none" };
-`
+  background-color: ${(props) => props.color};
+  cursor: ${(props) => (!props.selected ? "pointer" : "default")};
+  margin: ${(props) => (props.selected ? "0" : "2px")};
+  border: ${(props) => (props.selected ? "solid white 2px" : "none")};
+`;
