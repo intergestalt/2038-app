@@ -60,7 +60,12 @@ function getScrollOffset(currentId) {
   }
 }
 
-function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
+function SloganSelector({
+  language,
+  slogans,
+  currentSloganId,
+  setCurrentSloganId,
+}) {
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -85,7 +90,7 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
 
   useEffect(() => {
     setOffset(getScrollOffset(currentSloganId));
-  });
+  }, [currentSloganId]);
 
   return (
     <Container
@@ -93,24 +98,28 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
       {...config}
       offset={offset}
     >
-      {slogans.map(({ akronym, id }) => (
-        <Slide
-          className="slide"
-          data-id={id}
-          key={id}
-          active={currentSloganId == id}
-          onClick={() =>
-            setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-          }
-        >
-          {akronym}
-        </Slide>
+      {slogans.map(({ text, id }) => (
+        <Row key={id}>
+          {Object.keys(text).map((x) => (
+            <Slide
+              className="slide"
+              data-id={id}
+              key={x}
+              active={currentSloganId === id}
+              onClick={() =>
+                setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+              }
+            >
+              {id} {x} : {text[x]}
+            </Slide>
+          ))}
+        </Row>
       ))}
     </Container>
   );
 }
 
-export default Swiper;
+export default SloganSelector;
 
 const Container = styled(Swipeable)`
   display: flex;
@@ -121,9 +130,6 @@ const Container = styled(Swipeable)`
   height: 100%;
   color: black;
   user-select: none;
-  /*border-left: 50vw solid black;
-  position: absolute;
-  left:0;*/
   transition: transform 0.3s;
   transform: translateX(calc(50vw - ${(props) => props.offset}px));
 `;
@@ -137,14 +143,4 @@ const Slide = styled.div`
     active ? "rgba(255,0,255,0.5)" : "transparent"};
 `;
 
-function randomColor() {
-  return (
-    "rgb(" +
-    (Math.random() * 355 - 100) +
-    "," +
-    (Math.random() * 155 + 100) +
-    "," +
-    (Math.random() * 155 + 100) +
-    ")"
-  );
-}
+const Row = styled.div``;

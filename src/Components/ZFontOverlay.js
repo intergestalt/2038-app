@@ -62,7 +62,7 @@ export default class ZFontOverlay extends React.Component {
     ) {
       window.DeviceOrientationEvent.requestPermission()
         .then((response) => {
-          if (response == "granted") {
+          if (response === "granted") {
             window.addEventListener(
               "deviceorientation",
               this.onDeviceOrientationChangeEvent,
@@ -243,7 +243,7 @@ export default class ZFontOverlay extends React.Component {
     console.log(videoElement);
     console.log(resultCanvas);
 
-    let ratio = videoElement.videoWidth / videoElement.videoHeight;
+    // let ratio = videoElement.videoWidth / videoElement.videoHeight;
 
     let { width, height, x, y } = cover(
       resultCanvas.width,
@@ -349,5 +349,3 @@ const SensorInfo = styled.div`
   color: black;
   z-index: 10;
 `;
-
-var degtorad = Math.PI / 180; // Degree-to-Radian conversion

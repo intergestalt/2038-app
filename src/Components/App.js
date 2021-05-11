@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
 
-import config from "./config.json";
+import config from "../config.json";
 
 class App extends React.Component {
   constructor(props) {

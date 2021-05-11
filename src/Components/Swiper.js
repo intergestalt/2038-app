@@ -60,20 +60,7 @@ function getScrollOffset(currentId) {
   }
 }
 
-function getLanguages(arr) {
-  return arr.reduce((langs, lang) => {
-    console.log(lang, langs);
-    !langs.includes(lang) && langs.push(lang);
-    return langs;
-  }, []);
-}
-
-function SloganSelector({
-  language,
-  slogans,
-  currentSloganId,
-  setCurrentSloganId,
-}) {
+function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -94,9 +81,6 @@ function SloganSelector({
     }
   };
 
-  // console.log(getLanguages(slogans));
-  console.log(slogans.length);
-
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -109,28 +93,24 @@ function SloganSelector({
       {...config}
       offset={offset}
     >
-      {slogans.map(({ text, id }, index) => (
-        <Row key={id}>
-          {Object.keys(text).map((x) => (
-            <Slide
-              className="slide"
-              data-id={id}
-              key={x}
-              active={currentSloganId == id}
-              onClick={() =>
-                setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-              }
-            >
-              {id} {x} : {text[x]}
-            </Slide>
-          ))}
-        </Row>
+      {slogans.map(({ akronym, id }) => (
+        <Slide
+          className="slide"
+          data-id={id}
+          key={id}
+          active={currentSloganId === id}
+          onClick={() =>
+            setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+          }
+        >
+          {akronym}
+        </Slide>
       ))}
     </Container>
   );
 }
 
-export default SloganSelector;
+export default Swiper;
 
 const Container = styled(Swipeable)`
   display: flex;
@@ -141,9 +121,6 @@ const Container = styled(Swipeable)`
   height: 100%;
   color: black;
   user-select: none;
-  /*border-left: 50vw solid black;
-  position: absolute;
-  left:0;*/
   transition: transform 0.3s;
   transform: translateX(calc(50vw - ${(props) => props.offset}px));
 `;
@@ -156,5 +133,3 @@ const Slide = styled.div`
   background-color: ${({ active }) =>
     active ? "rgba(255,0,255,0.5)" : "transparent"};
 `;
-
-const Row = styled.div``;

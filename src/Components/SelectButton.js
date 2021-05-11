@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function () {
+export const SelectButton = () => {
   return (
     <Svg
       height="100%"
@@ -29,7 +29,7 @@ export default function () {
       </g>
     </Svg>
   );
-}
+};
 
 const Path = styled.path`
   fill: none;

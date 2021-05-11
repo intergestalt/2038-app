@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 import Swiper from "./Swiper";
-import CameraButton from "./CameraButton";
-import SelectButton from "./SelectButton";
+import { CameraButton } from "./CameraButton";
+import { SelectButton } from "./SelectButton";
 
 function ControlPanel({
   language,
@@ -99,12 +99,6 @@ const Right = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-`;
-
-const Slide = styled.div`
-  height: 100%;
-  width: 30%;
-  background: rgba(255, 0, 255, 0.5);
 `;
 
 const SnapButton = styled.div`
