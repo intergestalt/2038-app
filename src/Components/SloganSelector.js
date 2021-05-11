@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-import { Swipeable } from "react-swipeable";
+import { useSwipeable } from "react-swipeable";
 
 const config = {
   delta: 15, // min distance(px) before a swipe starts
@@ -60,12 +60,12 @@ function getScrollOffset(currentId) {
   }
 }
 
-function SloganSelector({
+export const SloganSelector = ({
   language,
   slogans,
   currentSloganId,
   setCurrentSloganId,
-}) {
+}) => {
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -86,6 +86,11 @@ function SloganSelector({
     }
   };
 
+  const handlers = useSwipeable({
+    onSwiping: (eventData) => handleSwipe(eventData),
+    ...config,
+  });
+
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -93,11 +98,7 @@ function SloganSelector({
   }, [currentSloganId]);
 
   return (
-    <Container
-      onSwiping={(eventData) => handleSwipe(eventData)}
-      {...config}
-      offset={offset}
-    >
+    <Container {...handlers} offset={offset}>
       {slogans.map(({ text, id }) => (
         <Row key={id}>
           {Object.keys(text).map((x) => (
@@ -117,11 +118,9 @@ function SloganSelector({
       ))}
     </Container>
   );
-}
+};
 
-export default SloganSelector;
-
-const Container = styled(Swipeable)`
+const Container = styled.div`
   display: flex;
   flex: 1;
   justify-self: flex-start;

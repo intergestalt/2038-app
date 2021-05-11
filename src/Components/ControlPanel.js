@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import Swiper from "./Swiper";
+import { Swiper } from "./Swiper";
 import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
 

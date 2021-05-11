@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import { Swipeable } from "react-swipeable";
+import { useSwipeable } from "react-swipeable";
 
 const config = {
   delta: 15, // min distance(px) before a swipe starts
@@ -60,7 +59,12 @@ function getScrollOffset(currentId) {
   }
 }
 
-function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
+export const Swiper = ({
+  language,
+  slogans,
+  currentSloganId,
+  setCurrentSloganId,
+}) => {
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -81,6 +85,11 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
     }
   };
 
+  const handlers = useSwipeable({
+    onSwiping: (eventData) => handleSwipe(eventData),
+    ...config,
+  });
+
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -88,11 +97,7 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
   }, [currentSloganId]);
 
   return (
-    <Container
-      onSwiping={(eventData) => handleSwipe(eventData)}
-      {...config}
-      offset={offset}
-    >
+    <Container {...handlers} offset={offset}>
       {slogans.map(({ akronym, id }) => (
         <Slide
           className="slide"
@@ -108,11 +113,9 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
       ))}
     </Container>
   );
-}
+};
 
-export default Swiper;
-
-const Container = styled(Swipeable)`
+const Container = styled.div`
   display: flex;
   flex: 1;
   justify-self: flex-start;
