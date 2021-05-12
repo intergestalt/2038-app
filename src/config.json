@@ -4,10 +4,25 @@
     "#0f0",
     "#00f"
   ],
+  "languages": [
+    {
+      "id": "en"
+    },
+    {
+      "id": "de"
+    },
+    {
+      "id": "cn"
+    }
+  ],
   "slogans": [
     {
       "id": "1",
-      "akronym": "twctis",
+      "akronym": {
+        "en": "twctis",
+        "de": "de - twctis",
+        "cn": "cn - twctis"
+      },
       "text": {
         "en": "the world\ncame to its\nsenses",
         "de": "1 de de de d orfijs elriufhs eriufhsleri",
@@ -16,7 +31,11 @@
     },
     {
       "id": "2",
-      "akronym": "wcottns",
+      "akronym": {
+        "en": "wcottns",
+        "de": "de - wcottns",
+        "cn": "cn - wcottns"
+      },
       "text": {
         "en": "we call our\ntime the\nnew serenity",
         "de": "2 de de de d orfijs elriufhs eriufhsleri",
@@ -25,7 +44,11 @@
     },
     {
       "id": "3",
-      "akronym": "eiomo",
+      "akronym": {
+        "en": "eiomo",
+        "de": "de - eiomo",
+        "cn": "cn - eiomo"
+      },
       "text": {
         "en": "equality\nis our main\nobjective",
         "de": "3 de de de d orfijs elriufhs eriufhsleri",
@@ -34,11 +57,15 @@
     },
     {
       "id": "4",
-      "akronym": "市喫案給",
+      "akronym": {
+        "en": "en - 市喫案給",
+        "de": "de - 市喫案給",
+        "cn": "cn - 市喫案給"
+      },
       "text": {
-        "en": "市喫案給\n益立面旅\n恐段題責計",
-        "de": "3 de de de d orfijs elriufhs eriufhsleri",
-        "cn": "3 cn 我想玩电脑 我想玩电脑 我想玩电脑"
+        "en": "3 en 我想玩电脑 我想玩电脑 我想玩电脑",
+        "de": "3 de orfijs elriufhs eriufhsleri",
+        "cn": "市喫案給\n益立面旅\n恐段題責計"
       }
     }
   ]
