@@ -60,8 +60,9 @@ function getScrollOffset(currentId) {
 }
 
 export const Swiper = ({
-  language,
+  languages,
   slogans,
+  currentLanguage,
   currentSloganId,
   setCurrentSloganId,
 }) => {
@@ -108,7 +109,7 @@ export const Swiper = ({
             setCurrentSloganId(moveToId(slogans, id, currentSloganId))
           }
         >
-          {akronym}
+          {akronym[currentLanguage]}
         </Slide>
       ))}
     </Container>

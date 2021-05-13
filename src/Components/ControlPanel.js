@@ -6,10 +6,11 @@ import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
 
 function ControlPanel({
-  language,
+  languages,
   slogans,
   sloganSelect,
   toggleSloganSelect,
+  currentLanguage,
   currentSloganId,
   setCurrentSloganId,
   snap,
@@ -21,7 +22,9 @@ function ControlPanel({
     <Container>
       <Top>
         <Swiper
+          languages={languages}
           slogans={slogans}
+          currentLanguage={currentLanguage}
           currentSloganId={currentSloganId}
           setCurrentSloganId={setCurrentSloganId}
         />

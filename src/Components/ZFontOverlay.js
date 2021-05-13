@@ -264,14 +264,22 @@ export default class ZFontOverlay extends React.Component {
 
   render() {
     return (
-      <VideoContainer initialized={this.state.initialized}>
+      <VideoContainer
+        initialized={this.state.initialized}
+        blur={this.props.blur}
+      >
         <SensorInfo>
-          {/*alpha: {this.state.orientation.alpha}<br/>
-            beta: {this.state.orientation.beta}<br/>
-            gamma: {this.state.orientation.gamma}<br/>
-            rotate x: {this.state.rotate.x}<br/>
-            rotate y: {this.state.rotate.y}<br/>
-            rotate z: {this.state.rotate.z}*/}
+          {/* alpha: {this.state.orientation.alpha}
+          <br />
+          beta: {this.state.orientation.beta}
+          <br />
+          gamma: {this.state.orientation.gamma}
+          <br />
+          rotate x: {this.state.rotate.x}
+          <br />
+          rotate y: {this.state.rotate.y}
+          <br />
+          rotate z: {this.state.rotate.z} */}
         </SensorInfo>
         <Video id="video"></Video>
         <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
@@ -300,8 +308,13 @@ export default class ZFontOverlay extends React.Component {
 }
 
 const VideoContainer = styled.div`
+  video {
+    /* ${({ initialized }) => initialized || "filter: blur(10px);"} */
+    ${({ blur }) => blur && "filter: blur(20px);"}
+  }
   canvas {
-    ${({ initialized }) => initialized || "filter: blur(10px);"}
+    /* ${({ initialized }) => initialized || "filter: blur(10px);"} */
+    ${({ blur }) => blur && "filter: blur(10px);"}
   }
   position: relative;
   width: 100%;

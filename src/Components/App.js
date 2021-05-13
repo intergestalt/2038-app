@@ -4,19 +4,23 @@ import styled from "styled-components/macro";
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
+import { SloganSelector } from "./SloganSelector";
 
 import config from "../config.json";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.languages = config.languages;
     this.slogans = config.slogans;
     this.colors = config.colors;
     this.state = {
+      currentLanguage: this.languages[0].id,
       currentSloganId: this.slogans[1].id,
       currentColor: this.colors[0],
       imageDataUrl: null,
       sloganSelect: false,
+      overlay: null,
     };
 
     this.overlayRef = React.createRef();
@@ -30,7 +34,10 @@ class App extends React.Component {
 
   toggleSloganSelect = () => {
     console.log("toggleSloganSelect executed");
-    this.setState((state) => ({ sloganSelect: !state.sloganSelect }));
+    this.setState((state) => ({
+      sloganSelect: !state.sloganSelect,
+      overlay: !state.sloganSelect ? "sloganSelect" : null,
+    }));
   };
 
   clearPicture = () => {
@@ -49,9 +56,8 @@ class App extends React.Component {
   };
 
   render() {
-    const language = "en";
     const text = this.slogans.find((s) => s.id === this.state.currentSloganId)
-      .text[language];
+      .text[this.state.currentLanguage];
 
     return (
       <FillViewport>
@@ -62,41 +68,53 @@ class App extends React.Component {
               ref={this.overlayRef}
               color={this.state.currentColor}
               snapped={!!this.state.imageDataUrl}
-              slogans={this.slogans}
-              sloganSelect={this.state.sloganSelect}
-              currentSloganId={this.state.currentSloganId}
-              setCurrentSloganId={(id) =>
-                this.setState({ currentSloganId: id })
-              }
+              blur={!!this.state.overlay}
             />
-            {this.state.imageDataUrl && (
+            {this.state.overlay && (
               <Overlay>
-                <Question>
-                  Keep Picture? <br />
-                  <br />
-                  <span
-                    style={{ textDecoration: "underline" }}
-                    onClick={this.clearPicture}
-                  >
-                    discard
-                  </span>
-                  &nbsp;&nbsp;&nbsp;
-                  <a
-                    href={this.state.imageDataUrl}
-                    onClick={this.clearPicture}
-                    download={this.makeFilename()}
-                  >
-                    save
-                  </a>
-                </Question>
+                {this.state.imageDataUrl && (
+                  <Question>
+                    Keep Picture? <br />
+                    <br />
+                    <span
+                      style={{ textDecoration: "underline" }}
+                      onClick={this.clearPicture}
+                    >
+                      discard
+                    </span>
+                    &nbsp;&nbsp;&nbsp;
+                    <a
+                      href={this.state.imageDataUrl}
+                      onClick={this.clearPicture}
+                      download={this.makeFilename()}
+                    >
+                      save
+                    </a>
+                  </Question>
+                )}
+                {this.state.overlay === "sloganSelect" && (
+                  <SloganSelector
+                    languages={this.languages}
+                    slogans={this.slogans}
+                    currentLanguage={this.state.currentLanguage}
+                    currentSloganId={this.state.currentSloganId}
+                    setCurrentSloganId={(id) =>
+                      this.setState({ currentSloganId: id })
+                    }
+                    currentColor={this.state.currentColor}
+                    setCurrentColor={this.setCurrentColor}
+                  />
+                )}
               </Overlay>
             )}
           </Top>
           <Bottom>
             <ControlPanel
+              languages={this.languages}
               slogans={this.slogans}
               sloganSelect={this.state.sloganSelect}
               toggleSloganSelect={this.toggleSloganSelect}
+              currentLanguage={this.state.currentLanguage}
               currentSloganId={this.state.currentSloganId}
               setCurrentSloganId={(id) =>
                 this.setState({ currentSloganId: id })
