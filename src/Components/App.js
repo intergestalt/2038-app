@@ -4,7 +4,7 @@ import styled from "styled-components/macro";
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
-import { SloganSelector } from "./SloganSelector";
+import { Swiper } from "./Swiper";
 
 import config from "../config.json";
 
@@ -93,19 +93,18 @@ class App extends React.Component {
                   </Question>
                 )}
                 {this.state.overlay === "sloganSelect" && (
-                  <SloganSelector
-                    languages={this.languages}
-                    setCurrentLanguage={(id) =>
+                  <Swiper
+                    colList={this.languages}
+                    colSelect={this.state.currentLanguage}
+                    setColSelect={(id) =>
                       this.setState({ currentLanguage: id })
                     }
-                    slogans={this.slogans}
-                    currentLanguage={this.state.currentLanguage}
-                    currentSloganId={this.state.currentSloganId}
-                    setCurrentSloganId={(id) =>
+                    rowList={this.slogans}
+                    rowSelect={this.state.currentSloganId}
+                    setRowSelect={(id) =>
                       this.setState({ currentSloganId: id })
                     }
-                    currentColor={this.state.currentColor}
-                    setCurrentColor={this.setCurrentColor}
+                    slideContents={(row, col) => row.text[col.id]}
                   />
                 )}
               </Overlay>

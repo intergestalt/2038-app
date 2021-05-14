@@ -10,36 +10,36 @@ const config = {
   rotationAngle: 0, // set a rotation angle
 };
 
-function nextId(slogans, id) {
-  const index = slogans.findIndex((s) => s.id === id);
+function nextId(list, id) {
+  const index = list.findIndex((x) => x.id === id);
   if (index !== undefined) {
-    if (index < slogans.length - 1) {
-      return slogans[index + 1].id;
+    if (index < list.length - 1) {
+      return list[index + 1].id;
     } else {
       return id;
     }
   }
 }
 
-function prevId(slogans, id) {
-  const index = slogans.findIndex((s) => s.id === id);
+function prevId(list, id) {
+  const index = list.findIndex((x) => x.id === id);
   if (index !== undefined) {
     if (index > 0) {
-      return slogans[index - 1].id;
+      return list[index - 1].id;
     } else {
       return id;
     }
   }
 }
 
-function moveToId(slogans, targetId, currentId) {
-  const targetIndex = slogans.findIndex((s) => s.id === targetId);
-  const currentIndex = slogans.findIndex((s) => s.id === currentId);
+function moveToId(list, targetId, currentId) {
+  const targetIndex = list.findIndex((s) => s.id === targetId);
+  const currentIndex = list.findIndex((s) => s.id === currentId);
   if (targetIndex > currentIndex) {
-    return nextId(slogans, currentId);
+    return nextId(list, currentId);
   }
   if (targetIndex < currentIndex) {
-    return prevId(slogans, currentId);
+    return prevId(list, currentId);
   }
   return currentId;
 }
@@ -60,11 +60,13 @@ function getScrollOffset(currentId) {
 }
 
 export const Swiper = ({
-  languages,
-  slogans,
-  currentLanguage,
-  currentSloganId,
-  setCurrentSloganId,
+  rowList = [{ id: 1 }],
+  rowSelect,
+  setRowSelect,
+  colList = [{ id: 1 }],
+  colSelect,
+  setColSelect,
+  slideContents,
 }) => {
   const handleSwipe = ({
     event, // source event
@@ -79,10 +81,14 @@ export const Swiper = ({
   }) => {
     console.log(dir, first);
     if (!first) return;
-    if (dir === "Left") {
-      setCurrentSloganId(nextId(slogans, currentSloganId));
-    } else if (dir === "Right") {
-      setCurrentSloganId(prevId(slogans, currentSloganId));
+    if (rowList.length > 1 && dir === "Left") {
+      setRowSelect(nextId(rowList, rowSelect));
+    } else if (rowList.length > 1 && dir === "Right") {
+      setRowSelect(prevId(rowList, rowSelect));
+    } else if (colList.length > 1 && dir === "Up") {
+      setColSelect(prevId(colList, colSelect));
+    } else if (colList.length > 1 && dir === "Down") {
+      setColSelect(nextId(colList, colSelect));
     }
   };
 
@@ -94,23 +100,29 @@ export const Swiper = ({
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    setOffset(getScrollOffset(currentSloganId));
-  }, [currentSloganId]);
+    setOffset(getScrollOffset(rowSelect));
+  }, [rowSelect]);
 
   return (
     <Container {...handlers} offset={offset}>
-      {slogans.map(({ akronym, id }) => (
-        <Slide
-          className="slide"
-          data-id={id}
-          key={id}
-          active={currentSloganId === id}
-          onClick={() =>
-            setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-          }
-        >
-          {akronym[currentLanguage]}
-        </Slide>
+      {rowList.map((row) => (
+        <Row key={row.id}>
+          {colList.map((col) => (
+            <Slide
+              className="slide"
+              data-id={col.id}
+              key={col.id}
+              active={rowSelect === row.id && colSelect === col.id}
+              onClick={() => {
+                setRowSelect(row.id);
+                setColSelect(col.id);
+                // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+              }}
+            >
+              {slideContents(row, col)}
+            </Slide>
+          ))}
+        </Row>
       ))}
     </Container>
   );
@@ -120,7 +132,7 @@ const Container = styled.div`
   display: flex;
   flex: 1;
   justify-self: flex-start;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   height: 100%;
   color: black;
@@ -136,4 +148,8 @@ const Slide = styled.div`
   transition: background-color 0.3s 0.1s;
   background-color: ${({ active }) =>
     active ? "rgba(255,0,255,0.5)" : "transparent"};
+`;
+
+const Row = styled.div`
+  display: flex;
 `;

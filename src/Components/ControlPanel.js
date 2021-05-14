@@ -22,11 +22,13 @@ function ControlPanel({
     <Container>
       <Top>
         <Swiper
-          languages={languages}
-          slogans={slogans}
-          currentLanguage={currentLanguage}
-          currentSloganId={currentSloganId}
-          setCurrentSloganId={setCurrentSloganId}
+          colList={slogans}
+          colSelect={currentSloganId}
+          setColSelect={setCurrentSloganId}
+          rowList={[{ id: currentLanguage }]}
+          rowSelect={currentLanguage}
+          setRowSelect={() => {}}
+          slideContents={(row, col) => col.akronym[row.id]}
         />
       </Top>
       <Bottom>
