@@ -95,6 +95,9 @@ class App extends React.Component {
                 {this.state.overlay === "sloganSelect" && (
                   <SloganSelector
                     languages={this.languages}
+                    setCurrentLanguage={(id) =>
+                      this.setState({ currentLanguage: id })
+                    }
                     slogans={this.slogans}
                     currentLanguage={this.state.currentLanguage}
                     currentSloganId={this.state.currentSloganId}

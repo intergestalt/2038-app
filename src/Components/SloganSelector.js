@@ -11,29 +11,29 @@ const config = {
   rotationAngle: 0, // set a rotation angle
 };
 
-function nextId(slogans, id) {
-  const index = slogans.findIndex((s) => s.id === id);
+function nextId(list, id) {
+  const index = list.findIndex((s) => s.id === id);
   if (index !== undefined) {
-    if (index < slogans.length - 1) {
-      return slogans[index + 1].id;
+    if (index < list.length - 1) {
+      return list[index + 1].id;
     } else {
       return id;
     }
   }
 }
 
-function prevId(slogans, id) {
-  const index = slogans.findIndex((s) => s.id === id);
+function prevId(list, id) {
+  const index = list.findIndex((s) => s.id === id);
   if (index !== undefined) {
     if (index > 0) {
-      return slogans[index - 1].id;
+      return list[index - 1].id;
     } else {
       return id;
     }
   }
 }
 
-function moveToId(slogans, targetId, currentId) {
+function moveToSlogan(slogans, targetId, currentId) {
   const targetIndex = slogans.findIndex((s) => s.id === targetId);
   const currentIndex = slogans.findIndex((s) => s.id === currentId);
   if (targetIndex > currentIndex) {
@@ -61,7 +61,9 @@ function getScrollOffset(currentId) {
 }
 
 export const SloganSelector = ({
-  language,
+  languages,
+  currentLanguage,
+  setCurrentLanguage,
   slogans,
   currentSloganId,
   setCurrentSloganId,
@@ -83,6 +85,10 @@ export const SloganSelector = ({
       setCurrentSloganId(nextId(slogans, currentSloganId));
     } else if (dir === "Right") {
       setCurrentSloganId(prevId(slogans, currentSloganId));
+    } else if (dir === "Up") {
+      setCurrentLanguage(prevId(languages, currentLanguage));
+    } else if (dir === "Down") {
+      setCurrentLanguage(nextId(languages, currentLanguage));
     }
   };
 
@@ -99,19 +105,20 @@ export const SloganSelector = ({
 
   return (
     <Container {...handlers} offset={offset}>
-      {slogans.map(({ text, id }) => (
-        <Row key={id}>
-          {Object.keys(text).map((x) => (
+      {slogans.map(({ id: sId, text }) => (
+        <Row key={sId}>
+          {languages.map(({ id: lId }) => (
             <Slide
               className="slide"
-              data-id={id}
-              key={x}
-              active={currentSloganId === id}
-              onClick={() =>
-                setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-              }
+              data-id={`${sId}-${lId}`}
+              key={lId}
+              active={currentSloganId === sId && currentLanguage === lId}
+              onClick={() => {
+                setCurrentLanguage(lId);
+                setCurrentSloganId(sId);
+              }}
             >
-              {id} {x} : {text[x]}
+              {sId} {lId} : {text[lId]}
             </Slide>
           ))}
         </Row>
