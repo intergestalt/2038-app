@@ -100,13 +100,13 @@ export const Swiper = ({
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
-    setOffset(getScrollOffset(rowSelect));
-  }, [rowSelect]);
+    setOffset(getScrollOffset(colSelect));
+  }, [colSelect]);
 
   return (
-    <Container {...handlers} offset={offset}>
+    <Container {...handlers}>
       {rowList.map((row) => (
-        <Row key={row.id}>
+        <Row key={row.id} offset={offset}>
           {colList.map((col) => (
             <Slide
               className="slide"
@@ -128,11 +128,11 @@ export const Swiper = ({
   );
 };
 
-const Container = styled.div`
+const Row = styled.div`
   display: flex;
   flex: 1;
   justify-self: flex-start;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: nowrap;
   height: 100%;
   color: black;
@@ -150,6 +150,8 @@ const Slide = styled.div`
     active ? "rgba(255,0,255,0.5)" : "transparent"};
 `;
 
-const Row = styled.div`
+const Container = styled.div`
   display: flex;
+  flex: 1;
+  flex-direction: column;
 `;
