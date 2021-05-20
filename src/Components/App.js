@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components/macro";
 
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
-import { Swiper } from "./Swiper";
+import { SloganSelector } from "./SloganSelector";
 
 import config from "../config.json";
 
@@ -93,7 +93,7 @@ class App extends React.Component {
                   </Question>
                 )}
                 {this.state.overlay === "sloganSelect" && (
-                  <Swiper
+                  <SloganSelector
                     colList={this.languages}
                     colSelect={this.state.currentLanguage}
                     setColSelect={(id) =>
@@ -104,7 +104,10 @@ class App extends React.Component {
                     setRowSelect={(id) =>
                       this.setState({ currentSloganId: id })
                     }
-                    slideContents={(row, col) => row.text[col.id]}
+                    activeColor={this.state.currentColor}
+                    slideContents={(row, col) =>
+                      row.text[col.id].replace(/\n/g, `<br />`)
+                    }
                   />
                 )}
               </Overlay>
@@ -161,6 +164,7 @@ const Overlay = styled.div`
   bottom: 0;
   justify-content: center;
   align-items: center;
+  background-color: rgba(127, 127, 127, 0.9);
 `;
 
 const Question = styled.div`
