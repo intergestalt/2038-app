@@ -79,15 +79,14 @@ export const Swiper = ({
     velocity, // √(absX^2 + absY^2) / time
     dir, // direction of swipe (Left|Right|Up|Down)
   }) => {
-    console.log(dir, first);
     if (!first) return;
-    if (rowList.length > 1 && dir === "Left") {
+    if (rowList.length > 1 && dir === "Up") {
       setRowSelect(nextId(rowList, rowSelect));
-    } else if (rowList.length > 1 && dir === "Right") {
+    } else if (rowList.length > 1 && dir === "Down") {
       setRowSelect(prevId(rowList, rowSelect));
-    } else if (colList.length > 1 && dir === "Up") {
+    } else if (colList.length > 1 && dir === "Right") {
       setColSelect(prevId(colList, colSelect));
-    } else if (colList.length > 1 && dir === "Down") {
+    } else if (colList.length > 1 && dir === "Left") {
       setColSelect(nextId(colList, colSelect));
     }
   };
