@@ -47,7 +47,7 @@ function moveToId(list, targetId, currentId) {
 function getScrollOffset(width, height, colIndex, rowIndex) {
   const off = {
     x: (colIndex + 0.5) * width,
-    y: (rowIndex + 0.5) * height,
+    y: (rowIndex + 1.5) * height,
   };
   console.log({ width, height, colIndex, rowIndex });
   console.log(off);
@@ -77,15 +77,14 @@ export const SloganSelector = ({
     velocity, // √(absX^2 + absY^2) / time
     dir, // direction of swipe (Left|Right|Up|Down)
   }) => {
-    console.log(dir, first);
     if (!first) return;
-    if (rowList.length > 1 && dir === "Left") {
+    if (rowList.length > 1 && dir === "Up") {
       setRowSelect(nextId(rowList, rowSelect));
-    } else if (rowList.length > 1 && dir === "Right") {
+    } else if (rowList.length > 1 && dir === "Down") {
       setRowSelect(prevId(rowList, rowSelect));
-    } else if (colList.length > 1 && dir === "Up") {
+    } else if (colList.length > 1 && dir === "Right") {
       setColSelect(prevId(colList, colSelect));
-    } else if (colList.length > 1 && dir === "Down") {
+    } else if (colList.length > 1 && dir === "Left") {
       setColSelect(nextId(colList, colSelect));
     }
   };
@@ -98,41 +97,59 @@ export const SloganSelector = ({
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    setOffset(getScrollOffset(slideWidth, slideHeight, colSelect, rowSelect));
-  }, [slideWidth, slideHeight, colSelect, rowSelect]);
+    setOffset(
+      getScrollOffset(
+        slideWidth,
+        slideHeight,
+        colList.findIndex((x) => x.id === colSelect),
+        rowList.findIndex((y) => y.id === rowSelect),
+      ),
+    );
+  }, [slideWidth, slideHeight, colList, rowList, colSelect, rowSelect]);
 
   return (
-    <Container {...handlers}>
-      {rowList.map((row) => (
-        <Row key={row.id} offset={offset}>
-          {colList.map((col) => (
-            <Slide
-              className="slide"
-              data-id={col.id}
-              key={col.id}
-              active={rowSelect === row.id && colSelect === col.id}
-              textColor={
-                rowSelect === row.id && colSelect === col.id
-                  ? activeColor
-                  : "white"
-              }
-              onClick={() => {
-                setRowSelect(row.id);
-                setColSelect(col.id);
-                // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-              }}
-              width={slideWidth}
-              height={slideHeight}
-            >
-              <Cage
-                dangerouslySetInnerHTML={{ __html: slideContents(row, col) }}
-              />
-              {/* {slideContents(row, col)} */}
-            </Slide>
-          ))}
-        </Row>
-      ))}
-    </Container>
+    <Fragment>
+      <Info>
+        w: {window.innerWidth}
+        <br />
+        h: {window.innerHeight}
+        <br />
+        x: {offset.x}
+        <br />
+        y: {offset.y}
+      </Info>
+      <Container {...handlers} offsetX={offset.x} offsetY={offset.y}>
+        {rowList.map((row) => (
+          <Row key={row.id}>
+            {colList.map((col) => (
+              <Slide
+                className="sloganslide"
+                data-id={col.id}
+                key={col.id}
+                active={rowSelect === row.id && colSelect === col.id}
+                textColor={
+                  rowSelect === row.id && colSelect === col.id
+                    ? activeColor
+                    : "white"
+                }
+                onClick={() => {
+                  setRowSelect(row.id);
+                  setColSelect(col.id);
+                  // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+                }}
+                width={slideWidth}
+                height={slideHeight}
+              >
+                <Cage
+                  dangerouslySetInnerHTML={{ __html: slideContents(row, col) }}
+                />
+                {/* {slideContents(row, col)} */}
+              </Slide>
+            ))}
+          </Row>
+        ))}
+      </Container>
+    </Fragment>
   );
 };
 
@@ -144,11 +161,6 @@ const Row = styled.div`
   flex-wrap: nowrap;
   color: white;
   user-select: none;
-  transition: transform 0.3s;
-  transform: translate(
-    (calc(50vw - ${({ offset }) => offset.x}px)),
-    (calc(50vh - ${({ offset }) => offset.y}px))
-  );
 `;
 
 const Slide = styled.div`
@@ -157,13 +169,13 @@ const Slide = styled.div`
   font-size: 2rem;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
-  width: 300px;
   padding: 1em auto;
   white-space: nowrap;
   cursor: ${({ active }) => (active ? "default" : "pointer")};
   transition: color 0.3s 0.1s;
   color: ${({ textColor }) => textColor};
   vertical-align: middle;
+  border-bottom: 1px white solid;
 `;
 
 const Cage = styled.p`
@@ -173,7 +185,23 @@ const Cage = styled.p`
 `;
 
 const Container = styled.div`
+  border: red 1px solid;
   display: flex;
   flex: 1;
   flex-direction: column;
+  transition: transform 0.3s;
+  transform: translate(
+    calc(50vw - ${({ offsetX }) => offsetX}px),
+    calc(50vh - ${({ offsetY }) => offsetY}px)
+  );
+`;
+
+const Info = styled.div`
+  padding: 8px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: small;
 `;
