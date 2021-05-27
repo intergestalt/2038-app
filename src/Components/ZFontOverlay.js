@@ -310,7 +310,7 @@ export default class ZFontOverlay extends React.Component {
 const VideoContainer = styled.div`
   video {
     /* ${({ initialized }) => initialized || "filter: blur(10px);"} */
-    ${({ blur }) => blur && "filter: blur(20px);"}
+    ${({ blur }) => blur && "filter: blur(10px);"}
   }
   canvas {
     /* ${({ initialized }) => initialized || "filter: blur(10px);"} */

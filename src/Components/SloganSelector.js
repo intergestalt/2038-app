@@ -10,24 +10,22 @@ const config = {
   rotationAngle: 0, // set a rotation angle
 };
 
-function nextId(list, id) {
-  const index = list.findIndex((x) => x.id === id);
+function nextId(list, index) {
   if (index !== undefined) {
-    if (index < list.length - 1) {
-      return list[index + 1].id;
+    if (index++ > list.length) {
+      return 0;
     } else {
-      return id;
+      return index++;
     }
   }
 }
 
-function prevId(list, id) {
-  const index = list.findIndex((x) => x.id === id);
+function prevId(list, index) {
   if (index !== undefined) {
-    if (index > 0) {
-      return list[index - 1].id;
+    if (index-- < 0) {
+      return list.length;
     } else {
-      return id;
+      return index--;
     }
   }
 }
@@ -118,36 +116,40 @@ export const SloganSelector = ({
         <br />
         y: {offset.y}
       </Info>
-      <Container {...handlers} offsetX={offset.x} offsetY={offset.y}>
-        {rowList.map((row) => (
-          <Row key={row.id}>
-            {colList.map((col) => (
-              <Slide
-                className="sloganslide"
-                data-id={col.id}
-                key={col.id}
-                active={rowSelect === row.id && colSelect === col.id}
-                textColor={
-                  rowSelect === row.id && colSelect === col.id
-                    ? activeColor
-                    : "white"
-                }
-                onClick={() => {
-                  setRowSelect(row.id);
-                  setColSelect(col.id);
-                  // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-                }}
-                width={slideWidth}
-                height={slideHeight}
-              >
-                <Cage
-                  dangerouslySetInnerHTML={{ __html: slideContents(row, col) }}
-                />
-                {/* {slideContents(row, col)} */}
-              </Slide>
-            ))}
-          </Row>
-        ))}
+      <Container
+        {...handlers}
+        offsetX={(colList.length + 0.5) * slideWidth}
+        offsetY={(rowList.length + 0.5) * slideHeight}
+      >
+        {rowList.map((row, rIndex) =>
+          colList.map((col, cIndex) => (
+            <Slide
+              className="sloganslide"
+              data-id={col.id}
+              key={col.id}
+              active={rowSelect === rIndex && colSelect === cIndex}
+              textColor={
+                rowSelect === rIndex && colSelect === cIndex
+                  ? activeColor
+                  : "white"
+              }
+              onClick={() => {
+                setRowSelect(rIndex);
+                setColSelect(cIndex);
+                // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+              }}
+              width={slideWidth}
+              height={slideHeight}
+              x={(cIndex - colSelect + 0.5) * slideWidth}
+              y={(rIndex - rowSelect + 1) * slideHeight}
+            >
+              <Cage
+                dangerouslySetInnerHTML={{ __html: slideContents(row, col) }}
+              />
+              {/* {slideContents(row, col)} */}
+            </Slide>
+          )),
+        )}
       </Container>
     </Fragment>
   );
@@ -164,6 +166,9 @@ const Row = styled.div`
 `;
 
 const Slide = styled.div`
+  position: absolute;
+  top: ${({ y }) => y}px;
+  left: ${({ x }) => x}px;
   display: flex;
   justify-content: center;
   font-size: 2rem;
@@ -173,8 +178,11 @@ const Slide = styled.div`
   white-space: nowrap;
   cursor: ${({ active }) => (active ? "default" : "pointer")};
   transition: color 0.3s 0.1s;
+  transition: top 0.3s;
+  transition: left 0.3s;
   color: ${({ textColor }) => textColor};
   vertical-align: middle;
+  border-top: 1px lightblue solid;
   border-bottom: 1px white solid;
 `;
 
@@ -185,11 +193,8 @@ const Cage = styled.p`
 `;
 
 const Container = styled.div`
+  background-color: rgba(0, 0, 0, 0.5);
   border: red 1px solid;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  transition: transform 0.3s;
   transform: translate(
     calc(50vw - ${({ offsetX }) => offsetX}px),
     calc(50vh - ${({ offsetY }) => offsetY}px)

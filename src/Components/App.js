@@ -56,6 +56,12 @@ class App extends React.Component {
   };
 
   render() {
+    console.log(this.overlayRef);
+    this.overlayRef.illo &&
+      console.log({
+        width: this.overlayRef.illo.width,
+        height: this.overlayRef.illo.height,
+      });
     const text = this.slogans.find((s) => s.id === this.state.currentSloganId)
       .text[this.state.currentLanguage];
 
@@ -95,14 +101,20 @@ class App extends React.Component {
                 {this.state.overlay === "sloganSelect" && (
                   <SloganSelector
                     colList={this.languages}
-                    colSelect={this.state.currentLanguage}
-                    setColSelect={(id) =>
-                      this.setState({ currentLanguage: id })
+                    colSelect={this.languages.findIndex(
+                      (x) => x.id === this.state.currentLanguage,
+                    )}
+                    setColSelect={(index) =>
+                      this.setState({
+                        currentLanguage: this.languages[index].id,
+                      })
                     }
                     rowList={this.slogans}
-                    rowSelect={this.state.currentSloganId}
-                    setRowSelect={(id) =>
-                      this.setState({ currentSloganId: id })
+                    rowSelect={this.slogans.findIndex(
+                      (x) => x.id === this.state.currentSloganId,
+                    )}
+                    setRowSelect={(index) =>
+                      this.setState({ currentSloganId: this.slogans[index].id })
                     }
                     activeColor={this.state.currentColor}
                     slideContents={(row, col) =>
