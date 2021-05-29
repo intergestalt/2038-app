@@ -94,6 +94,21 @@ export const SloganSelector = ({
 
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
+  const range = (start, end, increment) => {
+    let arr = [];
+    for (let i = start; i <= end; i += increment) {
+      arr.push(i);
+    }
+    return arr;
+  };
+
+  const rowPos = range(-2, 2, 1);
+  const colPos = range(-2, 2, 1);
+
+  const wrapList = (x, y, len) => {
+    return x - y < 0 ? x - y + len : x - y > len ? x - y - len : x - y;
+  };
+
   useEffect(() => {
     setOffset(
       getScrollOffset(
@@ -118,15 +133,15 @@ export const SloganSelector = ({
       </Info>
       <Container
         {...handlers}
-        offsetX={(colList.length + 0.5) * slideWidth}
-        offsetY={(rowList.length + 0.5) * slideHeight}
+        offsetX={3 * slideWidth}
+        offsetY={3 * slideHeight}
       >
-        {[-2, -1, 0, 1, 2].map((row, rIndex) =>
-          [-1, 0, 1].map((col, cIndex) => (
+        {rowPos.map((row, rIndex) =>
+          colPos.map((col, cIndex) => (
             <Slide
               className="sloganslide"
               data-id={col.id}
-              key={`${col}-${row}`}
+              key={`${col},${row}`}
               active={row === 0 && col === 0}
               textColor={row === 0 && col === 0 ? activeColor : "white"}
               backgroundColor={
@@ -144,15 +159,13 @@ export const SloganSelector = ({
             >
               [{col}, {row}]
               <br />
-              {
-                colList[
-                  col - colSelect < 0
-                    ? colList.length - Math.abs(col - colSelect)
-                    : col - colSelect > colList.length
-                    ? col - colSelect - colList.length
-                    : col - colSelect
-                ].id
-              }
+              {colList[wrapList(col, colSelect, colList.length)].id}
+              <br />
+              {/* {
+                rowList[wrapList(row, rowSelect, rowList.length)].text[
+                  colList[wrapList(col, colSelect, colList.length)].id
+                ]
+              } */}
               {/* <Cage
                 dangerouslySetInnerHTML={{
                   __html: slideContents(
