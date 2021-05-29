@@ -121,17 +121,16 @@ export const SloganSelector = ({
         offsetX={(colList.length + 0.5) * slideWidth}
         offsetY={(rowList.length + 0.5) * slideHeight}
       >
-        {rowList.map((row, rIndex) =>
-          colList.map((col, cIndex) => (
+        {[-2, -1, 0, 1, 2].map((row, rIndex) =>
+          [-1, 0, 1].map((col, cIndex) => (
             <Slide
               className="sloganslide"
               data-id={col.id}
-              key={col.id}
-              active={rowSelect === rIndex && colSelect === cIndex}
-              textColor={
-                rowSelect === rIndex && colSelect === cIndex
-                  ? activeColor
-                  : "white"
+              key={`${col}-${row}`}
+              active={row === 0 && col === 0}
+              textColor={row === 0 && col === 0 ? activeColor : "white"}
+              backgroundColor={
+                col === 0 ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
               }
               onClick={() => {
                 setRowSelect(rIndex);
@@ -140,17 +139,38 @@ export const SloganSelector = ({
               }}
               width={slideWidth}
               height={slideHeight}
-              x={(cIndex - colSelect + 0.5) * slideWidth}
-              y={(rIndex - rowSelect + 1) * slideHeight}
+              x={col * slideWidth}
+              y={row * slideHeight}
             >
-              <Cage
-                dangerouslySetInnerHTML={{ __html: slideContents(row, col) }}
-              />
+              [{col}, {row}]
+              <br />
+              {
+                colList[
+                  col - colSelect < 0
+                    ? colList.length - Math.abs(col - colSelect)
+                    : col - colSelect > colList.length
+                    ? col - colSelect - colList.length
+                    : col - colSelect
+                ].id
+              }
+              {/* <Cage
+                dangerouslySetInnerHTML={{
+                  __html: slideContents(
+                    rowList[row - rowSelect],
+                    colList[col - colSelect],
+                  ),
+                }}
+              /> */}
               {/* {slideContents(row, col)} */}
             </Slide>
           )),
         )}
       </Container>
+      {colSelect}
+      <br />
+      <button onClick={() => setColSelect(colSelect++)}>+</button>
+      <br />
+      <button onClick={() => setColSelect(colSelect--)}>-</button>
     </Fragment>
   );
 };
@@ -181,6 +201,7 @@ const Slide = styled.div`
   transition: top 0.3s;
   transition: left 0.3s;
   color: ${({ textColor }) => textColor};
+  background-color: ${({ backgroundColor }) => backgroundColor};
   vertical-align: middle;
   border-top: 1px lightblue solid;
   border-bottom: 1px white solid;
