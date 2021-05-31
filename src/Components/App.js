@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 
 import FillViewport from "./FillViewport";
@@ -104,11 +104,12 @@ class App extends React.Component {
                     colSelect={this.languages.findIndex(
                       (x) => x.id === this.state.currentLanguage,
                     )}
-                    setColSelect={(index) =>
+                    setColSelect={(index) => {
+                      alert(`set col to ${index}`);
                       this.setState({
                         currentLanguage: this.languages[index].id,
-                      })
-                    }
+                      });
+                    }}
                     rowList={this.slogans}
                     rowSelect={this.slogans.findIndex(
                       (x) => x.id === this.state.currentSloganId,

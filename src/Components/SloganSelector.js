@@ -1,6 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useSwipeable } from "react-swipeable";
+import useDimensions from "react-cool-dimensions";
+
+import { Slide } from "./Slide";
 
 const config = {
   delta: 15, // min distance(px) before a swipe starts
@@ -30,18 +33,6 @@ function prevId(list, index) {
   }
 }
 
-function moveToId(list, targetId, currentId) {
-  const targetIndex = list.findIndex((s) => s.id === targetId);
-  const currentIndex = list.findIndex((s) => s.id === currentId);
-  if (targetIndex > currentIndex) {
-    return nextId(list, currentId);
-  }
-  if (targetIndex < currentIndex) {
-    return prevId(list, currentId);
-  }
-  return currentId;
-}
-
 function getScrollOffset(width, height, colIndex, rowIndex) {
   const off = {
     x: (colIndex + 0.5) * width,
@@ -63,7 +54,19 @@ export const SloganSelector = ({
   slideWidth = 300,
   slideHeight = 150,
   activeColor,
+  wrapRow = true,
+  wrapCol = true,
 }) => {
+  const ref = useRef();
+  const { observe, unobserve, width, height, entry } = useDimensions({
+    onResize: ({ observe, unobserve, width, height, entry }) => {
+      // Triggered whenever the size of the target is changed...
+
+      unobserve(); // To stop observing the current target element
+      observe(); // To re-start observing the current target element
+    },
+  });
+  console.log({ width }, { height });
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -102,10 +105,10 @@ export const SloganSelector = ({
     return arr;
   };
 
-  const rowPos = range(-2, 2, 1);
-  const colPos = range(-2, 2, 1);
+  const posX = range(-1, 1, 1);
+  const posY = range(-2, 2, 1);
 
-  const wrapList = (x, y, len) => {
+  const calcPos = (x, y, len, wrap) => {
     return x - y < 0 ? x - y + len : x - y > len ? x - y - len : x - y;
   };
 
@@ -120,8 +123,30 @@ export const SloganSelector = ({
     );
   }, [slideWidth, slideHeight, colList, rowList, colSelect, rowSelect]);
 
+  const centrePos = {
+    x: width / 2,
+    y: height / 2,
+  };
+
+  console.log(rowList[rowSelect].text[colList[colSelect].id]);
+
+  const getContents = (x = 0, y = 0, wrap = true) => {
+    return (
+      (colList[colSelect + y] &&
+        rowList[rowSelect + x].text[colList[colSelect + y].id]) ||
+      "nada"
+    );
+  };
+
   return (
-    <Fragment>
+    <Container
+      {...handlers}
+      ref={(el) => {
+        observe(el);
+        handlers.ref(el);
+        ref.current = el;
+      }}
+    >
       <Info>
         w: {window.innerWidth}
         <br />
@@ -130,109 +155,59 @@ export const SloganSelector = ({
         x: {offset.x}
         <br />
         y: {offset.y}
+        <br />
+        width: {width}
+        <br />
+        height: {height}
+        <div>
+          {colSelect}
+          <button onClick={() => setColSelect(++colSelect)}>+</button>
+          <button onClick={() => setColSelect(--colSelect)}>-</button>
+        </div>
       </Info>
-      <Container
-        {...handlers}
-        offsetX={3 * slideWidth}
-        offsetY={3 * slideHeight}
-      >
-        {rowPos.map((row, rIndex) =>
-          colPos.map((col, cIndex) => (
-            <Slide
-              className="sloganslide"
-              data-id={col.id}
-              key={`${col},${row}`}
-              active={row === 0 && col === 0}
-              textColor={row === 0 && col === 0 ? activeColor : "white"}
-              backgroundColor={
-                col === 0 ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
-              }
-              onClick={() => {
-                setRowSelect(rIndex);
-                setColSelect(cIndex);
-                // setCurrentSloganId(moveToId(slogans, id, currentSloganId))
+      <Dot x={centrePos.x} y={centrePos.y}>
+        {`x: ${centrePos.x}, y: ${centrePos.y}`}
+      </Dot>
+      {posX.map((x) =>
+        posY.map((y) => (
+          <Slide
+            key={`${x} ${y}`} // slogan id and lang id / rowIndex and colIndex
+            width={slideWidth}
+            height={slideHeight}
+            x={centrePos.x + (x - 0.5) * slideWidth}
+            y={centrePos.y + (y - 0.5) * slideHeight}
+            active={x === 0 && y === 0}
+            backgroundColor={
+              x === 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
+            }
+            onClick={() => {
+              alert(`clicked ${x}, ${y}`);
+              setColSelect(colSelect + x);
+              setRowSelect(rowSelect + y);
+            }}
+          >
+            <Text
+              textColor={x === 0 && y === 0 ? activeColor : "white"}
+              dangerouslySetInnerHTML={{
+                __html: getContents(x, y).replace(/\n/gi, "<br />"),
               }}
-              width={slideWidth}
-              height={slideHeight}
-              x={col * slideWidth}
-              y={row * slideHeight}
-            >
-              [{col}, {row}]
-              <br />
-              {colList[wrapList(col, colSelect, colList.length)].id}
-              <br />
-              {/* {
-                rowList[wrapList(row, rowSelect, rowList.length)].text[
-                  colList[wrapList(col, colSelect, colList.length)].id
-                ]
-              } */}
-              {/* <Cage
-                dangerouslySetInnerHTML={{
-                  __html: slideContents(
-                    rowList[row - rowSelect],
-                    colList[col - colSelect],
-                  ),
-                }}
-              /> */}
-              {/* {slideContents(row, col)} */}
-            </Slide>
-          )),
-        )}
-      </Container>
-      {colSelect}
-      <br />
-      <button onClick={() => setColSelect(colSelect++)}>+</button>
-      <br />
-      <button onClick={() => setColSelect(colSelect--)}>-</button>
-    </Fragment>
+            ></Text>
+          </Slide>
+        )),
+      )}
+    </Container>
   );
 };
 
-const Row = styled.div`
-  display: flex;
-  flex: 1;
-  justify-self: flex-start;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  color: white;
-  user-select: none;
-`;
-
-const Slide = styled.div`
-  position: absolute;
-  top: ${({ y }) => y}px;
-  left: ${({ x }) => x}px;
-  display: flex;
-  justify-content: center;
-  font-size: 2rem;
-  height: ${({ height }) => height}px;
-  width: ${({ width }) => width}px;
-  padding: 1em auto;
-  white-space: nowrap;
-  cursor: ${({ active }) => (active ? "default" : "pointer")};
-  transition: color 0.3s 0.1s;
-  transition: top 0.3s;
-  transition: left 0.3s;
-  color: ${({ textColor }) => textColor};
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  vertical-align: middle;
-  border-top: 1px lightblue solid;
-  border-bottom: 1px white solid;
-`;
-
-const Cage = styled.p`
-  text-align: center;
-  margin: auto;
-  word-wrap: break-word;
-`;
-
 const Container = styled.div`
-  background-color: rgba(0, 0, 0, 0.5);
-  border: red 1px solid;
-  transform: translate(
-    calc(50vw - ${({ offsetX }) => offsetX}px),
-    calc(50vh - ${({ offsetY }) => offsetY}px)
-  );
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;
+
+const Text = styled.div`
+  text-align: center;
+  color: ${({ textColor }) => textColor};
 `;
 
 const Info = styled.div`
@@ -243,4 +218,16 @@ const Info = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   font-size: small;
+`;
+
+const Dot = styled.div`
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
+  top: ${({ y }) => y - 5}px;
+  left: ${({ x }) => x - 5}px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  background-color: red;
 `;
