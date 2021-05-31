@@ -42,6 +42,9 @@ export default class ZFontOverlay extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
+    if (this.props.blur !== prevProps.blur) {
+      this.controlVideo();
+    }
     if (this.props.text !== prevProps.text) {
       console.log("text changed to", this.props.text);
       this.text.value = this.props.text;
@@ -260,6 +263,18 @@ export default class ZFontOverlay extends React.Component {
     //this.setState({snapped: true});
 
     return resultCanvas;
+  };
+
+  controlVideo = () => {
+    // console.log("control video called");
+    let videoElement = document.getElementById("video");
+    if (videoElement.play && this.props.blur) {
+      // console.log("pause video");
+      videoElement.pause();
+    } else if (videoElement.pause && !this.props.blur) {
+      // console.log("play video");
+      videoElement.play();
+    }
   };
 
   render() {
