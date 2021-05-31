@@ -6,6 +6,7 @@
     "@hughsk/fulltilt": "^0.7.1",
     "intrinsic-scale": "^3.0.4",
     "react": "^17.0.2",
+    "react-cool-dimensions": "^2.0.6",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "react-swipeable": "^6.1.0",
@@ -34,7 +35,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
   "prettier": {
     "trailingComma": "all",
     "tabWidth": 2,
