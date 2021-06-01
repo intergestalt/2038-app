@@ -44,13 +44,14 @@ const Container = styled.div`
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
   padding: 1em auto;
-  white-space: nowrap;
+  white-space: pre-line;
   cursor: ${({ active }) => (active ? "default" : "pointer")};
   transition: color 0.3s 0.1s;
-  transition: top 0.3s;
-  transition: left 0.3s;
+  transition: top 0.1s;
+  transition: left 0.1s;
   background-color: ${({ backgroundColor }) => backgroundColor};
   vertical-align: middle;
   border-top: 1px lightblue solid;
   border-bottom: 1px white solid;
+  user-select: none;
 `;

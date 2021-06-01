@@ -283,19 +283,21 @@ export default class ZFontOverlay extends React.Component {
         initialized={this.state.initialized}
         blur={this.props.blur}
       >
-        <SensorInfo>
-          {/* alpha: {this.state.orientation.alpha}
-          <br />
-          beta: {this.state.orientation.beta}
-          <br />
-          gamma: {this.state.orientation.gamma}
-          <br />
-          rotate x: {this.state.rotate.x}
-          <br />
-          rotate y: {this.state.rotate.y}
-          <br />
-          rotate z: {this.state.rotate.z} */}
-        </SensorInfo>
+        {this.props.dev && (
+          <SensorInfo>
+            alpha: {this.state.orientation.alpha}
+            <br />
+            beta: {this.state.orientation.beta}
+            <br />
+            gamma: {this.state.orientation.gamma}
+            <br />
+            rotate x: {this.state.rotate.x}
+            <br />
+            rotate y: {this.state.rotate.y}
+            <br />
+            rotate z: {this.state.rotate.z}
+          </SensorInfo>
+        )}
         <Video id="video"></Video>
         <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
         <Canvas

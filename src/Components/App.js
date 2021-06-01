@@ -21,6 +21,7 @@ class App extends React.Component {
       imageDataUrl: null,
       sloganSelect: false,
       overlay: null,
+      dev: process.env.NODE_ENV !== "production",
     };
 
     this.overlayRef = React.createRef();
@@ -62,14 +63,17 @@ class App extends React.Component {
         width: this.overlayRef.illo.width,
         height: this.overlayRef.illo.height,
       });
-    const text = this.slogans.find((s) => s.id === this.state.currentSloganId)
-      .text[this.state.currentLanguage];
+    const text =
+      this.slogans.find((s) => s.id === this.state.currentSloganId).text[
+        this.state.currentLanguage
+      ] || "";
 
     return (
       <FillViewport>
         <Container>
           <Top>
             <ZFontOverlay
+              dev={this.state.dev}
               text={text}
               ref={this.overlayRef}
               color={this.state.currentColor}
@@ -100,12 +104,12 @@ class App extends React.Component {
                 )}
                 {this.state.overlay === "sloganSelect" && (
                   <SloganSelector
+                    dev={this.state.dev}
                     colList={this.languages}
                     colSelect={this.languages.findIndex(
                       (x) => x.id === this.state.currentLanguage,
                     )}
                     setColSelect={(index) => {
-                      alert(`set col to ${index}`);
                       this.setState({
                         currentLanguage: this.languages[index].id,
                       });
@@ -118,9 +122,16 @@ class App extends React.Component {
                       this.setState({ currentSloganId: this.slogans[index].id })
                     }
                     activeColor={this.state.currentColor}
-                    slideContents={(row, col) =>
-                      row.text[col.id].replace(/\n/g, `<br />`)
-                    }
+                    slideContents={(col, row) => {
+                      console.log({ col, row });
+                      return (
+                        (col.id &&
+                          row.text &&
+                          row.text[col.id] &&
+                          row.text[col.id].replace(/\n/g, `<br />`)) ||
+                        "nada"
+                      );
+                    }}
                   />
                 )}
               </Overlay>

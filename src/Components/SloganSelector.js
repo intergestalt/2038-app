@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Fragment } from "react";
 import styled from "styled-components";
 import { useSwipeable } from "react-swipeable";
 import useDimensions from "react-cool-dimensions";
@@ -13,24 +13,16 @@ const config = {
   rotationAngle: 0, // set a rotation angle
 };
 
-function nextId(list, index) {
-  if (index !== undefined) {
-    if (index++ > list.length) {
-      return 0;
-    } else {
-      return index++;
-    }
-  }
-}
-
-function prevId(list, index) {
-  if (index !== undefined) {
-    if (index-- < 0) {
-      return list.length;
-    } else {
-      return index--;
-    }
-  }
+function getOffsetIndex(list, index, offset) {
+  let offsetIndex = index + offset;
+  let out =
+    offsetIndex > list.length - 1
+      ? offsetIndex - list.length
+      : offsetIndex < 0
+      ? offsetIndex + list.length
+      : offsetIndex;
+  console.log({ list, index, offset, out });
+  return out;
 }
 
 function getScrollOffset(width, height, colIndex, rowIndex) {
@@ -44,6 +36,9 @@ function getScrollOffset(width, height, colIndex, rowIndex) {
 }
 
 export const SloganSelector = ({
+  dev = false,
+  rows = 3,
+  cols = 5,
   rowList = [{ id: 1 }],
   rowSelect,
   setRowSelect,
@@ -80,13 +75,13 @@ export const SloganSelector = ({
   }) => {
     if (!first) return;
     if (rowList.length > 1 && dir === "Up") {
-      setRowSelect(nextId(rowList, rowSelect));
+      setRowSelect(getOffsetIndex(rowList, rowSelect, 1));
     } else if (rowList.length > 1 && dir === "Down") {
-      setRowSelect(prevId(rowList, rowSelect));
+      setRowSelect(getOffsetIndex(rowList, rowSelect, -1));
     } else if (colList.length > 1 && dir === "Right") {
-      setColSelect(prevId(colList, colSelect));
+      setColSelect(getOffsetIndex(colList, colSelect, -1));
     } else if (colList.length > 1 && dir === "Left") {
-      setColSelect(nextId(colList, colSelect));
+      setColSelect(getOffsetIndex(colList, colSelect, 1));
     }
   };
 
@@ -108,10 +103,6 @@ export const SloganSelector = ({
   const posX = range(-1, 1, 1);
   const posY = range(-2, 2, 1);
 
-  const calcPos = (x, y, len, wrap) => {
-    return x - y < 0 ? x - y + len : x - y > len ? x - y - len : x - y;
-  };
-
   useEffect(() => {
     setOffset(
       getScrollOffset(
@@ -128,12 +119,15 @@ export const SloganSelector = ({
     y: height / 2,
   };
 
-  console.log(rowList[rowSelect].text[colList[colSelect].id]);
+  dev && console.log(rowList[rowSelect].text[colList[colSelect].id]);
 
   const getContents = (x = 0, y = 0, wrap = true) => {
     return (
-      (colList[colSelect + y] &&
-        rowList[rowSelect + x].text[colList[colSelect + y].id]) ||
+      (colList[getOffsetIndex(colList, colSelect, x)] &&
+        rowList[getOffsetIndex(rowList, rowSelect, y)].text &&
+        rowList[getOffsetIndex(rowList, rowSelect, y)].text[
+          colList[getOffsetIndex(colList, colSelect, x)].id
+        ]) ||
       "nada"
     );
   };
@@ -147,31 +141,70 @@ export const SloganSelector = ({
         ref.current = el;
       }}
     >
-      <Info>
-        w: {window.innerWidth}
-        <br />
-        h: {window.innerHeight}
-        <br />
-        x: {offset.x}
-        <br />
-        y: {offset.y}
-        <br />
-        width: {width}
-        <br />
-        height: {height}
-        <div>
-          {colSelect}
-          <button onClick={() => setColSelect(++colSelect)}>+</button>
-          <button onClick={() => setColSelect(--colSelect)}>-</button>
-        </div>
-      </Info>
-      <Dot x={centrePos.x} y={centrePos.y}>
-        {`x: ${centrePos.x}, y: ${centrePos.y}`}
-      </Dot>
+      {dev && (
+        <Fragment>
+          <Info>
+            w: {window.innerWidth}
+            <br />
+            h: {window.innerHeight}
+            <br />
+            x: {offset.x}
+            <br />
+            y: {offset.y}
+            <br />
+            width: {width}
+            <br />
+            height: {height}
+            <div>
+              Row:
+              <button
+                onClick={() =>
+                  setRowSelect(getOffsetIndex(rowList, rowSelect, -1))
+                }
+              >
+                -
+              </button>
+              {rowSelect}
+              <button
+                onClick={() =>
+                  setRowSelect(getOffsetIndex(rowList, rowSelect, 1))
+                }
+              >
+                +
+              </button>
+            </div>
+            <div>
+              Col:
+              <button
+                onClick={() =>
+                  setColSelect(getOffsetIndex(colList, colSelect, -1))
+                }
+              >
+                -
+              </button>
+              {colSelect}
+              <button
+                onClick={() =>
+                  setColSelect(getOffsetIndex(colList, colSelect, 1))
+                }
+              >
+                +
+              </button>
+            </div>
+          </Info>
+          <Dot x={centrePos.x} y={centrePos.y}>
+            {`x: ${centrePos.x}, y: ${centrePos.y}`}
+          </Dot>
+        </Fragment>
+      )}
       {posX.map((x) =>
         posY.map((y) => (
           <Slide
-            key={`${x} ${y}`} // slogan id and lang id / rowIndex and colIndex
+            key={`${getOffsetIndex(colList, colSelect, x)},${getOffsetIndex(
+              rowList,
+              rowSelect,
+              y,
+            )}`} // slogan id and lang id / rowIndex and colIndex
             width={slideWidth}
             height={slideHeight}
             x={centrePos.x + (x - 0.5) * slideWidth}
@@ -181,15 +214,17 @@ export const SloganSelector = ({
               x === 0 ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"
             }
             onClick={() => {
-              alert(`clicked ${x}, ${y}`);
-              setColSelect(colSelect + x);
-              setRowSelect(rowSelect + y);
+              setColSelect(getOffsetIndex(colList, colSelect, x));
+              setRowSelect(getOffsetIndex(rowList, rowSelect, y));
             }}
           >
             <Text
               textColor={x === 0 && y === 0 ? activeColor : "white"}
               dangerouslySetInnerHTML={{
-                __html: getContents(x, y).replace(/\n/gi, "<br />"),
+                __html: slideContents(
+                  colList[getOffsetIndex(colList, colSelect, x)],
+                  rowList[getOffsetIndex(rowList, rowSelect, y)],
+                ),
               }}
             ></Text>
           </Slide>
@@ -214,7 +249,7 @@ const Info = styled.div`
   padding: 8px;
   position: absolute;
   top: 2px;
-  left: 2px;
+  right: 2px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   font-size: small;
