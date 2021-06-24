@@ -218,15 +218,12 @@ export const SloganSelector = ({
               setRowSelect(getOffsetIndex(rowList, rowSelect, y));
             }}
           >
-            <Text
-              textColor={x === 0 && y === 0 ? activeColor : "white"}
-              dangerouslySetInnerHTML={{
-                __html: slideContents(
-                  colList[getOffsetIndex(colList, colSelect, x)],
-                  rowList[getOffsetIndex(rowList, rowSelect, y)],
-                ),
-              }}
-            ></Text>
+            <Text textColor={x === 0 && y === 0 ? activeColor : "white"}>
+              {slideContents(
+                colList[getOffsetIndex(colList, colSelect, x)],
+                rowList[getOffsetIndex(rowList, rowSelect, y)],
+              )}
+            </Text>
           </Slide>
         )),
       )}
