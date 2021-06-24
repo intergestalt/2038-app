@@ -124,13 +124,7 @@ class App extends React.Component {
                     activeColor={this.state.currentColor}
                     slideContents={(col, row) => {
                       console.log({ col, row });
-                      return (
-                        (col.id &&
-                          row.text &&
-                          row.text[col.id] &&
-                          row.text[col.id].replace(/\n/g, `<br />`)) ||
-                        "nada"
-                      );
+                      return (col.id && row?.text?.[col?.id]) || "nada";
                     }}
                   />
                 )}
