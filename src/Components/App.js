@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
 
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
 
-import config from "./config.json";
+import config from "../config.json";
 
 class App extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class App extends React.Component {
       currentSloganId: this.slogans[1].id,
       currentColor: this.colors[0],
       imageDataUrl: null,
+      sloganSelect: false,
     };
 
     this.overlayRef = React.createRef();
@@ -25,6 +26,11 @@ class App extends React.Component {
     const imageDataUrl = this.overlayRef.current.snap();
     console.log(imageDataUrl);
     this.setState({ imageDataUrl });
+  };
+
+  toggleSloganSelect = () => {
+    console.log("toggleSloganSelect executed");
+    this.setState((state) => ({ sloganSelect: !state.sloganSelect }));
   };
 
   clearPicture = () => {
@@ -56,6 +62,12 @@ class App extends React.Component {
               ref={this.overlayRef}
               color={this.state.currentColor}
               snapped={!!this.state.imageDataUrl}
+              slogans={this.slogans}
+              sloganSelect={this.state.sloganSelect}
+              currentSloganId={this.state.currentSloganId}
+              setCurrentSloganId={(id) =>
+                this.setState({ currentSloganId: id })
+              }
             />
             {this.state.imageDataUrl && (
               <Overlay>
@@ -83,6 +95,8 @@ class App extends React.Component {
           <Bottom>
             <ControlPanel
               slogans={this.slogans}
+              sloganSelect={this.state.sloganSelect}
+              toggleSloganSelect={this.toggleSloganSelect}
               currentSloganId={this.state.currentSloganId}
               setCurrentSloganId={(id) =>
                 this.setState({ currentSloganId: id })

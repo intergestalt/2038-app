@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-
-import { Swipeable } from "react-swipeable";
+import { useSwipeable } from "react-swipeable";
 
 const config = {
   delta: 15, // min distance(px) before a swipe starts
@@ -60,7 +59,12 @@ function getScrollOffset(currentId) {
   }
 }
 
-function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
+export const Swiper = ({
+  language,
+  slogans,
+  currentSloganId,
+  setCurrentSloganId,
+}) => {
   const handleSwipe = ({
     event, // source event
     initial, // initial swipe [x,y]
@@ -81,24 +85,25 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
     }
   };
 
+  const handlers = useSwipeable({
+    onSwiping: (eventData) => handleSwipe(eventData),
+    ...config,
+  });
+
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     setOffset(getScrollOffset(currentSloganId));
-  });
+  }, [currentSloganId]);
 
   return (
-    <Container
-      onSwiping={(eventData) => handleSwipe(eventData)}
-      {...config}
-      offset={offset}
-    >
+    <Container {...handlers} offset={offset}>
       {slogans.map(({ akronym, id }) => (
         <Slide
           className="slide"
           data-id={id}
           key={id}
-          active={currentSloganId == id}
+          active={currentSloganId === id}
           onClick={() =>
             setCurrentSloganId(moveToId(slogans, id, currentSloganId))
           }
@@ -108,11 +113,9 @@ function Swiper({ language, slogans, currentSloganId, setCurrentSloganId }) {
       ))}
     </Container>
   );
-}
+};
 
-export default Swiper;
-
-const Container = styled(Swipeable)`
+const Container = styled.div`
   display: flex;
   flex: 1;
   justify-self: flex-start;
@@ -121,9 +124,6 @@ const Container = styled(Swipeable)`
   height: 100%;
   color: black;
   user-select: none;
-  /*border-left: 50vw solid black;
-  position: absolute;
-  left:0;*/
   transition: transform 0.3s;
   transform: translateX(calc(50vw - ${(props) => props.offset}px));
 `;
@@ -136,15 +136,3 @@ const Slide = styled.div`
   background-color: ${({ active }) =>
     active ? "rgba(255,0,255,0.5)" : "transparent"};
 `;
-
-function randomColor() {
-  return (
-    "rgb(" +
-    (Math.random() * 355 - 100) +
-    "," +
-    (Math.random() * 155 + 100) +
-    "," +
-    (Math.random() * 155 + 100) +
-    ")"
-  );
-}

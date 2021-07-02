@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import Swiper from "./Swiper";
-import SelectButton from "./SelectButton";
+import { Swiper } from "./Swiper";
+import { CameraButton } from "./CameraButton";
+import { SelectButton } from "./SelectButton";
 
 function ControlPanel({
   language,
   slogans,
+  sloganSelect,
+  toggleSloganSelect,
   currentSloganId,
   setCurrentSloganId,
   snap,
@@ -25,7 +28,14 @@ function ControlPanel({
       </Top>
       <Bottom>
         <Left>
-          <SelectButton />
+          <div
+            onClick={() => {
+              console.log(`sloganSelect clicked: ${sloganSelect}`);
+              toggleSloganSelect();
+            }}
+          >
+            {sloganSelect ? <CameraButton /> : <SelectButton />}
+          </div>
         </Left>
         <Center>
           <SnapButton onClick={snap} color="red" />
@@ -89,12 +99,6 @@ const Right = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-`;
-
-const Slide = styled.div`
-  height: 100%;
-  width: 30%;
-  background: rgba(255, 0, 255, 0.5);
 `;
 
 const SnapButton = styled.div`
