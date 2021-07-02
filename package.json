@@ -42,5 +42,9 @@
     "tabWidth": 2,
     "semi": true,
     "singleQuote": false
+  },
+  "engines": {
+    "node": "12",
+    "npm": "6"
   }
 }
