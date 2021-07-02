@@ -14,7 +14,7 @@
     "zfont": "^1.2.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "FAST_REFRESH=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -42,7 +42,7 @@
     "singleQuote": false
   },
   "engines": {
-    "node": "12",
-    "npm": "6"
+    "node": "16",
+    "npm": "7"
   }
 }
