@@ -5,6 +5,7 @@ import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
 import TopInfoBar from './TopInfoBar'
+import { Mask2038 } from './Mask2038'
 
 import config from "../config.json";
 
@@ -61,6 +62,7 @@ class App extends React.Component {
             <TopInfoBar />
           </Above>
           <Top>
+            <Mask2038 show={true} />
             <ZFontOverlay
               text={text}
               ref={this.overlayRef}
