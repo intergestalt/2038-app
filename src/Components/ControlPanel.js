@@ -5,6 +5,8 @@ import { Swiper } from "./Swiper";
 import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
 
+import { breakpoints } from '../config'
+
 function ControlPanel({
   language,
   slogans,
@@ -64,21 +66,21 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: black;
 `;
 
 const Top = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
+  font-size: 20px;
 `;
 
 const Bottom = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
-  background: lightgrey;
   font-size: 4vh;
+  padding: 0 20px 15px;
 `;
 
 const Left = styled.div`
@@ -102,14 +104,19 @@ const Right = styled.div`
 `;
 
 const SnapButton = styled.div`
-  height: 40px;
-  width: 40px;
+  height: 42px;
+  width: 42px;
+  @media ${breakpoints.large} {
+    height: 60px;
+    width: 60px;
+  }
+  box-sizing: border-box;
   border-radius: 50%;
   background-color: transparent;
   border: solid 5px ${(props) => props.color || "black"};
   position: relative;
   cursor: pointer;
-  &:before {
+  &:before { /* white circle */
     content: "";
     position: absolute;
     z-index: 1;
@@ -135,4 +142,5 @@ const RoundButton = styled.div`
   cursor: ${(props) => (!props.selected ? "pointer" : "default")};
   margin: ${(props) => (props.selected ? "0" : "2px")};
   border: ${(props) => (props.selected ? "solid white 2px" : "none")};
+  margin-left: 10px;
 `;
