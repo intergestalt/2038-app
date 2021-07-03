@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
+import TopInfoBar from './TopInfoBar'
 
 import config from "../config.json";
 
@@ -56,6 +57,9 @@ class App extends React.Component {
     return (
       <FillViewport>
         <Container>
+          <Above>
+            <TopInfoBar />
+          </Above>
           <Top>
             <ZFontOverlay
               text={text}
@@ -121,6 +125,10 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const Above = styled.div`
+  background: lightgrey;
+`;
+
 const Top = styled.div`
   flex: 1;
   overflow: hidden;
@@ -128,8 +136,7 @@ const Top = styled.div`
 `;
 
 const Bottom = styled.div`
-  background: white;
-  height: 100px;
+  background: lightgrey;
 `;
 
 const Overlay = styled.div`
