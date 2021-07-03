@@ -64,6 +64,7 @@ export const Swiper = ({
   slogans,
   currentSloganId,
   setCurrentSloganId,
+  currentColor
 }) => {
   const handleSwipe = ({
     event, // source event
@@ -104,6 +105,7 @@ export const Swiper = ({
           data-id={id}
           key={id}
           active={currentSloganId === id}
+          activeColor={currentColor}
           onClick={() =>
             setCurrentSloganId(moveToId(slogans, id, currentSloganId))
           }
@@ -129,10 +131,10 @@ const Container = styled.div`
 `;
 
 const Slide = styled.div`
-  padding: 1em;
+  padding: 15px 15px 12px;
   white-space: nowrap;
   cursor: ${({ active }) => (active ? "default" : "pointer")};
   transition: background-color 0.3s 0.1s;
-  background-color: ${({ active }) =>
-    active ? "rgba(255,0,255,0.5)" : "transparent"};
+  color: ${({ active, activeColor }) =>
+    active ? activeColor : "currentColor"};
 `;

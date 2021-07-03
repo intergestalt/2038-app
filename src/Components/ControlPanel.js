@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Swiper } from "./Swiper";
 import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
+import { InfoButton } from './InfoButton'
 
 import { breakpoints } from '../config'
 
@@ -26,6 +27,7 @@ function ControlPanel({
           slogans={slogans}
           currentSloganId={currentSloganId}
           setCurrentSloganId={setCurrentSloganId}
+          currentColor={currentColor}
         />
       </Top>
       <Bottom>
@@ -38,9 +40,12 @@ function ControlPanel({
           >
             {sloganSelect ? <CameraButton /> : <SelectButton />}
           </div>
+          <InfoButtonContainer>
+            <InfoButton />
+          </InfoButtonContainer>
         </Left>
         <Center>
-          <SnapButton onClick={snap} color="red" />
+          <SnapButton onClick={snap} color={currentColor} />
         </Center>
         <Right>
           {colors.map((c) => (
@@ -73,6 +78,8 @@ const Top = styled.div`
   display: flex;
   justify-content: center;
   font-size: 20px;
+  mask-mode: luminance;
+  mask-image: linear-gradient(90deg, transparent 20px, white 30%, white 70%, transparent calc(100% - 20px));
 `;
 
 const Bottom = styled.div`
@@ -102,6 +109,14 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex-end;
 `;
+
+const InfoButtonContainer = styled.span`
+  margin-left: 20px;
+  display: initial;
+  @media ${breakpoints.medium} {
+    display: none;
+  }
+`
 
 const SnapButton = styled.div`
   height: 42px;

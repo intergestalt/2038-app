@@ -8,6 +8,7 @@ import TopInfoBar from './TopInfoBar'
 import { Mask2038 } from './Mask2038'
 
 import config from "../config.json";
+import { colors } from "../config.js"
 
 class App extends React.Component {
   constructor(props) {
@@ -128,7 +129,7 @@ const Container = styled.div`
 `;
 
 const Above = styled.div`
-  background: lightgrey;
+  background: ${colors.bg};
 `;
 
 const Top = styled.div`
@@ -138,7 +139,7 @@ const Top = styled.div`
 `;
 
 const Bottom = styled.div`
-  background: lightgrey;
+  background: ${colors.bg};
 `;
 
 const Overlay = styled.div`
