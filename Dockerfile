@@ -1,4 +1,4 @@
-FROM node:16 as builder
+FROM node:16-slim as builder
 
 # set working directory
 RUN mkdir /app
