@@ -4,13 +4,15 @@ import styled from "styled-components";
 import { Swiper } from "./Swiper";
 import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
+import { InfoButton } from "./InfoButton";
+
+import { breakpoints } from "../config";
 
 function ControlPanel({
-  languages,
+  currentLanguage,
   slogans,
   sloganSelect,
   toggleSloganSelect,
-  currentLanguage,
   currentSloganId,
   setCurrentSloganId,
   snap,
@@ -18,17 +20,22 @@ function ControlPanel({
   currentColor,
   setCurrentColor,
 }) {
+  console.log({
+    currentLanguage,
+    slogans,
+    currentSloganId,
+    setCurrentSloganId,
+    currentColor,
+  });
   return (
     <Container>
       <Top>
         <Swiper
-          colList={slogans}
-          colSelect={currentSloganId}
-          setColSelect={setCurrentSloganId}
-          rowList={[{ id: currentLanguage }]}
-          rowSelect={currentLanguage}
-          setRowSelect={() => {}}
-          slideContents={(row, col) => col.akronym[row.id]}
+          currentLanguage={currentLanguage}
+          slogans={slogans}
+          currentSloganId={currentSloganId}
+          setCurrentSloganId={setCurrentSloganId}
+          currentColor={currentColor}
         />
       </Top>
       <Bottom>
@@ -41,9 +48,12 @@ function ControlPanel({
           >
             {sloganSelect ? <CameraButton /> : <SelectButton />}
           </div>
+          <InfoButtonContainer>
+            <InfoButton />
+          </InfoButtonContainer>
         </Left>
         <Center>
-          <SnapButton onClick={snap} color="red" />
+          <SnapButton onClick={snap} color={currentColor} />
         </Center>
         <Right>
           {colors.map((c) => (
@@ -69,21 +79,29 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  color: black;
 `;
 
 const Top = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
+  font-size: 20px;
+  mask-mode: luminance;
+  mask-image: linear-gradient(
+    90deg,
+    transparent 20px,
+    white 30%,
+    white 70%,
+    transparent calc(100% - 20px)
+  );
 `;
 
 const Bottom = styled.div`
   flex: 1;
   display: flex;
   justify-content: space-between;
-  background: lightgrey;
   font-size: 4vh;
+  padding: 0 20px 15px;
 `;
 
 const Left = styled.div`
@@ -106,15 +124,29 @@ const Right = styled.div`
   justify-content: flex-end;
 `;
 
+const InfoButtonContainer = styled.span`
+  margin-left: 20px;
+  display: initial;
+  @media ${breakpoints.medium} {
+    display: none;
+  }
+`;
+
 const SnapButton = styled.div`
-  height: 40px;
-  width: 40px;
+  height: 42px;
+  width: 42px;
+  @media ${breakpoints.large} {
+    height: 60px;
+    width: 60px;
+  }
+  box-sizing: border-box;
   border-radius: 50%;
   background-color: transparent;
   border: solid 5px ${(props) => props.color || "black"};
   position: relative;
   cursor: pointer;
   &:before {
+    /* white circle */
     content: "";
     position: absolute;
     z-index: 1;
@@ -140,4 +172,5 @@ const RoundButton = styled.div`
   cursor: ${(props) => (!props.selected ? "pointer" : "default")};
   margin: ${(props) => (props.selected ? "0" : "2px")};
   border: ${(props) => (props.selected ? "solid white 2px" : "none")};
+  margin-left: 10px;
 `;

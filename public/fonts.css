@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'Haas';
+  font-weight: normal;
+  src: local('Haas'), url(fonts/NHaasGroteskTXPro-55Rg/font.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Haas';
+  font-weight: bold;
+  src: local('Haas'), url(fonts/NeueHaasUnicaW1G-Bold/font.woff) format('woff');
+}

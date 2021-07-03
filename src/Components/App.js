@@ -5,8 +5,11 @@ import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
 import { SloganSelector } from "./SloganSelector";
+import TopInfoBar from "./TopInfoBar";
+import { Mask2038 } from "./Mask2038";
 
 import config from "../config.json";
+import { colors } from "../config.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -71,7 +74,11 @@ class App extends React.Component {
     return (
       <FillViewport>
         <Container>
+          <Above>
+            <TopInfoBar />
+          </Above>
           <Top>
+            <Mask2038 show={true} />
             <ZFontOverlay
               dev={this.state.dev}
               text={text}
@@ -162,6 +169,10 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const Above = styled.div`
+  background: ${colors.bg};
+`;
+
 const Top = styled.div`
   flex: 1;
   overflow: hidden;
@@ -169,8 +180,7 @@ const Top = styled.div`
 `;
 
 const Bottom = styled.div`
-  background: white;
-  height: 100px;
+  background: ${colors.bg};
 `;
 
 const Overlay = styled.div`
