@@ -32,31 +32,11 @@ function prevId(slogans, id) {
   }
 }
 
-function moveToId(slogans, targetId, currentId) {
-  const targetIndex = slogans.findIndex((s) => s.id === targetId);
-  const currentIndex = slogans.findIndex((s) => s.id === currentId);
-  if (targetIndex > currentIndex) {
-    return nextId(slogans, currentId);
-  }
-  if (targetIndex < currentIndex) {
-    return prevId(slogans, currentId);
-  }
-  return currentId;
-}
-
 function getScrollOffset(currentId) {
-  const slides = document.getElementsByClassName("slide");
-  let offset = 0;
-  for (let i = 0; i < slides.length; i++) {
-    //console.log(slides[i].getAttribute('data-id'));
-    if (slides[i].getAttribute("data-id") !== currentId) {
-      offset += slides[i].offsetWidth;
-    } else {
-      offset += slides[i].offsetWidth / 2;
-      //console.log(offset)
-      return offset;
-    }
-  }
+  const { offsetLeft, clientWidth } = document.querySelector(
+    `.slide[data-id="${currentId}"]`,
+  );
+  return offsetLeft + clientWidth / 2;
 }
 
 export const Swiper = ({
@@ -106,9 +86,7 @@ export const Swiper = ({
           key={id}
           active={currentSloganId === id}
           activeColor={currentColor}
-          onClick={() =>
-            setCurrentSloganId(moveToId(slogans, id, currentSloganId))
-          }
+          onClick={() => setCurrentSloganId(id)}
         >
           {akronym?.[currentLanguage]}
         </Slide>
@@ -127,7 +105,7 @@ const Container = styled.div`
   color: black;
   user-select: none;
   transition: transform 0.3s;
-  transform: translateX(calc(50vw - ${(props) => props.offset}px));
+  transform: translateX(calc(50% - ${({ offset }) => offset}px));
 `;
 
 const Slide = styled.div`
