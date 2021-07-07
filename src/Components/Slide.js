@@ -1,57 +1,56 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
-export const Slide = ({
+const Slide = ({
   children,
   id,
-  key,
   width = 300,
   height = 150,
+  row,
+  column,
   active,
-  // textColor,
   backgroundColor,
-  x = 0,
-  y = 0,
   onClick,
+  activate,
+  addToIO,
 }) => {
+  const ref = useRef();
+  useEffect(() => {
+    addToIO(ref.current);
+  }, [addToIO]);
   return (
     <Container
       className="sloganslide"
+      ref={ref}
       id={id}
-      key={key}
+      row={row}
+      column={column}
       active={active}
-      // textColor={textColor}
+      textColor={active ? "red" : "white"}
       backgroundColor={backgroundColor}
       onClick={() => onClick()}
       width={width}
       height={height}
-      x={x}
-      y={y}
     >
       {children}
     </Container>
   );
 };
 
+export default Slide;
+
 const Container = styled.div`
-  position: absolute;
-  top: ${({ y }) => y}px;
-  left: ${({ x }) => x}px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 2rem;
-  height: ${({ height }) => height}px;
-  width: ${({ width }) => width}px;
-  padding: 1em auto;
-  white-space: pre-line;
-  cursor: ${({ active }) => (active ? "default" : "pointer")};
-  transition: color 0.3s 0.1s;
-  transition: top 0.1s;
-  transition: left 0.1s;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  vertical-align: middle;
-  border-top: 1px lightblue solid;
-  border-bottom: 1px white solid;
   user-select: none;
+  box-sizing: border-box;
+  width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`};
+  vertical-align: middle;
+  text-align: center;
+  font-size: 5vh;
+  border: 1px grey solid;
+  scroll-snap-align: center;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  color: ${({ textColor }) => textColor};
+  grid-column-start: ${({ column }) => column};
+  grid-row-start: ${({ row }) => row};
 `;

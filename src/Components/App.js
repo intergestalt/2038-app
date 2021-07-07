@@ -28,6 +28,7 @@ class App extends React.Component {
     };
 
     this.overlayRef = React.createRef();
+    this.topRef = React.createRef();
   }
 
   snap = () => {
@@ -77,7 +78,7 @@ class App extends React.Component {
           <Above>
             <TopInfoBar />
           </Above>
-          <Top>
+          <Top ref={this.topRef}>
             <Mask2038 show={true} />
             <ZFontOverlay
               dev={this.state.dev}
@@ -111,28 +112,23 @@ class App extends React.Component {
                 )}
                 {this.state.overlay === "sloganSelect" && (
                   <SloganSelector
+                    width={this.topRef.current.clientWidth}
+                    height={this.topRef.current.clientHeight}
+                    root={this.topRef.current}
                     dev={this.state.dev}
-                    colList={this.languages}
-                    colSelect={this.languages.findIndex(
-                      (x) => x.id === this.state.currentLanguage,
-                    )}
-                    setColSelect={(index) => {
+                    languages={this.languages}
+                    currentLanguage={this.state.currentLanguage}
+                    setCurrentLanguage={(id) => {
                       this.setState({
-                        currentLanguage: this.languages[index].id,
+                        currentLanguage: id,
                       });
                     }}
-                    rowList={this.slogans}
-                    rowSelect={this.slogans.findIndex(
-                      (x) => x.id === this.state.currentSloganId,
-                    )}
-                    setRowSelect={(index) =>
+                    slogans={this.slogans}
+                    currentSlogan={this.state.currentSloganId}
+                    setCurrentSlogan={(index) =>
                       this.setState({ currentSloganId: this.slogans[index].id })
                     }
-                    activeColor={this.state.currentColor}
-                    slideContents={(col, row) => {
-                      console.log({ col, row });
-                      return (col.id && row?.text?.[col?.id]) || "nada";
-                    }}
+                    currentColor={this.state.currentColor}
                   />
                 )}
               </Overlay>
