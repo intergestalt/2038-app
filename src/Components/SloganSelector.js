@@ -1,15 +1,18 @@
 import React, { useRef, Fragment } from "react";
 import styled from "styled-components";
 import "intersection-observer-debugger";
-// import { useInView } from "react-intersection-observer";
-// import useDimensions from "react-cool-dimensions";
+import { useSwipeable } from "react-swipeable";
 import { useIntersect } from "../Hooks/useIntersect";
 
 import Slide from "./Slide";
 
-// let rootMargin = "0px"; //"-300px 0px -150px 0px";
-// let targetTop = 0;
-// let targetLeft = 0;
+const config = {
+  delta: 15, // min distance(px) before a swipe starts
+  preventDefaultTouchmoveEvent: false, // preventDefault on touchmove, *See Details*
+  trackTouch: true, // track touch input
+  trackMouse: false, // track mouse input
+  rotationAngle: 0, // set a rotation angle
+};
 
 export const SloganSelector = ({
   width,
@@ -26,6 +29,40 @@ export const SloganSelector = ({
   setCurrentSlogan,
 }) => {
   dev = false;
+  const handleSwipe = ({
+    event, // source event
+    initial, // initial swipe [x,y]
+    first, // true for first event
+    deltaX, // x offset (initial.x - current.x)
+    deltaY, // y offset (initial.y - current.y)
+    absX, // absolute deltaX
+    absY, // absolute deltaY
+    velocity, // √(absX^2 + absY^2) / time
+    dir, // direction of swipe (Left|Right|Up|Down)
+  }) => {
+    if (!first) return;
+    if (
+      languages.findIndex((x) => x.id === currentLanguage) > 0 &&
+      dir === "Right"
+    ) {
+      setCurrentLanguage(
+        languages[languages.findIndex((x) => x.id === currentLanguage) - 1].id,
+      );
+    } else if (
+      languages.findIndex((x) => x.id === currentLanguage) <
+        languages.length - 1 &&
+      dir === "Left"
+    ) {
+      setCurrentLanguage(
+        languages[languages.findIndex((x) => x.id === currentLanguage) + 1].id,
+      );
+    }
+  };
+
+  const handlers = useSwipeable({
+    onSwiping: (eventData) => handleSwipe(eventData),
+    ...config,
+  });
   const targetRef = useRef();
   // const root = targetRef.current;
   const targetTop = (height - slideHeight) / 2;
@@ -42,7 +79,7 @@ export const SloganSelector = ({
         setCurrentSlogan(entry.target.id);
       }
     });
-  };
+  }
   const [addIntersectNode, intersectNodes] = useIntersect(handleIntersect, {
     root,
     rootMargin,
@@ -50,9 +87,13 @@ export const SloganSelector = ({
   });
   return (
     <Wrapper
+      {...handlers}
       width={width}
       height={height}
-      ref={targetRef}
+      ref={(el) => {
+        handlers.ref(el);
+        targetRef.current = el;
+      }}
       cols={languages.length}
       rows={slogans.length}
       slideWidth={slideWidth}
