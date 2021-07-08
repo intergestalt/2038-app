@@ -127,8 +127,8 @@ class App extends React.Component {
                     }}
                     slogans={this.slogans}
                     currentSlogan={this.state.currentSloganId}
-                    setCurrentSlogan={(index) =>
-                      this.setState({ currentSloganId: this.slogans[index].id })
+                    setCurrentSlogan={(id) =>
+                      this.setState({ currentSloganId: id })
                     }
                     currentColor={this.state.currentColor}
                   />
