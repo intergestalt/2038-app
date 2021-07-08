@@ -24,7 +24,7 @@ export const SloganSelector = ({
   currentSlogan,
   setCurrentSlogan,
 }) => {
-  console.log({ currentLanguage });
+  dev = false;
   const targetRef = useRef();
   // const root = targetRef.current;
   const targetTop = (height - slideHeight) / 2;
@@ -37,23 +37,26 @@ export const SloganSelector = ({
   console.log({ width, height, targetRef, root, rootMargin });
   function handleIntersect(entries, observer) {
     entries.forEach((entry) => {
-      console.log("here");
       if (entry.isIntersecting) {
-        console.log({ entry });
-        console.log(`setting current slogan to ${entry.id}`);
-        setCurrentSlogan(slogans.findIndex((x) => x.id === entry.target.id));
+        setCurrentSlogan(entry.target.id);
       }
     });
-  }
+  };
   const [addIntersectNode, intersectNodes] = useIntersect(handleIntersect, {
     root,
     rootMargin,
-    threshold: 0.5,
+    threshold: 0.8,
   });
-  console.log({ intersectNodes });
-
   return (
-    <Wrapper width={width} height={height} ref={targetRef}>
+    <Wrapper
+      width={width}
+      height={height}
+      ref={targetRef}
+      cols={languages.length}
+      rows={slogans.length}
+      slideWidth={slideWidth}
+      slideHeight={slideHeight}
+    >
       <Container left={targetLeft}>
         {/* <Spacer height={targetTop} /> */}
         {languages.map((language, languageIndex) =>
@@ -178,8 +181,12 @@ export const SloganSelector = ({
 };
 
 const Wrapper = styled.div`
+  --slide-width: ${(slideWidth) => slideWidth}px;
+  --slide-height: ${(slideHeight) => slideHeight}px;
+  --cols: ${({ cols }) => cols};
+  --rows: ${(rows) => rows};
   position: absolute;
-  box-sizing: border-box;
+  box-sizing: content-box-box;
   border: 8px red solid;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
@@ -189,14 +196,20 @@ const Container = styled.div`
   position: absolute;
   box-sizing: border-box;
   left: ${({ left }) => `${left}px`};
-  width: 100%;
-  height: 100%;
+  width: calc(var(--cols) * var(--slide-width));
+  height: calc(var(--rows) * var(--slide-height));
   display: grid;
   grid-template-columns:
-    calc((100% - var(--slide-width)) / 2) repeat(4, var(--slide-width))
+    calc((100% - var(--slide-width)) / 2) repeat(
+      var(--cols),
+      var(--slide-width)
+    )
     calc((100% - var(--slide-width)) / 2);
   grid-template-rows:
-    calc((100% - var(--slide-height)) / 2) repeat(4, var(--slide-height))
+    calc((100% - var(--slide-height)) / 2) repeat(
+      var(--rows),
+      var(--slide-height)
+    )
     calc((100% - var(--slide-height)) / 2);
   grid-auto-columns: var(--slide-width);
   grid-auto-rows: var(--slide-height);
@@ -217,12 +230,13 @@ const Target = styled.div`
   position: absolute;
   top: ${({ top }) => `${top}px`};
   left: ${({ left }) => `${left}px`};
-  width: ${({ width }) => `${width}px`};
-  height: ${({ height }) => `${height}px`};
+  width: var(--slide-width);
+  height: var(--slide-height);
   border: 2px purple dashed;
 `;
 
 const Info = styled.div`
+  pointer-events: none;
   padding: 8px;
   position: absolute;
   top: 2px;

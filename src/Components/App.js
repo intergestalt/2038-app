@@ -114,6 +114,8 @@ class App extends React.Component {
                   <SloganSelector
                     width={this.topRef.current.clientWidth}
                     height={this.topRef.current.clientHeight}
+                    slideWidth={150}
+                    slideHeight={100}
                     root={this.topRef.current}
                     dev={this.state.dev}
                     languages={this.languages}
