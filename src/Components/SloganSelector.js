@@ -1,5 +1,6 @@
 import React, { useRef, Fragment } from "react";
 import styled from "styled-components";
+import "intersection-observer-debugger";
 // import { useInView } from "react-intersection-observer";
 // import useDimensions from "react-cool-dimensions";
 import { useIntersect } from "../Hooks/useIntersect";
