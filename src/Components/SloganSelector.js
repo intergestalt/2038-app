@@ -223,43 +223,39 @@ export const SloganSelector = ({
 };
 
 const Wrapper = styled.div`
-  --slide-width: ${(slideWidth) => slideWidth}px;
-  --slide-height: ${(slideHeight) => slideHeight}px;
+  --wrapper-width: ${({ width }) => width}px;
+  --wrapper-height: ${({ height }) => height}px;
+  --slide-width: ${({ slideWidth }) => slideWidth}px;
+  --slide-height: ${({ slideHeight }) => slideHeight}px;
   --cols: ${({ cols }) => cols};
-  --rows: ${(rows) => rows};
+  --rows: ${({ rows }) => rows};
   position: absolute;
-  box-sizing: content-box-box;
+  box-sizing: border-box;
   border: 8px red solid;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
+  overflow-x: hidden;
+  overflow-y: scroll;
 `;
 
 const Container = styled.div`
   position: absolute;
   box-sizing: border-box;
   left: ${({ left }) => `${left}px`};
-  width: calc(var(--cols) * var(--slide-width));
-  height: calc(var(--rows) * var(--slide-height));
+  /* top: calc(100% - var(--slide-height) / 2); */
+  /* width: calc(var(--cols) * var(--slide-width)); */
+  /* height: calc(var(--rows) * var(--slide-height)); */
   display: grid;
-  grid-template-columns:
-    calc((100% - var(--slide-width)) / 2) repeat(
-      var(--cols),
-      var(--slide-width)
-    )
-    calc((100% - var(--slide-width)) / 2);
-  grid-template-rows:
-    calc((100% - var(--slide-height)) / 2) repeat(
-      var(--rows),
-      var(--slide-height)
-    )
-    calc((100% - var(--slide-height)) / 2);
+  grid-template-columns: repeat(var(--cols), var(--slide-width));
+  grid-template-rows: repeat(var(--rows), var(--slide-height));
   grid-auto-columns: var(--slide-width);
   grid-auto-rows: var(--slide-height);
-  overflow: scroll;
-  padding-block: calc(50% - (var(--slide-height) / 2));
-  scroll-padding: calc((100% - var(--slide-height)) / 2);
+  /* overflow: scroll; */
+  padding-block: calc((var(--wrapper-height) - var(--slide-height)) / 2);
+  scroll-padding: calc((var(--wrapper-height) - var(--slide-height)) / 2);
   scroll-snap-type: both mandatory;
-  overflow-x: hidden;
+  overflow: hidden;
+  transform: left 0.3s;
 `;
 
 const Spacer = styled.div`
@@ -270,7 +266,7 @@ const Spacer = styled.div`
 const Target = styled.div`
   box-sizing: border-box;
   position: absolute;
-  top: ${({ top }) => `${top}px`};
+  top: calc((var(--wrapper-height) - var(--slide-height)) / 2);
   left: ${({ left }) => `${left}px`};
   width: var(--slide-width);
   height: var(--slide-height);

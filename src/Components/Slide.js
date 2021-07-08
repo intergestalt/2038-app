@@ -42,11 +42,12 @@ export default Slide;
 const Container = styled.div`
   user-select: none;
   box-sizing: border-box;
-  width: ${({ width }) => `${width}px`};
-  height: ${({ height }) => `${height}px`};
+  /* width: ${({ width }) => `${width}px`};
+  height: ${({ height }) => `${height}px`}; */
   vertical-align: middle;
   text-align: center;
-  font-size: 5vh;
+  font-size: 2vh;
+  white-space: pre-wrap;
   border: 1px grey solid;
   scroll-snap-align: center;
   background-color: ${({ backgroundColor }) => backgroundColor};
