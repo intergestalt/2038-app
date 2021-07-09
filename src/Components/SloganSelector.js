@@ -5,7 +5,7 @@ import { useSwipeable } from "react-swipeable";
 import Slide from "./Slide";
 
 const config = {
-  delta: 15, // min distance(px) before a swipe starts
+  delta: 20, // min distance(px) before a swipe starts
   preventDefaultTouchmoveEvent: false, // preventDefault on touchmove, *See Details*
   trackTouch: true, // track touch input
   trackMouse: false, // track mouse input
@@ -25,6 +25,7 @@ export const SloganSelector = ({
   slogans,
   currentSlogan,
   setCurrentSlogan,
+  currentColor,
 }) => {
   dev = false;
   const handleSwipe = ({
@@ -64,13 +65,6 @@ export const SloganSelector = ({
   const targetRef = useRef();
   // const root = targetRef.current;
   const currentColumn = languages.findIndex( x => x.id === currentLanguage )
-  function handleIntersect(entries, observer) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setCurrentSlogan(entry.target.id);
-      }
-    });
-  }
 
   return (
     <Wrapper
@@ -96,11 +90,12 @@ export const SloganSelector = ({
               column={languageIndex + 1}
               width={slideWidth}
               height={slideHeight}
+              currentColor={currentColor}
               active={
                 slogan.id === currentSlogan && language.id === currentLanguage
               }
-              backgroundColor={
-                language.id === currentLanguage ? "pink" : "black"
+              activeColumn={
+                language.id === currentLanguage
               }
               onClick={() => {
                 console.log({ language: language.id, currentLanguageId: currentLanguage, slogan: slogan.id });
@@ -115,7 +110,7 @@ export const SloganSelector = ({
                 setCurrentSlogan(slogan.id);
               }}
             >
-              <p>{slogan.text[language.id]}</p>
+              {slogan.text[language.id]}
             </Slide>
           )),
         )}
@@ -131,17 +126,18 @@ const Wrapper = styled.div`
   --rows: ${({ rows }) => rows};
   position: absolute;
   box-sizing: border-box;
-  border: 8px red solid;
   width: 100%;
   height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
+  // background: linear-gradient(90deg, rgba(0,0,0,0.6) 33%, rgba(0,0,0,0.4) 33%, rgba(0,0,0,0.4) 66%, rgba(0,0,0,0.4) 66%);
 `;
 
 const Container = styled.div`
   position: absolute;
   box-sizing: border-box;
   left: ${({ currentColumn }) => `calc( -${currentColumn} * var(--slide-width) + ( var(--slide-width) / 2) )`};
+  will-change: left;
   display: grid;
   grid-template-columns: repeat(var(--cols), var(--slide-width));
   grid-template-rows: repeat(var(--rows), var(--slide-height));
@@ -152,5 +148,5 @@ const Container = styled.div`
   scroll-padding: calc((var(--wrapper-height) - var(--slide-height)) / 2);*/
   scroll-snap-type: both mandatory;
   overflow: hidden;
-  transition: left 0.3s;
+  transition: left 0.5s;
 `;
