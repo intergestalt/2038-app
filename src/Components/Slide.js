@@ -4,20 +4,16 @@ import styled from "styled-components";
 const Slide = ({
   children,
   id,
-  width = 300,
-  height = 150,
+  width,
+  height,
   row,
   column,
   active,
   backgroundColor,
   onClick,
   activate,
-  addToIO,
 }) => {
   const ref = useRef();
-  useEffect(() => {
-    addToIO(ref.current);
-  }, [addToIO]);
   return (
     <Container
       className="sloganslide"
@@ -42,8 +38,8 @@ export default Slide;
 const Container = styled.div`
   user-select: none;
   box-sizing: border-box;
-  /* width: ${({ width }) => `${width}px`};
-  height: ${({ height }) => `${height}px`}; */
+  width: ${({ width }) => width};
+  height: ${({ height }) => height}; 
   vertical-align: middle;
   text-align: center;
   font-size: 2vh;

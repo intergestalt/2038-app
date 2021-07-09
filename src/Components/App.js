@@ -10,6 +10,10 @@ import { Mask2038 } from "./Mask2038";
 
 import config from "../config.json";
 import { colors } from "../config.js";
+import smoothscroll from 'smoothscroll-polyfill';
+
+// kick off the polyfill!
+smoothscroll.polyfill();
 
 class App extends React.Component {
   constructor(props) {
@@ -53,6 +57,14 @@ class App extends React.Component {
     this.setState({ currentColor: c });
   };
 
+  setCurrentSlogan =  (id) => {
+    this.setState({ currentSloganId: id })
+  }
+
+  setCurrentLanguage = (id) => {
+  this.setState({ currentLanguage: id });
+}
+
   makeFilename = () => {
     return (
       this.slogans.find(({ id }) => id === this.state.currentSloganId).akronym +
@@ -79,7 +91,7 @@ class App extends React.Component {
             <TopInfoBar />
           </Above>
           <Top ref={this.topRef}>
-            <Mask2038 show={true} />
+            <Mask2038 show={!this.state.sloganSelect} />
             <ZFontOverlay
               dev={this.state.dev}
               text={text}
@@ -114,22 +126,14 @@ class App extends React.Component {
                   <SloganSelector
                     width={this.topRef.current.clientWidth}
                     height={this.topRef.current.clientHeight}
-                    slideWidth={150}
-                    slideHeight={100}
                     root={this.topRef.current}
                     dev={this.state.dev}
                     languages={this.languages}
                     currentLanguage={this.state.currentLanguage}
-                    setCurrentLanguage={(id) => {
-                      this.setState({
-                        currentLanguage: id,
-                      });
-                    }}
+                    setCurrentLanguage={this.setCurrentLanguage}
                     slogans={this.slogans}
                     currentSlogan={this.state.currentSloganId}
-                    setCurrentSlogan={(id) =>
-                      this.setState({ currentSloganId: id })
-                    }
+                    setCurrentSlogan={this.setCurrentSlogan}
                     currentColor={this.state.currentColor}
                   />
                 )}

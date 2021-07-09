@@ -1,8 +1,6 @@
 import React, { useRef, Fragment } from "react";
 import styled from "styled-components";
-import "intersection-observer-debugger";
 import { useSwipeable } from "react-swipeable";
-import { useIntersect } from "../Hooks/useIntersect";
 
 import Slide from "./Slide";
 
@@ -17,8 +15,8 @@ const config = {
 export const SloganSelector = ({
   width,
   height,
-  slideWidth = 300,
-  slideHeight = 200,
+  slideWidth = "50vw",
+  slideHeight = "30vw",
   root,
   dev,
   languages,
@@ -65,14 +63,7 @@ export const SloganSelector = ({
   });
   const targetRef = useRef();
   // const root = targetRef.current;
-  const targetTop = (height - slideHeight) / 2;
-  const targetLeft =
-    width / 2 -
-    (languages.findIndex((x) => x.id === currentLanguage) + 0.5) * slideWidth;
-  const rootMargin = `-${(height - slideHeight) / 2 || 0}px -${
-    (width - slideWidth) / 2 || 0
-  }px`;
-  console.log({ width, height, targetRef, root, rootMargin });
+  const currentColumn = languages.findIndex( x => x.id === currentLanguage )
   function handleIntersect(entries, observer) {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -80,11 +71,7 @@ export const SloganSelector = ({
       }
     });
   }
-  const [addIntersectNode, intersectNodes] = useIntersect(handleIntersect, {
-    root,
-    rootMargin,
-    threshold: 0.8,
-  });
+
   return (
     <Wrapper
       {...handlers}
@@ -99,8 +86,7 @@ export const SloganSelector = ({
       slideWidth={slideWidth}
       slideHeight={slideHeight}
     >
-      <Container left={targetLeft}>
-        {/* <Spacer height={targetTop} /> */}
+      <Container currentColumn={currentColumn}>
         {languages.map((language, languageIndex) =>
           slogans.map((slogan, sloganIndex) => (
             <Slide
@@ -117,123 +103,37 @@ export const SloganSelector = ({
                 language.id === currentLanguage ? "pink" : "black"
               }
               onClick={() => {
-                console.log({ language: language.id, slogan: slogan.id });
-                setCurrentLanguage(language.id);
+                console.log({ language: language.id, currentLanguageId: currentLanguage, slogan: slogan.id });
+                if (currentLanguage === language.id) {
+                  setCurrentSlogan(slogan.id);
+                } else {
+                  setCurrentLanguage(language.id);
+                }
               }}
               activate={() => {
                 // setCurrentLanguage();
                 setCurrentSlogan(slogan.id);
               }}
-              addToIO={addIntersectNode}
             >
               <p>{slogan.text[language.id]}</p>
             </Slide>
           )),
         )}
-        {/* <Spacer height={targetTop} /> */}
       </Container>
-      {dev && (
-        <Fragment>
-          <Target
-            top={targetTop}
-            left={targetLeft}
-            width={slideWidth}
-            height={slideHeight}
-          />
-          <Info>
-            w: {window.innerWidth}
-            <br />
-            h: {window.innerHeight}
-            <br />
-            width: {width}
-            <br />
-            height: {height}
-            <div>
-              Slogan:
-              <button
-                onClick={() => {
-                  if (slogans.findIndex((x) => x.id === currentSlogan) > 0) {
-                    setCurrentSlogan(
-                      slogans[
-                        slogans.findIndex((x) => x.id === currentSlogan) - 1
-                      ].id,
-                    );
-                  }
-                }}
-              >
-                -
-              </button>
-              {currentSlogan}
-              <button
-                onClick={() => {
-                  if (
-                    slogans.findIndex((x) => x.id === currentSlogan) <
-                    slogans.length
-                  ) {
-                    setCurrentSlogan(
-                      slogans[
-                        slogans.findIndex((x) => x.id === currentSlogan) + 1
-                      ].id,
-                    );
-                  }
-                }}
-              >
-                +
-              </button>
-            </div>
-            <div>
-              Language:
-              <button
-                onClick={() => {
-                  if (
-                    languages.findIndex((x) => x.id === currentLanguage) > 0
-                  ) {
-                    setCurrentLanguage(
-                      languages[
-                        languages.findIndex((x) => x.id === currentLanguage) - 1
-                      ].id,
-                    );
-                  }
-                }}
-              >
-                -
-              </button>
-              {currentLanguage}
-              <button
-                onClick={() => {
-                  if (
-                    languages.findIndex((x) => x.id === currentLanguage) > 0
-                  ) {
-                    setCurrentLanguage(
-                      languages[
-                        languages.findIndex((x) => x.id === currentLanguage) + 1
-                      ].id,
-                    );
-                  }
-                }}
-              >
-                +
-              </button>
-            </div>
-          </Info>
-        </Fragment>
-      )}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  --wrapper-width: ${({ width }) => width}px;
-  --wrapper-height: ${({ height }) => height}px;
-  --slide-width: ${({ slideWidth }) => slideWidth}px;
-  --slide-height: ${({ slideHeight }) => slideHeight}px;
+  --slide-width: ${({ slideWidth }) => slideWidth};
+  --slide-height: ${({ slideHeight }) => slideHeight};
   --cols: ${({ cols }) => cols};
   --rows: ${({ rows }) => rows};
   position: absolute;
   box-sizing: border-box;
   border: 8px red solid;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
+  width: 100%;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
 `;
@@ -241,45 +141,16 @@ const Wrapper = styled.div`
 const Container = styled.div`
   position: absolute;
   box-sizing: border-box;
-  left: ${({ left }) => `${left}px`};
-  /* top: calc(100% - var(--slide-height) / 2); */
-  /* width: calc(var(--cols) * var(--slide-width)); */
-  /* height: calc(var(--rows) * var(--slide-height)); */
+  left: ${({ currentColumn }) => `calc( -${currentColumn} * var(--slide-width) + ( var(--slide-width) / 2) )`};
   display: grid;
   grid-template-columns: repeat(var(--cols), var(--slide-width));
   grid-template-rows: repeat(var(--rows), var(--slide-height));
   grid-auto-columns: var(--slide-width);
   grid-auto-rows: var(--slide-height);
   /* overflow: scroll; */
-  padding-block: calc((var(--wrapper-height) - var(--slide-height)) / 2);
-  scroll-padding: calc((var(--wrapper-height) - var(--slide-height)) / 2);
+  /*padding-block: calc((var(--wrapper-height) - var(--slide-height)) / 2);
+  scroll-padding: calc((var(--wrapper-height) - var(--slide-height)) / 2);*/
   scroll-snap-type: both mandatory;
   overflow: hidden;
-  transform: left 0.3s;
-`;
-
-const Spacer = styled.div`
-  box-sizing: border-box;
-  height: ${({ height }) => `${height}px`};
-`;
-
-const Target = styled.div`
-  box-sizing: border-box;
-  position: absolute;
-  top: calc((var(--wrapper-height) - var(--slide-height)) / 2);
-  left: ${({ left }) => `${left}px`};
-  width: var(--slide-width);
-  height: var(--slide-height);
-  border: 2px purple dashed;
-`;
-
-const Info = styled.div`
-  pointer-events: none;
-  padding: 8px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: small;
+  transition: left 0.3s;
 `;
