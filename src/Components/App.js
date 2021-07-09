@@ -10,11 +10,6 @@ import { Mask2038 } from "./Mask2038";
 
 import config from "../config.json";
 import { colors } from "../config.js";
-import smoothscroll from 'smoothscroll-polyfill';
-
-// kick off the polyfill!
-smoothscroll.polyfill();
-
 class App extends React.Component {
   constructor(props) {
     super(props);
