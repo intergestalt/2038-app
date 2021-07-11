@@ -103,8 +103,11 @@ const Bottom = styled.div`
   height: 40px;
   font-weight: normal;
   text-align: center;
+  padding-bottom: 2px;
 `
 
 const BottomText = styled.span`
   cursor: pointer;
+  font-size: 20px;
+  display: block;
 `
