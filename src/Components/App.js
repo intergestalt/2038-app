@@ -118,7 +118,7 @@ class App extends React.Component {
               ref={this.overlayRef}
               color={this.state.currentColor}
               snapped={!!this.state.imageDataUrl}
-              blur={!!this.state.sloganSelect}
+              blur={!!this.state.sloganSelect || !!this.state.tutorialState}
             />
 
             {this.state.tutorialState && (
