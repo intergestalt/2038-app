@@ -7,6 +7,7 @@ import ControlPanel from "./ControlPanel";
 import { SloganSelector } from "./SloganSelector";
 import TopInfoBar from "./TopInfoBar";
 import { Mask2038 } from "./Mask2038";
+import { Flash } from "./Flash";
 
 import config from "../config.json";
 import { colors } from "../config.js";
@@ -87,6 +88,7 @@ class App extends React.Component {
           </Above>
           <Top ref={this.topRef}>
             <Mask2038 show={!this.state.sloganSelect} />
+            <Flash trigger={!!this.state.imageDataUrl} color={this.state.currentColor}/>
             <ZFontOverlay
               dev={this.state.dev}
               text={text}
@@ -190,6 +192,7 @@ const Overlay = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(127, 127, 127, 0.9);
+  z-index: 10;
 `;
 
 const Question = styled.div`
