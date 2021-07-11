@@ -9,6 +9,7 @@ import TopInfoBar from "./TopInfoBar";
 import { Mask2038 } from "./Mask2038";
 import { Flash } from "./Flash";
 import { Tutorial } from "./Tutorial"
+import { Question } from "./Question"
 
 import config from "../config.json";
 import { colors } from "../config.js";
@@ -23,6 +24,7 @@ class App extends React.Component {
       currentSloganId: this.slogans[1].id,
       currentColor: this.colors[0],
       imageDataUrl: null,
+      filename: null,
       sloganSelect: false,
       tutorialState: null,
       dev: process.env.NODE_ENV !== "production",
@@ -35,7 +37,10 @@ class App extends React.Component {
   snap = () => {
     const imageDataUrl = this.overlayRef.current.snap();
     console.log(imageDataUrl);
-    this.setState({ imageDataUrl });
+    this.setState({ 
+      imageDataUrl,
+      filename: this.makeFilename()
+    });
   };
 
   initVideo = () => {
@@ -147,25 +152,12 @@ class App extends React.Component {
 
             {!!this.state.imageDataUrl && (
               <Overlay>
-                <Question>
-                  Keep Picture? <br />
-                  <br />
-                  <span
-                    style={{ textDecoration: "underline" }}
-                    onClick={this.clearPicture}
-                  >
-                    discard
-                  </span>
-                  &nbsp;&nbsp;&nbsp;
-                  <Img src={this.state.imageDataUrl} />
-                  <a
-                    href={this.state.imageDataUrl}
-                    onClick={this.clearPicture}
-                    download={this.makeFilename()}
-                  >
-                    save
-                  </a>
-                </Question>
+                <Question 
+                  imageDataUrl={this.state.imageDataUrl} 
+                  onCancel={this.clearPicture}
+                  onSave={this.clearPicture}
+                  filename={this.state.filename}
+                />
               </Overlay>
             )}
 
@@ -199,6 +191,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  font-family: "Haas", sans-serif;
 `;
 
 const Above = styled.div`
@@ -227,16 +220,3 @@ const Overlay = styled.div`
   background-color: rgba(127, 127, 127, 0.9);
   z-index: 10;
 `;
-
-const Question = styled.div`
-  padding: 20px;
-  border-radius: 10px;
-  background-color: darkgrey;
-  opacity: 0.93;
-`;
-
-const Img = styled.img`
-  width: 25vw;
-  height: auto;
-
-`
