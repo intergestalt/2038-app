@@ -23,7 +23,6 @@ class App extends React.Component {
       currentColor: this.colors[0],
       imageDataUrl: null,
       sloganSelect: false,
-      overlay: null,
       dev: process.env.NODE_ENV !== "production",
     };
 
@@ -38,10 +37,8 @@ class App extends React.Component {
   };
 
   toggleSloganSelect = () => {
-    console.log("toggleSloganSelect executed");
     this.setState((state) => ({
       sloganSelect: !state.sloganSelect,
-      overlay: !state.sloganSelect ? "sloganSelect" : null,
     }));
   };
 
@@ -95,47 +92,50 @@ class App extends React.Component {
               ref={this.overlayRef}
               color={this.state.currentColor}
               snapped={!!this.state.imageDataUrl}
-              blur={!!this.state.overlay}
+              blur={!!this.state.sloganSelect}
             />
-            {this.state.overlay && (
+            
+            {this.state.sloganSelect && (
               <Overlay>
-                {this.state.imageDataUrl && (
-                  <Question>
-                    Keep Picture? <br />
-                    <br />
-                    <span
-                      style={{ textDecoration: "underline" }}
-                      onClick={this.clearPicture}
-                    >
-                      discard
-                    </span>
-                    &nbsp;&nbsp;&nbsp;
-                    <a
-                      href={this.state.imageDataUrl}
-                      onClick={this.clearPicture}
-                      download={this.makeFilename()}
-                    >
-                      save
-                    </a>
-                  </Question>
-                )}
-                {this.state.overlay === "sloganSelect" && (
-                  <SloganSelector
-                    width={this.topRef.current.clientWidth}
-                    height={this.topRef.current.clientHeight}
-                    root={this.topRef.current}
-                    dev={this.state.dev}
-                    languages={this.languages}
-                    currentLanguage={this.state.currentLanguage}
-                    setCurrentLanguage={this.setCurrentLanguage}
-                    slogans={this.slogans}
-                    currentSlogan={this.state.currentSloganId}
-                    setCurrentSlogan={this.setCurrentSlogan}
-                    currentColor={this.state.currentColor}
-                  />
-                )}
+                <SloganSelector
+                  width={this.topRef.current.clientWidth}
+                  height={this.topRef.current.clientHeight}
+                  root={this.topRef.current}
+                  dev={this.state.dev}
+                  languages={this.languages}
+                  currentLanguage={this.state.currentLanguage}
+                  setCurrentLanguage={this.setCurrentLanguage}
+                  slogans={this.slogans}
+                  currentSlogan={this.state.currentSloganId}
+                  setCurrentSlogan={this.setCurrentSlogan}
+                  currentColor={this.state.currentColor}
+                />
               </Overlay>
             )}
+
+            {!!this.state.imageDataUrl && (
+              <Overlay>
+                <Question>
+                  Keep Picture? <br />
+                  <br />
+                  <span
+                    style={{ textDecoration: "underline" }}
+                    onClick={this.clearPicture}
+                  >
+                    discard
+                  </span>
+                  &nbsp;&nbsp;&nbsp;
+                  <a
+                    href={this.state.imageDataUrl}
+                    onClick={this.clearPicture}
+                    download={this.makeFilename()}
+                  >
+                    save
+                  </a>
+                </Question>
+              </Overlay>
+            )}
+
           </Top>
           <Bottom>
             <ControlPanel
