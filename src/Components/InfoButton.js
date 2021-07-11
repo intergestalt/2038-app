@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 
-export const InfoButton = () => {
+export const InfoButton = ({type, onClick}) => {
+    const letter = type === "close" ? "x" : "i"
     return (
-        <Outer title="info"><Inner>i</Inner></Outer>
+        <Outer title="info" onClick={onClick}>
+            <Inner>
+                {letter}
+            </Inner>
+        </Outer>
     );
 };
 
@@ -16,6 +21,7 @@ const Outer = styled.span`
     font-family: 'Roboto Mono', monospace;
     font-size: 20px;
     display: inline-flex;
+    cursor: pointer;
 `
 
 const Inner = styled.span`

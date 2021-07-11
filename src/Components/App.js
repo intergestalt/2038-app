@@ -8,6 +8,7 @@ import { SloganSelector } from "./SloganSelector";
 import TopInfoBar from "./TopInfoBar";
 import { Mask2038 } from "./Mask2038";
 import { Flash } from "./Flash";
+import { Tutorial } from "./Tutorial"
 
 import config from "../config.json";
 import { colors } from "../config.js";
@@ -23,6 +24,7 @@ class App extends React.Component {
       currentColor: this.colors[0],
       imageDataUrl: null,
       sloganSelect: false,
+      tutorialState: null,
       dev: process.env.NODE_ENV !== "production",
     };
 
@@ -35,6 +37,14 @@ class App extends React.Component {
     console.log(imageDataUrl);
     this.setState({ imageDataUrl });
   };
+
+  initVideo = () => {
+    this.overlayRef.current.initVideo()
+  }
+
+  initSensors = () => {
+    this.overlayRef.current.initSensors()
+  }
 
   toggleSloganSelect = () => {
     this.setState((state) => ({
@@ -55,8 +65,8 @@ class App extends React.Component {
   }
 
   setCurrentLanguage = (id) => {
-  this.setState({ currentLanguage: id });
-}
+    this.setState({ currentLanguage: id });
+  }
 
   makeFilename = () => {
     return (
@@ -64,6 +74,22 @@ class App extends React.Component {
       ".jpg"
     );
   };
+
+  switchTutorialState = state => {
+    console.log(state)
+    if (this.state.tutorialState === "setupVideo") {
+      this.initVideo()
+      this.setState({ tutorialState: "setupSensors" })
+    }
+    if (this.state.tutorialState === "setupSensors") {
+      this.initSensors()
+      this.setState({ tutorialState: null })
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ tutorialState: "setupVideo"})
+  }
 
   render() {
     console.log(this.overlayRef);
@@ -94,7 +120,13 @@ class App extends React.Component {
               snapped={!!this.state.imageDataUrl}
               blur={!!this.state.sloganSelect}
             />
-            
+
+            {this.state.tutorialState && (
+              <Overlay>
+                <Tutorial stateName={this.state.tutorialState} onNext={this.switchTutorialState} />
+              </Overlay>
+            )}
+
             {this.state.sloganSelect && (
               <Overlay>
                 <SloganSelector
@@ -125,6 +157,7 @@ class App extends React.Component {
                     discard
                   </span>
                   &nbsp;&nbsp;&nbsp;
+                  <Img src={this.state.imageDataUrl} />
                   <a
                     href={this.state.imageDataUrl}
                     onClick={this.clearPicture}
@@ -201,3 +234,9 @@ const Question = styled.div`
   background-color: darkgrey;
   opacity: 0.93;
 `;
+
+const Img = styled.img`
+  width: 25vw;
+  height: auto;
+
+`

@@ -16,7 +16,6 @@ export default class ZFontOverlay extends React.Component {
       orientation: { alpha: 0, beta: 0, gamma: 0 },
       width: null,
       height: null,
-      initialized: false,
     };
 
     this.dragging = false;
@@ -34,12 +33,6 @@ export default class ZFontOverlay extends React.Component {
       });
     });
   }
-
-  initialize = () => {
-    this.initVideo();
-    this.initSensors();
-    this.setState({ initialized: true });
-  };
 
   componentDidUpdate(prevProps) {
     if (this.props.blur !== prevProps.blur) {
@@ -282,7 +275,6 @@ export default class ZFontOverlay extends React.Component {
   render() {
     return (
       <VideoContainer
-        initialized={this.state.initialized}
         blur={this.props.blur}
       >
         {this.props.dev && (
@@ -311,16 +303,6 @@ export default class ZFontOverlay extends React.Component {
             visibility: this.props.snapped ? "visible" : "hidden",
           }}
         ></Canvas>
-
-        {!this.state.initialized && (
-          <Cover>
-            <CoverText>
-              Please allow camera and sensor access
-              <br />
-              <button onClick={this.initialize}>Start</button>
-            </CoverText>
-          </Cover>
-        )}
       </VideoContainer>
     );
   }
@@ -328,32 +310,15 @@ export default class ZFontOverlay extends React.Component {
 
 const VideoContainer = styled.div`
   video {
-    /* ${({ initialized }) => initialized || "filter: blur(10px);"} */
     ${({ blur }) => blur && "filter: blur(10px);"}
   }
   canvas {
-    /* ${({ initialized }) => initialized || "filter: blur(10px);"} */
     ${({ blur }) => blur && "filter: blur(10px);"}
   }
   position: relative;
   width: 100%;
   height: 100%;
   background-color: black;
-`;
-
-const Cover = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 99;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: rgba(111, 111, 111, 0.8);
-`;
-
-const CoverText = styled.div`
-  text-align: center;
 `;
 
 const Video = styled.video`
