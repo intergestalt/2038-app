@@ -12,19 +12,7 @@
       "id": "de"
     },
     {
-      "id": "fr"
-    },
-    {
-      "id": "nl"
-    },
-    {
-      "id": "gr"
-    },
-    {
-      "id": "ru"
-    },
-    {
-      "id": "cn"
+      "id": "it"
     }
   ],
   "texts": {
@@ -32,340 +20,96 @@
   },
   "slogans": [
     {
-      "id": "1",
-      "akronym": {
-        "en": "en - twctis",
-        "de": "de - twctis",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "cn - twctis"
-      },
-      "text": {
-        "en": "the world\ncame to its\nsenses",
-        "de": "1 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "2",
-      "akronym": {
-        "en": "wcottns",
-        "de": "de - wcottns",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "cn - wcottns"
-      },
-      "text": {
-        "en": "we call our\ntime the\nnew serenity",
-        "de": "2 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "3",
-      "akronym": {
-        "en": "eiomo",
-        "de": "de - eiomo",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "cn - eiomo"
-      },
-      "text": {
-        "en": "equality\nis our main\nobjective",
-        "de": "3 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "3 cn\n我想玩电脑\n我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
       "id": "4",
       "akronym": {
-        "en": "en - 市喫案給",
-        "de": "de - 市喫案給",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "cn - 市喫案給"
+        "en": "mscmps",
+        "de": "issiwmim",
+        "it": "ccirppi"
+
       },
       "text": {
-        "en": "3 en 我想玩电脑\n我想玩电脑 我想玩电脑",
-        "de": "3 de orfijs\nelriufhs\neriufhsleri",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "市喫案給\n益立面旅\n恐段題責計"
+        "en": "make smart\ncities by making\npeople smart",
+        "de": "intelligente\nStädte schaffen,\nindem wir Menschen\nintelligenter machen",
+        "it": "creare\ncittà intelligenti\nrendendo le persone\npiù intelligenti"
       }
     },
     {
       "id": "5",
       "akronym": {
-        "en": "en - twctis",
-        "de": "de - twctis",
-        "fr": "fr - 5",
-        "nl": "nl - 5",
-        "gr": "gr - 5",
-        "ru": "ru - 5",
-        "cn": "cn - twctis"
+        "en": "sic",
+        "de": "stw",
+        "it": "sidc"
       },
       "text": {
-        "en": "the world\ncame to its\nsenses",
-        "de": "1 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
+        "en": "solidarity\n instead of\n competition",
+        "de": "Solidarität\nstatt\nWettbewerb",
+        "it": "Solidarietà\ninvece\ndella competizione"
       }
     },
     {
       "id": "6",
-      "akronym": {
-        "en": "wcottns",
-        "de": "de - wcottns",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "cn - wcottns"
-      },
-      "text": {
-        "en": "we call our\ntime the\nnew serenity",
-        "de": "2 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
+    "akronym": {
+      "en": "mcfa",
+      "de": "KzLb",
+      "it": "ricdnf"
     },
+    "text": {
+      "en": "make\ncircularity\nfunction again",
+      "de": "Kreisläufe\nzum Laufen\nbringen",
+      "it": "Rendere\ni circuiti\ndi nuova funzione"
+    }
+  },
     {
       "id": "7",
-      "akronym": {
-        "en": "eiomo",
-        "de": "de - eiomo",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "cn - eiomo"
-      },
-      "text": {
-        "en": "equality\nis our main\nobjective",
-        "de": "3 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "3 cn\n我想玩电脑\n我想玩电脑\n我想玩电脑"
-      }
+    "akronym": {
+      "en": "pp?wwt?",
+      "de": "p?wwdd?",
+      "it": "pp?q?"
     },
-    {
-      "id": "8",
-      "akronym": {
-        "en": "en - 市喫案給",
-        "de": "de - 市喫案給",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "cn - 市喫案給"
-      },
-      "text": {
-        "en": "3 en 我想玩电脑\n我想玩电脑 我想玩电脑",
-        "de": "3 de orfijs\nelriufhs\neriufhsleri",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "市喫案給\n益立面旅\n恐段題責計"
-      }
-    },
-    {
-      "id": "9",
-      "akronym": {
-        "en": "en - twctis",
-        "de": "de - twctis",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "cn - twctis"
-      },
-      "text": {
-        "en": "the world\ncame to its\nsenses",
-        "de": "1 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "10",
-      "akronym": {
-        "en": "wcottns",
-        "de": "de - wcottns",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "cn - wcottns"
-      },
-      "text": {
-        "en": "we call our\ntime the\nnew serenity",
-        "de": "2 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "11",
-      "akronym": {
-        "en": "eiomo",
-        "de": "de - eiomo",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "cn - eiomo"
-      },
-      "text": {
-        "en": "equality\nis our main\nobjective",
-        "de": "3 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "3 cn\n我想玩电脑\n我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "12",
-      "akronym": {
-        "en": "en - 市喫案給",
-        "de": "de - 市喫案給",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "cn - 市喫案給"
-      },
-      "text": {
-        "en": "3 en 我想玩电脑\n我想玩电脑 我想玩电脑",
-        "de": "3 de orfijs\nelriufhs\neriufhsleri",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "市喫案給\n益立面旅\n恐段題責計"
-      }
-    },
-    {
-      "id": "13",
-      "akronym": {
-        "en": "en - twctis",
-        "de": "de - twctis",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "cn - twctis"
-      },
-      "text": {
-        "en": "the world\ncame to its\nsenses",
-        "de": "1 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 1",
-        "nl": "nl - 1",
-        "gr": "gr - 1",
-        "ru": "ru - 1",
-        "cn": "1 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "14",
-      "akronym": {
-        "en": "wcottns",
-        "de": "de - wcottns",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "cn - wcottns"
-      },
-      "text": {
-        "en": "we call our\ntime the\nnew serenity",
-        "de": "2 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 2",
-        "nl": "nl - 2",
-        "gr": "gr - 2",
-        "ru": "ru - 2",
-        "cn": "2 cn \n我想玩电脑 我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "15",
-      "akronym": {
-        "en": "eiomo",
-        "de": "de - eiomo",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "cn - eiomo"
-      },
-      "text": {
-        "en": "equality\nis our main\nobjective",
-        "de": "3 de de de d\norfijs elriufhs\neriufhsleri",
-        "fr": "fr - 3",
-        "nl": "nl - 3",
-        "gr": "gr - 3",
-        "ru": "ru - 3",
-        "cn": "3 cn\n我想玩电脑\n我想玩电脑\n我想玩电脑"
-      }
-    },
-    {
-      "id": "16",
-      "akronym": {
-        "en": "en - 市喫案給",
-        "de": "de - 市喫案給",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "cn - 市喫案給"
-      },
-      "text": {
-        "en": "3 en 我想玩电脑\n我想玩电脑 我想玩电脑",
-        "de": "3 de orfijs\nelriufhs\neriufhsleri",
-        "fr": "fr - 4",
-        "nl": "nl - 4",
-        "gr": "gr - 4",
-        "ru": "ru - 4",
-        "cn": "市喫案給\n益立面旅\n恐段題責計"
-      }
+    "text": {
+      "en": "private property?\nwhen was that?",
+      "de": "Privateigentum?\nWann war\ndas denn?",
+      "it": "Proprietà privata?\nQuando?"
     }
-  ]
+  },
+  {
+    "id": "1",
+    "akronym": {
+      "en": "twctis",
+      "de": "twctis",
+      "it": "twctis"
+    },
+    "text": {
+      "en": "the world\ncame to its\nsenses",
+      "de": "the world\ncame to its\nsenses",
+      "it": "the world\ncame to its\nsenses"
+    }
+  },
+  {
+    "id": "2",
+    "akronym": {
+      "en": "wcottns",
+      "de": "wcottns",
+      "fr": "wcottns"
+    },
+    "text": {
+      "en": "we call our\ntime the\nnew serenity",
+      "de": "we call our\ntime the\nnew serenity",
+      "it": "we call our\ntime the\nnew serenity"
+    }
+  },
+  {
+    "id": "3",
+    "akronym": {
+      "en": "eiomo",
+      "de": "eiomo",
+      "it": "eiomo"
+    },
+    "text": {
+      "en": "equality\nis our main\nobjective",
+      "de": "equality\nis our main\nobjective",
+      "it": "equality\nis our main\nobjective"
+    }
+  }
+]
 }
