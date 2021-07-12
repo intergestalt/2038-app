@@ -2,8 +2,34 @@ import React from "react";
 import styled from "styled-components";
 
 import { cover } from "intrinsic-scale";
+import { mask2038DataUrl } from './Mask2038.js'
 
 import "@hughsk/fulltilt/dist/fulltilt";
+
+const drawMaskCanvas = (canvas) => {
+  // draw "2038" on a canvas
+  if (!canvas) canvas = document.getElementById("2038-canvas")
+  if (!canvas) return null
+  const context = canvas.getContext('2d')
+  // the dimensions of the element as shown in the browser
+  const offsetWidth = canvas.offsetWidth
+  const offsetHeight = canvas.offsetHeight
+  // the dimensions of the canvas itself as defined at canvas creation
+  const w = context.canvas.width
+  const h = context.canvas.height
+  // load image
+  const image = new Image();
+  image.src = mask2038DataUrl;
+  //console.log("canvas size", w, h, offsetWidth, offsetHeight)
+  image.onload = function () {
+    //console.log("loaded image", image)
+    const image_ar = image.height / image.width
+    context.clearRect(0,0,w, h)
+    context.drawImage(image, w * 0.35, 0, w * 0.3, w * 0.3 * image_ar * offsetWidth / offsetHeight * h / w);
+  }
+  return canvas
+}
+
 export default class ZFontOverlay extends React.Component {
   constructor(props) {
     super(props);
@@ -32,6 +58,7 @@ export default class ZFontOverlay extends React.Component {
         this.initZfont();
       });
     });
+
   }
 
   componentDidUpdate(prevProps) {
@@ -47,6 +74,8 @@ export default class ZFontOverlay extends React.Component {
       console.log("color changed to", this.props.color);
       this.text.color = this.props.color;
     }
+
+    //drawMaskCanvas(document.getElementById("2038-canvas"));
   }
 
   initSensors() {
@@ -151,6 +180,7 @@ export default class ZFontOverlay extends React.Component {
       onResize: function (width, height) {
         var minSize = Math.min(width, height);
         this.zoom = minSize / 300;
+        drawMaskCanvas()
       },
     });
 
@@ -232,6 +262,7 @@ export default class ZFontOverlay extends React.Component {
   combineCanvas = () => {
     let videoElement = document.getElementById("video");
     let zdogCanvas = document.getElementById("zdog-canvas");
+    let maskCanvas = document.getElementById("2038-canvas");
 
     let resultCanvas = document.getElementById("combined-result");
     resultCanvas.width = zdogCanvas.width;
@@ -250,9 +281,10 @@ export default class ZFontOverlay extends React.Component {
       videoElement.videoHeight,
     );
 
-    console.log({ x, y, width, height });
+    //console.log({ x, y, width, height });
 
     resultCanvasContext.drawImage(videoElement, x, y, width, height);
+    resultCanvasContext.drawImage(maskCanvas, 0, 0, resultCanvas.width, resultCanvas.height);
     resultCanvasContext.drawImage(zdogCanvas, 0, 0);
 
     //this.setState({snapped: true});
@@ -293,6 +325,7 @@ export default class ZFontOverlay extends React.Component {
           </SensorInfo>
         )}
         <Video id="video"></Video>
+        <Canvas id="2038-canvas" width="600" height="800"></Canvas>
         <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
         <Canvas
           id="combined-result"

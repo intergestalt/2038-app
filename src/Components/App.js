@@ -6,7 +6,6 @@ import ZFontOverlay from "./ZFontOverlay";
 import ControlPanel from "./ControlPanel";
 import { SloganSelector } from "./SloganSelector";
 import TopInfoBar from "./TopInfoBar";
-import { Mask2038 } from "./Mask2038";
 import { Flash } from "./Flash";
 import { Tutorial } from "./Tutorial"
 import { Question } from "./Question"
@@ -115,7 +114,6 @@ class App extends React.Component {
             <TopInfoBar />
           </Above>
           <Top ref={this.topRef}>
-            <Mask2038 show={!this.state.sloganSelect} />
             <Flash trigger={!!this.state.imageDataUrl} color={this.state.currentColor}/>
             <ZFontOverlay
               dev={this.state.dev}
