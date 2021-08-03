@@ -242,6 +242,7 @@ export default class ZFontOverlay extends React.Component {
   initVideo() {
     let videoElement = document.getElementById("video");
 
+    if (!navigator.mediaDevices) return false
     // Use facingMode: environment to attemt to get the front camera on phones
     navigator.mediaDevices
       .getUserMedia({ video: { facingMode: "environment" } })
@@ -306,40 +307,51 @@ export default class ZFontOverlay extends React.Component {
 
   render() {
     return (
-      <VideoContainer
-        blur={this.props.blur}
-      >
-        {this.props.dev && (
-          <SensorInfo>
-            alpha: {this.state.orientation.alpha}
-            <br />
-            beta: {this.state.orientation.beta}
-            <br />
-            gamma: {this.state.orientation.gamma}
-            <br />
-            rotate x: {this.state.rotate.x}
-            <br />
-            rotate y: {this.state.rotate.y}
-            <br />
-            rotate z: {this.state.rotate.z}
-          </SensorInfo>
-        )}
-        <Video id="video"></Video>
-        <Canvas id="2038-canvas" width="600" height="800"></Canvas>
-        <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
-        <Canvas
-          id="combined-result"
-          width="600"
-          height="800"
-          style={{
-            pointerEvents: this.props.snapped ? "all" : "none",
-            visibility: this.props.snapped ? "visible" : "hidden",
-          }}
-        ></Canvas>
-      </VideoContainer>
+      <Container color={this.props.color}>
+        <VideoContainer
+          blur={this.props.blur}
+        >
+          {this.props.dev && (
+            <SensorInfo>
+              alpha: {this.state.orientation.alpha}
+              <br />
+              beta: {this.state.orientation.beta}
+              <br />
+              gamma: {this.state.orientation.gamma}
+              <br />
+              rotate x: {this.state.rotate.x}
+              <br />
+              rotate y: {this.state.rotate.y}
+              <br />
+              rotate z: {this.state.rotate.z}
+            </SensorInfo>
+          )}
+          <Video id="video"></Video>
+          <Canvas id="2038-canvas" width="600" height="800"></Canvas>
+          <Canvas id="zdog-canvas" width="600" height="800"></Canvas>
+          <Canvas
+            id="combined-result"
+            width="600"
+            height="800"
+            style={{
+              pointerEvents: this.props.snapped ? "all" : "none",
+              visibility: this.props.snapped ? "visible" : "hidden",
+            }}
+          ></Canvas>
+        </VideoContainer>
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  background-color: ${({color}) => color};
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const VideoContainer = styled.div`
   video {
@@ -351,7 +363,7 @@ const VideoContainer = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: black;
+  max-width: 120vh;
 `;
 
 const Video = styled.video`
