@@ -13,6 +13,11 @@ import { Question } from "./Question"
 import config from "../config.json";
 import { colors, dimensions } from "../config.js";
 
+function randomPick(items, maxLength) {
+  var len = (maxLength && maxLength < items.length) ? maxLength : items.length
+  return items[Math.floor(Math.random() * len)];
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,8 +26,8 @@ class App extends React.Component {
     this.colors = config.colors;
     this.state = {
       currentLanguage: this.languages[0].id,
-      currentSloganId: this.slogans[1].id,
-      currentColor: this.colors[0],
+      currentSloganId: randomPick(this.slogans).id,
+      currentColor: randomPick(this.colors),
       imageDataUrl: null,
       filename: null,
       sloganSelect: false,
