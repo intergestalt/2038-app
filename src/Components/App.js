@@ -113,52 +113,53 @@ class App extends React.Component {
           <Above>
             <TopInfoBar />
           </Above>
-          <Top ref={this.topRef}>
-            <Flash trigger={!!this.state.imageDataUrl} color={this.state.currentColor}/>
-            <ZFontOverlay
-              dev={this.state.dev}
-              text={text}
-              ref={this.overlayRef}
-              color={this.state.currentColor}
-              snapped={!!this.state.imageDataUrl}
-              blur={!!this.state.sloganSelect || !!this.state.tutorialState}
-            />
+          <Top ref={this.topRef} color={this.state.currentColor}>
+            <TopInner>
+              <Flash trigger={!!this.state.imageDataUrl} color={this.state.currentColor}/>
+              <ZFontOverlay
+                dev={this.state.dev}
+                text={text}
+                ref={this.overlayRef}
+                color={this.state.currentColor}
+                snapped={!!this.state.imageDataUrl}
+                blur={!!this.state.sloganSelect || !!this.state.tutorialState}
+              />
 
-            {this.state.tutorialState && (
-              <Overlay>
-                <Tutorial stateName={this.state.tutorialState} onNext={this.switchTutorialState} />
-              </Overlay>
-            )}
+              {this.state.tutorialState && (
+                <Overlay>
+                  <Tutorial stateName={this.state.tutorialState} onNext={this.switchTutorialState} />
+                </Overlay>
+              )}
 
-            {this.state.sloganSelect && (
-              <Overlay>
-                <SloganSelector
-                  width={this.topRef.current.clientWidth}
-                  height={this.topRef.current.clientHeight}
-                  root={this.topRef.current}
-                  dev={this.state.dev}
-                  languages={this.languages}
-                  currentLanguage={this.state.currentLanguage}
-                  setCurrentLanguage={this.setCurrentLanguage}
-                  slogans={this.slogans}
-                  currentSlogan={this.state.currentSloganId}
-                  setCurrentSlogan={this.setCurrentSlogan}
-                  currentColor={this.state.currentColor}
-                />
-              </Overlay>
-            )}
+              {this.state.sloganSelect && (
+                <Overlay>
+                  <SloganSelector
+                    width={this.topRef.current.clientWidth}
+                    height={this.topRef.current.clientHeight}
+                    root={this.topRef.current}
+                    dev={this.state.dev}
+                    languages={this.languages}
+                    currentLanguage={this.state.currentLanguage}
+                    setCurrentLanguage={this.setCurrentLanguage}
+                    slogans={this.slogans}
+                    currentSlogan={this.state.currentSloganId}
+                    setCurrentSlogan={this.setCurrentSlogan}
+                    currentColor={this.state.currentColor}
+                  />
+                </Overlay>
+              )}
 
-            {!!this.state.imageDataUrl && (
-              <Overlay>
-                <Question 
-                  imageDataUrl={this.state.imageDataUrl} 
-                  onCancel={this.clearPicture}
-                  onSave={this.clearPicture}
-                  filename={this.state.filename}
-                />
-              </Overlay>
-            )}
-
+              {!!this.state.imageDataUrl && (
+                <Overlay>
+                  <Question 
+                    imageDataUrl={this.state.imageDataUrl} 
+                    onCancel={this.clearPicture}
+                    onSave={this.clearPicture}
+                    filename={this.state.filename}
+                  />
+                </Overlay>
+              )}
+            </TopInner>
           </Top>
           <Bottom>
             <ControlPanel
@@ -200,10 +201,20 @@ const Top = styled.div`
   flex: 1;
   overflow: hidden;
   position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: ${({color}) => color}
 `;
+
+const TopInner = styled.div`
+  max-width: 120vh;
+  width: 100%;
+  height: 100%;
+`
 
 const Bottom = styled.div`
   background: ${colors.bg};
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 `;
 
 const Overlay = styled.div`

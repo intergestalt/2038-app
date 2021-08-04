@@ -15,8 +15,9 @@ const config = {
 export const SloganSelector = ({
   width,
   height,
-  slideWidth = "50vw",
-  slideHeight = "30vw",
+  slideWidth = "50vmin",
+  slideHeight = "30vmin",
+  fontSize = "5vmin",
   root,
   dev,
   languages,
@@ -71,6 +72,7 @@ export const SloganSelector = ({
       {...handlers}
       width={width}
       height={height}
+      fontSize={fontSize}
       ref={(el) => {
         handlers.ref(el);
         targetRef.current = el;
@@ -124,6 +126,7 @@ const Wrapper = styled.div`
   --slide-height: ${({ slideHeight }) => slideHeight};
   --cols: ${({ cols }) => cols};
   --rows: ${({ rows }) => rows};
+  --fontSize: ${({ fontSize }) => fontSize};
   position: absolute;
   box-sizing: border-box;
   width: 100%;
@@ -136,7 +139,7 @@ const Wrapper = styled.div`
 const Container = styled.div`
   position: absolute;
   box-sizing: border-box;
-  left: ${({ currentColumn }) => `calc( -${currentColumn} * var(--slide-width) + ( var(--slide-width) / 2) )`};
+  left: ${({ currentColumn }) => `calc( 50% - ( 0.5 * var(--slide-width) ) - ( ${currentColumn} * var(--slide-width) ) )`};
   will-change: left;
   display: grid;
   grid-template-columns: repeat(var(--cols), var(--slide-width));
@@ -149,4 +152,5 @@ const Container = styled.div`
   scroll-snap-type: both mandatory;
   overflow: hidden;
   transition: left 0.5s;
+  font-size: var(--fontSize);
 `;

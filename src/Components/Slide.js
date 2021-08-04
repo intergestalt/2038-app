@@ -52,7 +52,7 @@ const Container = styled.div`
   grid-row-start: ${({ row }) => row};
   font-family: 'Haas', sans-serif;
   font-weight: bold;
-  font-size: 6vw;
+  font-size: inherit;
   line-height: 1.1;
   transition: background-color 0.3s 0.1s ${ ({ active }) => !active && ", color 0.3s 0.1s"};
   display: flex;
