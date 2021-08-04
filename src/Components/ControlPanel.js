@@ -31,6 +31,7 @@ function ControlPanel({
     <Container>
       <Top>
         <Swiper
+          key={currentLanguage + "swiper"}
           currentLanguage={currentLanguage}
           slogans={slogans}
           currentSloganId={currentSloganId}
@@ -40,14 +41,14 @@ function ControlPanel({
       </Top>
       <Bottom>
         <Left>
-          <div
+          <IconsContainer
             onClick={() => {
               console.log(`sloganSelect clicked: ${sloganSelect}`);
               toggleSloganSelect();
             }}
           >
             {sloganSelect ? <CameraButton /> : <SelectButton />}
-          </div>
+          </IconsContainer>
           <InfoButtonContainer>
             <InfoButton />
           </InfoButtonContainer>
@@ -123,6 +124,10 @@ const Right = styled.div`
   align-items: center;
   justify-content: flex-end;
 `;
+
+const IconsContainer = styled.div`
+  cursor: pointer;
+`
 
 const InfoButtonContainer = styled.span`
   margin-left: 20px;

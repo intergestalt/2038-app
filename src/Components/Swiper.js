@@ -102,7 +102,7 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   height: 100%;
-  color: black;
+  color: white;
   user-select: none;
   transition: transform 0.3s;
   transform: translateX(calc(50% - ${({ offset }) => offset}px));

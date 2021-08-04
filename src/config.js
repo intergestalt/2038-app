@@ -3,6 +3,7 @@ const colors = {
 }
 
 const dimensions = {
+  maxVideoHeight: "120vw",
   breakpoints: {
     medium: {
       minHeightPx: 600,

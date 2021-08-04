@@ -11,9 +11,8 @@ import { Tutorial } from "./Tutorial"
 import { Question } from "./Question"
 
 import config from "../config.json";
-import { colors } from "../config.js";
+import { colors, dimensions } from "../config.js";
 
-const maxHeight="120vw";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -193,11 +192,12 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   font-family: "Haas", sans-serif;
+  user-select: none;
 `;
 
 const Above = styled.div`
   background: ${colors.bg};
-  min-height: calc( ( 100% - ${maxHeight} - 75px ) / 2 );
+  min-height: calc( ( 100% - ${ dimensions.maxVideoHeight } - 75px ) / 2 ); /* substract the height of the controls */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -210,7 +210,7 @@ const Top = styled.div`
   display: flex;
   justify-content: center;
   background-color: ${({color}) => color};
-  max-height: ${maxHeight};
+  max-height: ${ dimensions.maxVideoHeight };
 `;
 
 const TopInner = styled.div`
