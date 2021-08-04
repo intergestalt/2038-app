@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
+import { createGlobalStyle } from 'styled-components'
 
 import FillViewport from "./FillViewport";
 import ZFontOverlay from "./ZFontOverlay";
@@ -18,6 +19,14 @@ function randomPick(items, maxLength) {
   return items[Math.floor(Math.random() * len)];
 }
 
+const BodyColor = createGlobalStyle`
+    :root,
+    html,
+    body,
+    #root {
+    background-color: ${props => props.color};
+  }
+`
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -115,6 +124,7 @@ class App extends React.Component {
 
     return (
       <FillViewport>
+        <BodyColor color={this.state.currentColor} />
         <Container>
           <Above>
             <TopInfoBar />
@@ -198,6 +208,7 @@ const Container = styled.div`
   height: 100%;
   font-family: "Haas", sans-serif;
   user-select: none;
+  background-color: #BEBEBE;
 `;
 
 const Above = styled.div`
@@ -222,6 +233,7 @@ const TopInner = styled.div`
   max-width: 120vh;
   width: 100%;
   height: 100%;
+  background-color: #BEBEBE;
 `
 
 const Bottom = styled.div`

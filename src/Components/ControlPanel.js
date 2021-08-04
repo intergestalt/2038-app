@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { SwiperAnimator } from "./SwiperAnimator";
+import { Swiper } from "./Swiper";
 import { CameraButton } from "./CameraButton";
 import { SelectButton } from "./SelectButton";
 import { InfoButton } from "./InfoButton";
@@ -31,7 +32,6 @@ function ControlPanel({
     <Container>
       <Top>
         <SwiperAnimator
-          key={currentLanguage + "swiper"}
           currentLanguage={currentLanguage}
           slogans={slogans}
           currentSloganId={currentSloganId}

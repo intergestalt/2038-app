@@ -102,6 +102,9 @@ const Container = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   height: 100%;
+  width: 100%;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
   color: white;
   user-select: none;
   transition: transform 0.3s;
