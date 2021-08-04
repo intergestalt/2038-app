@@ -12,6 +12,8 @@ import { Question } from "./Question"
 
 import config from "../config.json";
 import { colors } from "../config.js";
+
+const maxHeight="120vw";
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -195,6 +197,10 @@ const Container = styled.div`
 
 const Above = styled.div`
   background: ${colors.bg};
+  min-height: calc( ( 100% - ${maxHeight} - 75px ) / 2 );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const Top = styled.div`
@@ -203,7 +209,8 @@ const Top = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
-  background-color: ${({color}) => color}
+  background-color: ${({color}) => color};
+  max-height: ${maxHeight};
 `;
 
 const TopInner = styled.div`
