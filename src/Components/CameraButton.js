@@ -5,42 +5,43 @@ export const CameraButton = () => {
   return (
     <Svg
       height="100%"
-      viewBox="0 0 35 20"
+      viewBox="0 0 35 22"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g transform="translate(0 1)">
-        <Path d="M0,0L15,0" />
-      </g>
-      <g transform="translate(20 1)">
-        <Path d="M0,0L15,0" />
-      </g>
-      <g transform="translate(0 10)">
-        <Path d="M0,0L15,0" />
-      </g>
-      <g transform="translate(20 10)">
-        <Path d="M0,0L15,0" />
-      </g>
-      <g transform="translate(0 19)">
-        <Path d="M0,0L15,0" />
-      </g>
-      <g transform="translate(20 19)">
-        <Path d="M0,0L15,0" />
-      </g>
+      <Rect x="7" y="1" width="2" height="1" />
+      <Rect x="1" y="3" width="33" height="18" />
+      <Circle cx="17.5" cy="12" r="2" />
     </Svg>
   );
 };
 
 const Path = styled.path`
   fill: none;
-  fill-rule: nonzero;
-  stroke: red;
+  fill-rule:nonzero
+  stroke: white;
   stroke-width: 2px;
+`;
+
+const Rect = styled.rect`
+  fill: none;
+  fill-rule:nonzero
+  stroke: white;
+  stroke-width: 2px;
+`;
+
+const Circle = styled.circle`
+  fill: none;
+  fill-rule:nonzero
+  stroke: white;
+  fill: white;
+  stroke-width: 0;
 `;
 
 const Svg = styled.svg`
   fill-rule: evenodd;
   clip-rule: evenodd;
-  height: 20px;
+  height: 22px;
   width: 35px;
+  stroke: white;
 `;
